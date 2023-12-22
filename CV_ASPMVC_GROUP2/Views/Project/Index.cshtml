@@ -1,0 +1,66 @@
+﻿@model IEnumerable<CV_ASPMVC_GROUP2.Models.Project>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Välkommen till projektsidan </h1>
+<p> Här har vi samlat en lista av de projekt som användare av denna hemsida har skapat! </p>
+
+< class=" table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+              <th>
+                @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+                @Html.DisplayNameFor(model => model.UserProjects)
+        </th>
+        <th>
+                @Html.DisplayNameFor(model => model.Image)
+        </th>
+        <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model)
+        {
+            <tr>
+                <td>
+                 @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                @Html.DisplayFor(modelItem => item.Description)
+                </td>
+
+                 <td>
+                    @Html.DisplayFor(modelItem => item.UserProjects)
+                </td>
+                <td>
+                    <img src="~/Images/@item.Image" class="img-fluid" alt="Responsive image" asp-append-version = "true" />
+                </td>
+
+            </tr>
+         
+        }
+
+
+
+
+
+    </tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+</table>

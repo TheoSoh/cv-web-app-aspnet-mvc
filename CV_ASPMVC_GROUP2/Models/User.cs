@@ -6,6 +6,7 @@ namespace CV_ASPMVC_GROUP2.Models
     {
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
+        public string? ProfilePicture {  get; set; }
         public virtual Cv? Cv { get; set; }
         public virtual Address? Address { get; set; }
         public virtual IEnumerable<Message> SentMessages { get; set; } = new List<Message>();

@@ -18,3 +18,11 @@
         <a asp-action="Login" asp-controller="Account">Logga in</a>
     }
 </div>
+
+<div class="text-center">
+    
+    @if (User.Identity.IsAuthenticated)
+    {
+        <a asp-action="Create" asp-controller="Project">Lägg till nytt projekt</a>
+    }
+</div>
