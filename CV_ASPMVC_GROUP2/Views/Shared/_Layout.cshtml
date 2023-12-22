@@ -22,10 +22,24 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
                     </ul>
+
+                    <form class="d-flex">
+                        <input class="form-control me-2" type="search" placeholder="Sök..." aria-label="Search">
+                        <button class="btn btn-outline-secondary" type="submit">Sök</button>
+                    </form>
+
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Meny
+                        </button>
+                        <ul class="dropdown-menu bg" aria-labelledby="dropdownMenuButton">
+                            <li><a class="dropdown-item text-black" href="@Url.Action("Index", "Home")">Hem</a></li>
+                            <li><a class="dropdown-item text-black" href="@Url.Action("Login", "Account")">Logga in</a></li>
+                            <li><a class="dropdown-item text-black" href="@Url.Action("CVs", "Cv")">CV</a></li>
+                            <li><a class="dropdown-item text-black" href="@Url.Action("Index", "Project")">Projekt</a></li>
+                        </ul>
                 </div>
             </div>
         </nav>
@@ -38,7 +52,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2023 - CV_ASPMVC_GROUP2 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+          
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Cv\" />
     <Folder Include="Views\Message\" />
     <Folder Include="wwwroot\Images\" />
   </ItemGroup>

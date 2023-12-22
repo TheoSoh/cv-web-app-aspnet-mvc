@@ -1,0 +1,40 @@
+﻿@model User
+
+<h2>Användarprofiler</h2>
+
+<div class="table-responsive">
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Användarnamn</th>
+                <td>@Model.UserName</td>
+            </tr>
+            <tr>
+                <th>Förnamn</th>
+                <td>@Model.FirstName</td>
+            </tr>
+            <tr>
+                <th>Efternamn</th>
+                <td>@Model.LastName</td>
+            </tr>
+            <tr>
+                <th>E-post</th>
+                <td>@Model.Email</td>
+            </tr>
+            <tr>
+                <th>Profilbild</th>
+                <td>
+                    @if (!string.IsNullOrEmpty(Model.ProfilePicture))
+                    {
+                        <img src="@Model.ProfilePicture" alt="Profilbild" style="max-width: 200px; max-height: 200px;" />
+                    }
+                    else
+                    {
+                        <span>Ingen profilbild tillgänglig</span>
+                    }
+                </td>
+            </tr>
+            <!-- Lägg till fler rader för andra attribut som ska visas -->
+        </tbody>
+    </table>
+</div>
