@@ -1,0 +1,58 @@
+﻿@model IEnumerable<CV_ASPMVC_GROUP2.Models.Cv>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Här kan du se alla användares CVn </h1>
+
+< class= "table">
+<thead>
+    <tr>
+        <th>
+                @Html.DisplayNameFor(model => model.Id)
+        </th>
+        <th>
+                @Html.DisplayNameFor(model => model.User_ID)
+        </th>
+        <th>
+                @Html.DisplayNameFor(model => model.CvCompetences)
+        </th>
+        <th>
+                @Html.DisplayNameFor(model => model.CvEducations)
+        </th>
+        <th>
+                @Html.DisplayNameFor(model => model.CvExperiences)
+        </th>
+        </th>
+    </tr>
+</thead>
+<tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.User_ID)
+            </td>
+
+            <td>
+                    @Html.DisplayFor(modelItem => item.CvExperiences)
+            </td>
+            <td>
+                    @Html.DisplayNameFor(model => model.CvEducations)  
+            </td>
+            <td>
+                    @Html.DisplayNameFor(model => model.CvCompetences)
+            </td>
+
+        </tr>
+
+        }
+
+    <div class="text-center">
+            <a asp-action="Add" asp-controller="CV">Lägg till nytt CV</a>
+    </div>
+
+</tbody>

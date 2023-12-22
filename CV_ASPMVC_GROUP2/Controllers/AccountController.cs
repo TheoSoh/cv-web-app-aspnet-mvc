@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using CV_ASPMVC_GROUP2.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CV_ASPMVC_GROUP2.Controllers
 {
@@ -8,11 +9,13 @@ namespace CV_ASPMVC_GROUP2.Controllers
     {
         private UserManager<User> userManager;
         private SignInManager<User> signInManager;
+        private TestDbContext testDbContext;
         public AccountController(UserManager<User> userMngr,
-        SignInManager<User> signInMngr)
+        SignInManager<User> signInMngr, TestDbContext context)
         {
             this.userManager = userMngr;
             this.signInManager = signInMngr;
+            this.testDbContext = context;
         }
         [HttpGet]
         public IActionResult Register()
@@ -82,3 +85,4 @@ namespace CV_ASPMVC_GROUP2.Controllers
         }
     }
 }
+

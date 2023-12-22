@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 using CV_ASPMVC_GROUP2.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CV_ASPMVC_GROUP2.Controllers
 {
@@ -12,9 +13,15 @@ namespace CV_ASPMVC_GROUP2.Controllers
             this.context = context;
         }
         
-        public IActionResult Add()
+        public IActionResult AddCV()
         {
-            return View();
+            return View("AddCV");
+        }
+
+        public IActionResult CVs()
+        {
+            var items = context.Cvs.ToList();
+            return View(items);
         }
     }
 }
