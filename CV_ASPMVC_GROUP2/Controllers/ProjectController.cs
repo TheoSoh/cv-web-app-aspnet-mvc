@@ -20,33 +20,37 @@ namespace CV_ASPMVC_GROUP2.Controllers
             return View(items);
         }
 
-        public IActionResult Create()
-        {
-            var items = _context.Projects.ToList();
-            return View(items);
-        }
+        [HttpGet]
+        //public IActionResult Create()
+        //{
+        //    //var items = _context.Projects.ToList();
+        //    //return View(items);
+        //}
 
         [HttpPost]
-        public IActionResult Create(ProjectViewModel pm)
+        public async Task<IActionResult> Create(ProjectViewModel pm)
         {
-            string stringFile = UploadFile(pm);
-            var Project = new Project
-            {
-                Name = pm.Title,
-                Description = pm.Description,
-                Image = stringFile
-            };
-            _context.Projects.Add(Project);
-            _context.SaveChanges();
+            if(ModelState.IsValid) {
 
-            //var Project_user = new UserProject
-            //{
-            //    UserId = 
-            //}
-            
-            
+                string stringFile = UploadFile(pm);
+                var Project = new Project();
 
-            return RedirectToAction("Index","Project");
+                Project.Name = pm.Title;
+                Project.Description = pm.Description;
+                Project.Image = stringFile;
+                await _context.AddAsync(Project);
+                await _context.SaveChangesAsync();
+                
+                //var userProject = new UserProject();
+                //userProject.UserId = 
+
+
+
+                return RedirectToAction("Index", "Project");
+
+            }
+            return View(pm);
+           
         }
 
         private string UploadFile(ProjectViewModel pm)
