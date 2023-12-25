@@ -3,7 +3,7 @@
     ViewData["Title"] = "Add Project-page";
 }
 
-<div class="CreateProject">
+
 
     <h1>Skapa nytt Projekt</h1>
 
@@ -11,36 +11,37 @@
     <form method="post" asp-action="Create">
         <div class="form-group row">
             <div class="col-sm-2">
-                <label>Titel: </label>
+                <label asp-for="Title" ></label>
             </div>
             <div class="col-sm-4">
                 <input asp-for="Title" class="form-control" />
             </div>
         </div>
+        <br />
         <div class="form-group row">
             <div class="col-sm-2">
-                <label>Beskriving: </label>
+                <label >Beskriving: </label>
             </div>
             <div class="col-sm-4">
                 <input asp-for="Description" class="form-control" />
             </div>
         </div>
-       
+        <br />
         <div class="form-group row">
             <div class="col-sm-2">
                 <label> Bild: </label>
             </div>
             <div class="col-sm-4">
-                <input asp-for="Image" class="custom-file-input"/>
+                <input type ="File" asp-for="Image" class="custom-file-input"/>
                 <label class="custom-file-label" for="customFile">Välj fil</label>
             </div>
         </div>
-
-       
+        <br />
         <div class="form-group row">
             <div class="offset-2 col-sm-4">
                 <button type="submit" class="btn btn-primary">Skapa projekt</button>
             </div>
         </div>
-    </form>
-</div>
+    
+
+</form>
