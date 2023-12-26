@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using CV_ASPMVC_GROUP2.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 
 namespace CV_ASPMVC_GROUP2.Controllers
 {
@@ -83,6 +84,24 @@ namespace CV_ASPMVC_GROUP2.Controllers
             await signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
+
+
+        public async Task<IActionResult> Search(string searchString)
+        {
+            var users = from u in testDbContext.Users select u;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                users = users.Where(u => u.UserName.Contains(searchString));
+            }
+
+            var searchResult = await users.ToListAsync();
+
+            return View("Users");
+        }
+
     }
+
+
 }
 

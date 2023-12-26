@@ -1,5 +1,32 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model Cv
+
+<h1>Lägg till ett nytt cv</h1>
+
+<form method="post" asp-action="Create">
+        <div class="form-group row">
+            <div class="col-sm-2">
+                <label>Utbildning</label>
+                <input asp-for="CvEducations" class="form-control"/>
+            </div>
+
+            <div class="col-sm-4">
+                <label>Tidigare erfarenheter</label>
+                <input asp-for="CvExperiences" class="form-control" />
+            </div>
+        </div>
+        <br />
+        <div class="form-group row">
+            <div class="col-sm-2">
+                <label>Kompetenser </label>
+            </div>
+            <div class="col-sm-4">
+                <input asp-for="CvCompetences" class="form-control" />
+            </div>
+        </div>
+        <br />
+
+    <div class="form-group row">
+        <div class="offset-2 col-sm-4">
+            <button type="submit" class="btn btn-primary">Lägg till</button>
+        </div>
+</form>
