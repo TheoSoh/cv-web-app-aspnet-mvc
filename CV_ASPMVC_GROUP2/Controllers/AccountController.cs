@@ -83,6 +83,50 @@ namespace CV_ASPMVC_GROUP2.Controllers
             await signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
+
+        [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword (ChangePasswordViewModel changePasswordViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    return RedirectToAction("LogIn");
+                }
+
+             
+                var result = await userManager.ChangePasswordAsync(user,
+                changePasswordViewModel.CurrentPassword, changePasswordViewModel.NewPassword);
+
+
+                if (!result.Succeeded)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                    return View();
+                }
+
+                else
+                {
+
+                    await signInManager.RefreshSignInAsync(user);
+                    TempData["SuccessMessage"] = "Ditt lösenord har ändrats.";
+                    return View("ChangePassword");
+                }
+            }
+
+            return View(changePasswordViewModel);
+        }
     }
-}
+    }
+
 
