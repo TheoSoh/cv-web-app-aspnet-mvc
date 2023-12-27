@@ -27,6 +27,14 @@
 </div>
 
 
+<div class="text-center">
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <a asp-action="EditUser" asp-controller="Account">Redigera uppgifter</a>
+    }
+</div>
+
 
 
 
