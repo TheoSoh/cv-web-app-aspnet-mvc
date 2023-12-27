@@ -31,6 +31,10 @@ namespace CV_ASPMVC_GROUP2.Controllers
             {
                 User anvandare = new User();
                 anvandare.UserName = registerViewModel.UserName;
+                anvandare.FirstName = registerViewModel.FirstName;
+                anvandare.LastName = registerViewModel.LastName;
+                anvandare.PhoneNumber = registerViewModel.PhoneNumber;
+                anvandare.Email = registerViewModel.Email;
                 var result =
                 await userManager.CreateAsync(anvandare, registerViewModel.Password);
                 if (result.Succeeded)
@@ -142,6 +146,50 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
             return View(changePasswordViewModel);
         }
+
+
+
+        //[HttpGet]
+        //public IActionResult MoreInfo()
+        //{
+
+        //    var anv = testDbContext.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
+
+        //    var model = new RegisterMoreInfoViewModel
+        //    {
+        //        Firstname = anv.FirstName,
+        //        Lastname = anv.LastName,
+        //        Email = anv.Email,
+        //        Phonenumber = anv.PhoneNumber
+
+        //    };
+
+        //    return View(model);
+
+        //}
+
+        //[HttpPost]
+        //public async Task<IActionResult> RegisterMoreInfo(RegisterMoreInfoViewModel moreInfoModel)
+        //{
+        //    var user = await userManager.GetUserAsync(User);
+
+
+        //    user.FirstName = moreInfoModel.Firstname;
+        //    user.LastName = moreInfoModel.Lastname;
+        //    user.Email = moreInfoModel.Email;
+        //    user.PhoneNumber = moreInfoModel.Phonenumber;
+
+        //    var result = await userManager.UpdateAsync(user);
+
+        //    if (result.Succeeded)
+        //    {
+
+        //        //Ändra till profilen istället
+        //        return RedirectToAction("Index", "Home");
+        //    }
+        //    //}
+        //    return View(moreInfoModel);
+        //}
 
     }
 
