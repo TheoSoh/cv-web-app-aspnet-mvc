@@ -149,47 +149,48 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
 
 
-        //[HttpGet]
-        //public IActionResult MoreInfo()
-        //{
+        [HttpGet]
+        public IActionResult EditUser()
+        {
 
-        //    var anv = testDbContext.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
+            var anv = testDbContext.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
 
-        //    var model = new RegisterMoreInfoViewModel
-        //    {
-        //        Firstname = anv.FirstName,
-        //        Lastname = anv.LastName,
-        //        Email = anv.Email,
-        //        Phonenumber = anv.PhoneNumber
+            var model = new EditUserViewModel
+            {
+                UserName = anv.UserName,
+                FirstName = anv.FirstName,
+                LastName = anv.LastName,
+                Email = anv.Email,
+                PhoneNumber = anv.PhoneNumber
 
-        //    };
+            };
 
-        //    return View(model);
+            return View(model);
 
-        //}
+        }
 
-        //[HttpPost]
-        //public async Task<IActionResult> RegisterMoreInfo(RegisterMoreInfoViewModel moreInfoModel)
-        //{
-        //    var user = await userManager.GetUserAsync(User);
+        [HttpPost]
+        public async Task<IActionResult> EditUser(EditUserViewModel editUserViewModel)
+        {
+            var user = await userManager.GetUserAsync(User);
 
+            user.UserName = editUserViewModel.UserName;
+            user.FirstName = editUserViewModel.FirstName;
+            user.LastName = editUserViewModel.LastName;
+            user.Email = editUserViewModel.Email;
+            user.PhoneNumber = editUserViewModel.PhoneNumber;
 
-        //    user.FirstName = moreInfoModel.Firstname;
-        //    user.LastName = moreInfoModel.Lastname;
-        //    user.Email = moreInfoModel.Email;
-        //    user.PhoneNumber = moreInfoModel.Phonenumber;
+            var result = await userManager.UpdateAsync(user);
 
-        //    var result = await userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
 
-        //    if (result.Succeeded)
-        //    {
-
-        //        //Ändra till profilen istället
-        //        return RedirectToAction("Index", "Home");
-        //    }
-        //    //}
-        //    return View(moreInfoModel);
-        //}
+                //Ändra till profilen istället
+                return RedirectToAction("Index", "Home");
+            }
+            //}
+            return View(editUserViewModel);
+        }
 
     }
 
