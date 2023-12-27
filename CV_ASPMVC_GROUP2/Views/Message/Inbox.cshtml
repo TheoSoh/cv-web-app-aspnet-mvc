@@ -1,0 +1,22 @@
+﻿@model List<Message>
+
+<h2>Inkommande meddelanden</h2>
+
+@if (Model != null && Model.Any())
+{
+    <ul>
+        @foreach (var message in Model)
+        {
+            <li>
+                <strong>Avsändare:</strong> @message.FromUserId <br />
+                <strong>Meddelande:</strong> @message.Content <br />
+                <strong>Tidpunkt:</strong> @message.SentTime
+            </li>
+            <hr />
+        }
+    </ul>
+}
+else
+{
+    <p>Du har inga inkommande meddelanden.</p>
+}

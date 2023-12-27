@@ -43,6 +43,8 @@
                             <li><a class="dropdown-item text-black" href="@Url.Action("Login", "Account")">Logga in</a></li>
                             <li><a class="dropdown-item text-black" href="@Url.Action("CVs", "Cv")">CV</a></li>
                             <li><a class="dropdown-item text-black" href="@Url.Action("Index", "Project")">Projekt</a></li>
+                            <li><a class="dropdown-item text-black" href="@Url.Action("Users", "Account")">Användare</a></li>
+
                         </ul>
                 </div>
             </div>
@@ -54,9 +56,9 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-          
+    <footer class="fixed-bottom bg-light text-center">
+        <div class="container py-3">
+            <a asp-action="Inbox" asp-controller="Message" class="btn btn-primary">Inkommande meddelanden</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
