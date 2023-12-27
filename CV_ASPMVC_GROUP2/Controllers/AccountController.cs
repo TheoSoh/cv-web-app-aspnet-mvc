@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using CV_ASPMVC_GROUP2.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 
 namespace CV_ASPMVC_GROUP2.Controllers
 {
@@ -84,49 +85,23 @@ namespace CV_ASPMVC_GROUP2.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpGet]
-        public IActionResult ChangePassword()
-        {
-            return View();
-        }
 
-        [HttpPost]
-        public async Task<IActionResult> ChangePassword (ChangePasswordViewModel changePasswordViewModel)
+        public async Task<IActionResult> Search(string searchString)
         {
-            if (ModelState.IsValid)
+            var users = from u in testDbContext.Users select u;
+
+            if (!string.IsNullOrEmpty(searchString))
             {
-                var user = await userManager.GetUserAsync(User);
-                if (user == null)
-                {
-                    return RedirectToAction("LogIn");
-                }
-
-             
-                var result = await userManager.ChangePasswordAsync(user,
-                changePasswordViewModel.CurrentPassword, changePasswordViewModel.NewPassword);
-
-
-                if (!result.Succeeded)
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                    return View();
-                }
-
-                else
-                {
-
-                    await signInManager.RefreshSignInAsync(user);
-                    TempData["SuccessMessage"] = "Ditt lösenord har ändrats.";
-                    return View("ChangePassword");
-                }
+                users = users.Where(u => u.UserName.Contains(searchString));
             }
 
-            return View(changePasswordViewModel);
+            var searchResult = await users.ToListAsync();
+
+            return View("Users");
         }
-    }
+
     }
 
+
+}
 
