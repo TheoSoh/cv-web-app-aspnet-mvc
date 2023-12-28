@@ -1,4 +1,5 @@
 ﻿using CV_ASPMVC_GROUP2.Models;
+using CV_ASPMVC_GROUP2.Repositories.Abstract;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,11 +9,13 @@ namespace CV_ASPMVC_GROUP2.Controllers
     {
         private TestDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IProjectService iProjectService;
 
-        public ProjectController(TestDbContext context, IWebHostEnvironment webHostEnviroment)
+        public ProjectController(TestDbContext context, IWebHostEnvironment webHostEnviroment, IProjectService iProjectService)
         {
             _context = context;
             _webHostEnvironment = webHostEnviroment;
+            this.iProjectService = iProjectService;
         }
         public IActionResult Index()
         {
@@ -67,6 +70,19 @@ namespace CV_ASPMVC_GROUP2.Controllers
                 }
             }
             return fileName;
+        }
+
+        public IActionResult ProjectList()
+        {
+            var data = this.iProjectService.GetAll().ToList();
+            return View(data);
+
+        }
+
+        public IActionResult Delete(int id)
+        {
+            var result = iProjectService.Delete(id);
+            return RedirectToAction(nameof(ProjectList));
         }
     }
 }
