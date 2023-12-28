@@ -5,12 +5,12 @@ namespace CV_ASPMVC_GROUP2.Repositories.Implentation
 {
     public class CvService : ICvService
     {
-        public void Add(Cv entity)
+        public bool Add(Cv entity)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(Cv entity)
+        public bool Delete(Cv entity)
         {
             throw new NotImplementedException();
         }
@@ -25,7 +25,7 @@ namespace CV_ASPMVC_GROUP2.Repositories.Implentation
             throw new NotImplementedException();
         }
 
-        public void Update(Cv entity)
+        public bool Update(Cv entity)
         {
             throw new NotImplementedException();
         }
