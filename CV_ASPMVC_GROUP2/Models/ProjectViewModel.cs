@@ -11,7 +11,6 @@ namespace CV_ASPMVC_GROUP2.Models
         [Required(ErrorMessage = "Vänligen skriv en beskrivning av projektet.")]
         public string Description{ get; set; }
 
-
-        public IFormFile Image {  get; set; } 
+        public IFormFile? Image {  get; set; } 
     }
 }
