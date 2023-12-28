@@ -185,10 +185,10 @@ namespace CV_ASPMVC_GROUP2.Controllers
             if (result.Succeeded)
             {
 
-                //Ändra till profilen istället
+               
                 return RedirectToAction("Index", "Home");
             }
-            //}
+          
             return View(editUserViewModel);
         }
 

@@ -1,4 +1,6 @@
-﻿namespace CV_ASPMVC_GROUP2.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CV_ASPMVC_GROUP2.Models
 {
     public class EditUserViewModel
     {
@@ -9,6 +11,7 @@
 
         public string PhoneNumber { get; set; }
 
+        [EmailAddress]
         public string Email { get; set; }
 
     }
