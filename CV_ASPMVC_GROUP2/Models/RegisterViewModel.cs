@@ -17,16 +17,17 @@ namespace CV_ASPMVC_GROUP2.Models
         public string ConfirmPassword { get; set; }
 
 
-        [Required]
+        [Required(ErrorMessage = "Vänligen skriv ett förnamn")]
         public string? FirstName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Vänligen skriv ett efternamn")]
         public string? LastName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Vänligen skriv in ett telefonnummer")]
         public string? PhoneNumber { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Vänligen skriv in en epost")]
+        [DataType(DataType.EmailAddress)]
         public string? Email { get; set; }
     }
 }

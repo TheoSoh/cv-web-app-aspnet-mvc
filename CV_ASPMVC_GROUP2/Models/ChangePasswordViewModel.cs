@@ -10,10 +10,13 @@ namespace CV_ASPMVC_GROUP2.Models
 
         [Required]
         [DataType(DataType.Password)]
+        [Compare("ConfirmPassword")]
         public string? NewPassword { get; set; }
+
 
         [Required]
         [DataType(DataType.Password)]
+        [Display(Name = "Bekrafta lösenordet")]
         public string? ConfirmPassword { get; set; }
     }
 }
