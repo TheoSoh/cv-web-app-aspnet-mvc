@@ -1,19 +1,17 @@
-﻿@model Message 
+﻿@model Message
 
 <h2>Skicka meddelande</h2>
 
 <form asp-action="SendMessage" asp-controller="Message" method="post">
-    <input type="hidden" asp-for="ToUserId" />
-
     <div class="form-group">
-        <label for="ToUserId">Mottagarens ID:</label>
-        <textarea class="form-control form-control-sm" asp-for="ToUserId"></textarea>
+        <label for="ToUserId">Välj mottagare:</label>
+        @Html.DropDownListFor(model => model.ToUserId, ViewData["ToUserId"] as SelectList, "-- Välj en användare --", new { @class = "form-control" })
     </div>
 
     <div class="form-group">
-        <label for="Content">Meddelande:</label>
-        <textarea class="form-control" asp-for="Content"></textarea>
+        <label for="Content">Meddelande</label>
+        <textarea name="Content" class="form-control">@Model.Content</textarea>
     </div>
 
-    <button type="submit" class="btn btn-primary">Skicka</button>
+    <button type="submit" class="btn btn-primary">Skicka meddelande</button>
 </form>

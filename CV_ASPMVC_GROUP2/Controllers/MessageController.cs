@@ -4,6 +4,7 @@ using CV_ASPMVC_GROUP2.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CV_ASPMVC_GROUP2.Controllers
 {
@@ -11,20 +12,32 @@ namespace CV_ASPMVC_GROUP2.Controllers
     {
 
         private readonly TestDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public MessageController(TestDbContext context)
+
+        public MessageController(TestDbContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        public IActionResult SendMessage(string receiverId)
+        [HttpGet]
+        public async Task<IActionResult> SendMessage()
         {
+            var users = await _userManager.Users.ToListAsync();
+            var usersSelectList = new SelectList(users, "Id", "UserName");
+            ViewData["ToUserId"] = usersSelectList;
+
+            var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var message = new Message
             {
-                ToUserId = receiverId 
+                SentTime = DateTime.Now,
+                Read = false,
+                FromUserId = loggedInUserId
             };
 
-            return View("SendMessage");
+            return View("SendMessage", message);
         }
 
         [HttpPost]
@@ -50,5 +63,16 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
             return View(incomingMessages);
         }
+
+
+       // [HttpGet]
+       // public IActionResult GetUnreadCount()
+       // {
+            // Hämta antalet olästa meddelanden för den inloggade användaren
+           // var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+           // var unreadCount = _context.Messages.Count(m => m.ToUserId == userId && !m.Read);
+
+           // return Json(new { unreadCount });
+       // }
     }
 }
