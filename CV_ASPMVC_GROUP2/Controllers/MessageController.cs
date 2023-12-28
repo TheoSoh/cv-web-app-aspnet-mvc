@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using CV_ASPMVC_GROUP2.Repositories.Abstract;
 
 namespace CV_ASPMVC_GROUP2.Controllers
 {
@@ -13,16 +14,18 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
         private readonly TestDbContext _context;
         private readonly UserManager<User> _userManager;
+        private readonly IUserService _userService;
 
 
-        public MessageController(TestDbContext context, UserManager<User> userManager)
+        public MessageController(TestDbContext context, UserManager<User> userManager, IUserService userService)
         {
             _context = context;
             _userManager = userManager;
+            _userService = userService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> SendMessage()
+        public async Task<IActionResult> SendMessage(string selectedUsername)
         {
             var users = await _userManager.Users.ToListAsync();
             var usersSelectList = new SelectList(users, "Id", "UserName");
@@ -30,11 +33,15 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
             var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            var toUserId = await _userService.GetUserIdByUsernameAsync(selectedUsername); 
+
+
             var message = new Message
             {
                 SentTime = DateTime.Now,
                 Read = false,
-                FromUserId = loggedInUserId
+                FromUserId = loggedInUserId,
+                ToUserId = toUserId
             };
 
             return View("SendMessage", message);
@@ -59,20 +66,23 @@ namespace CV_ASPMVC_GROUP2.Controllers
         public IActionResult Inbox()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var incomingMessages = _context.Messages.Where(m => m.ToUserId == userId).ToList();
-
-            return View(incomingMessages);
+            var incomingUnreadMessages = _context.Messages
+                   .Where(m => m.ToUserId == userId && (m.Read == null || m.Read == false)).ToList();
+                   
+            return View("Inbox");
         }
 
 
-       // [HttpGet]
-       // public IActionResult GetUnreadCount()
-       // {
-            // Hämta antalet olästa meddelanden för den inloggade användaren
-           // var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-           // var unreadCount = _context.Messages.Count(m => m.ToUserId == userId && !m.Read);
+        public IActionResult MarkAsRead(int id)
+        {
+            var message = _context.Messages.FirstOrDefault(m => m.Id == id);
+            if (message != null)
+            {
+                message.Read = true;
+                _context.SaveChanges();
+            }
 
-           // return Json(new { unreadCount });
-       // }
+            return RedirectToAction("Inbox");
+        }
     }
 }
