@@ -65,5 +65,10 @@ namespace CV_ASPMVC_GROUP2.Repositories.Implentation
 
             return null; 
         }
+
+        public void Delete(User entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
