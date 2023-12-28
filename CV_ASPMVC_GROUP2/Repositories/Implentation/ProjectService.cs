@@ -12,7 +12,7 @@ namespace CV_ASPMVC_GROUP2.Repositories.Implentation
         {
             this._context = _context;
         }
-        public bool Add(Project entity)
+        public bool Add(Models.Project entity)
         {
             try
             {
@@ -55,20 +55,20 @@ namespace CV_ASPMVC_GROUP2.Repositories.Implentation
             //throw new NotImplementedException();
         }
 
-        public IEnumerable<Project> GetAll()
+        public IEnumerable<Models.Project> GetAll()
         {
             var data = _context.Projects;
             return data;
             //throw new NotImplementedException();
         }
 
-        public Project GetById(int id)
+        public Models.Project GetById(int id)
         {
             return _context.Projects.Find(id);
             //throw new NotImplementedException();
         }
 
-        public bool Update(Project entity)
+        public bool Update(Models.Project entity)
         {
             try
             {
