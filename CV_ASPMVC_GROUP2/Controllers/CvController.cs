@@ -2,21 +2,17 @@
 using Microsoft.Identity.Client;
 using CV_ASPMVC_GROUP2.Models;
 using Microsoft.EntityFrameworkCore;
-using CV_ASPMVC_GROUP2.Repositories.Abstract;
 
 
 
 namespace CV_ASPMVC_GROUP2.Controllers
 {
-    public class CvController : Controller
+    public class CvController : BaseController
     {
         private TestDbContext context;
-        private readonly ICvService icvService;
-        private ICvService<Cv> CvData { get; set; }
-        public CvController(TestDbContext context, ICvService icvService)
+        public CvController(TestDbContext context)
         {
             this.context = context;
-            this.icvService = icvService;
         }
 
         [HttpPost]
@@ -39,16 +35,14 @@ namespace CV_ASPMVC_GROUP2.Controllers
         }
 
 
-        public IActionResult CvList()
-        {
-            var data = this.icvService.GetAll().ToList();
-            return View(data);
-        }
+        //public IActionResult CvList()
+        //{
+        //    return View();
+        //}
 
-        public IActionResult Delete(int id)
-        {
-            var result = icvService.Delete(id);
-            return RedirectToAction(nameof(CvList));
-        }
+        //public IActionResult Delete(Cv cv)
+        //{
+        //    return RedirectToAction();
+        //}
     }
 }

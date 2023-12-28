@@ -1,21 +1,18 @@
 ﻿using CV_ASPMVC_GROUP2.Models;
-using CV_ASPMVC_GROUP2.Repositories.Abstract;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CV_ASPMVC_GROUP2.Controllers
 {
-    public class ProjectController : Controller
+    public class ProjectController : BaseController
     {
         private TestDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly IProjectService iProjectService;
 
-        public ProjectController(TestDbContext context, IWebHostEnvironment webHostEnviroment, IProjectService iProjectService)
+        public ProjectController(TestDbContext context, IWebHostEnvironment webHostEnviroment)
         {
             _context = context;
             _webHostEnvironment = webHostEnviroment;
-            this.iProjectService = iProjectService;
         }
         public IActionResult Index()
         {
@@ -36,18 +33,22 @@ namespace CV_ASPMVC_GROUP2.Controllers
             if(ModelState.IsValid) {
 
                 string stringFile = UploadFile(pm);
-                var Project = new Project();
+                var project = new Project();
 
-                Project.Name = pm.Title;
-                Project.Description = pm.Description;
-                Project.Image = stringFile;
-                await _context.AddAsync(Project);
+                project.Name = pm.Title;
+                project.Description = pm.Description;
+                project.Image = stringFile;
+                await _context.AddAsync(project);
                 await _context.SaveChangesAsync();
-                
+
                 //var userProject = new UserProject();
                 //userProject.UserId = 
 
-
+                var userProject = new UserProject();
+                userProject.UserId = base.UserId;
+                userProject.Project = project;
+                await _context.AddAsync(userProject);
+                await _context.SaveChangesAsync();
 
                 return RedirectToAction("Index", "Project");
 
@@ -74,14 +75,11 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
         public IActionResult ProjectList()
         {
-            var data = this.iProjectService.GetAll().ToList();
-            return View(data);
-
+            return View();
         }
 
-        public IActionResult Delete(int id)
+        public IActionResult Delete(Project project)
         {
-            var result = iProjectService.Delete(id);
             return RedirectToAction(nameof(ProjectList));
         }
     }

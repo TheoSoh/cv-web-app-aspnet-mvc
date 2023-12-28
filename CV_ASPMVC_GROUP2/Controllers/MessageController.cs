@@ -5,23 +5,20 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using CV_ASPMVC_GROUP2.Repositories.Abstract;
 
 namespace CV_ASPMVC_GROUP2.Controllers
 {
-    public class MessageController : Controller
+    public class MessageController : BaseController
     {
 
         private readonly TestDbContext _context;
         private readonly UserManager<User> _userManager;
-        private readonly IUserService _userService;
 
 
-        public MessageController(TestDbContext context, UserManager<User> userManager, IUserService userService)
+        public MessageController(TestDbContext context, UserManager<User> userManager)
         {
             _context = context;
             _userManager = userManager;
-            _userService = userService;
         }
 
         [HttpGet]
@@ -33,15 +30,12 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
             var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var toUserId = await _userService.GetUserIdByUsernameAsync(selectedUsername); 
-
-
             var message = new Message
             {
                 SentTime = DateTime.Now,
                 Read = false,
-                FromUserId = loggedInUserId,
-                ToUserId = toUserId
+                FromUserId = loggedInUserId
+                //ToUserId = toUserId
             };
 
             return View("SendMessage", message);
