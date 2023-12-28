@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 
 namespace CV_ASPMVC_GROUP2.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private UserManager<User> userManager;
         private SignInManager<User> signInManager;
@@ -18,6 +18,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
             this.signInManager = signInMngr;
             this.testDbContext = context;
         }
+
         [HttpGet]
         public IActionResult Register()
         {
@@ -98,7 +99,6 @@ namespace CV_ASPMVC_GROUP2.Controllers
             {
                 users = users.Where(u => u.UserName.Contains(searchString));
             }
-
             var searchResult = await users.ToListAsync();
 
             return View("Users");
@@ -121,10 +121,8 @@ namespace CV_ASPMVC_GROUP2.Controllers
                     return RedirectToAction("LogIn");
                 }
 
-
                 var result = await userManager.ChangePasswordAsync(user,
                 changePasswordViewModel.CurrentPassword, changePasswordViewModel.NewPassword);
-
 
                 if (!result.Succeeded)
                 {
@@ -137,7 +135,6 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
                 else
                 {
-
                     await signInManager.RefreshSignInAsync(user);
                     TempData["SuccessMessage"] = "Ditt lösenord har ändrats.";
                     return View("ChangePassword");
@@ -152,7 +149,6 @@ namespace CV_ASPMVC_GROUP2.Controllers
         [HttpGet]
         public IActionResult EditUser()
         {
-
             var anv = testDbContext.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
 
             var model = new EditUserViewModel
@@ -166,7 +162,6 @@ namespace CV_ASPMVC_GROUP2.Controllers
             };
 
             return View(model);
-
         }
 
         [HttpPost]
@@ -184,16 +179,11 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
             if (result.Succeeded)
             {
-
-               
                 return RedirectToAction("Index", "Home");
             }
-          
+            
             return View(editUserViewModel);
         }
-
     }
-
-
 }
 
