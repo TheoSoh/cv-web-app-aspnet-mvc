@@ -1,0 +1,42 @@
+﻿@model EditAddressViewModel
+
+<form method="post" asp-action="EditAddress" class="mt-3">
+
+    <div class="form-group row">
+        <label asp-for="Street" class="col-sm-2 col-form-label">Gatu-adress</label>
+        <br />
+        <div class="col-sm-10">
+            <input asp-for="Street" class="form-control" value="@Model.Street">
+            <br />
+            <span asp-validation-for="Street" class="text-danger"></span>
+            <br />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="City" class="col-sm-2 col-form-label">Stad</label>
+        <br />
+        <div class="col-sm-10">
+            <input asp-for="City" class="form-control" value="@Model.City">
+            <br />
+            <span asp-validation-for="City" class="text-danger"></span>
+            <br />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="PostalCode" class="col-sm-2 col-form-label">Postkod</label>
+        <br />
+        <div class="col-sm-10">
+            <input asp-for="PostalCode" class="form-control" value="@Model.PostalCode">
+            <br />
+            <span asp-validation-for="PostalCode" class="text-danger"></span>
+            <br />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Uppdatera</button>
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+
+</form>
