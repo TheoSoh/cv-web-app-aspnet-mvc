@@ -22,7 +22,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> SendMessage(string selectedUsername)
+        public async Task<IActionResult> SendMessage()
         {
             var users = await _userManager.Users.ToListAsync();
             var usersSelectList = new SelectList(users, "Id", "UserName");
@@ -35,26 +35,47 @@ namespace CV_ASPMVC_GROUP2.Controllers
                 SentTime = DateTime.Now,
                 Read = false,
                 FromUserId = loggedInUserId
-                //ToUserId = toUserId
             };
 
             return View("SendMessage", message);
         }
 
         [HttpPost]
-        public IActionResult SendMessage(Message m)
+        public async Task<IActionResult> SendMessage(Message message, string selectedUsername)
         {
             if (ModelState.IsValid)
             {
-                _context.Messages.Add(m);
-                _context.SaveChanges();
+                var toUserId = selectedUsername;
 
-                return RedirectToAction("Index", "Home");
+                if (toUserId != null)
+                {
+                    var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    message.FromUserId = loggedInUserId;
+                    message.ToUserId = toUserId;
+                    message.Read = false;
 
+                    _context.Messages.Add(message);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("Index", "Home");
+                }
             }
 
-            return View("SendMessage"); 
+            var users = await _userManager.Users.ToListAsync();
+            var usersSelectList = new SelectList(users, "UserName", "UserName");
+            ViewData["ToUserId"] = usersSelectList;
+
+            return View("SendMessage", message);
         }
+
+        public async Task<string?> GetUserIdByUsernameAsync(string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+
+            return user?.Id;
+        }
+
+
 
 
         public IActionResult Inbox()
