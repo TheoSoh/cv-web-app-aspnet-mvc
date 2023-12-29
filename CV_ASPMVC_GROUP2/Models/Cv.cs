@@ -6,7 +6,12 @@ namespace CV_ASPMVC_GROUP2.Models
     public class Cv
     {
         public int Id { get; set; }
+        public  string? CvImage { get; set; }
+
+        [NotMapped]
+        public IFormFile? ImageFile { get; set; }
         public String User_ID { get; set; }
+
         [ForeignKey(nameof(User_ID))]
         public virtual User? User { get; set; }
         public virtual IEnumerable<CvEducation> CvEducations { get; set; } = new List<CvEducation>();

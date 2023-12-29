@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CV_ASPMVC_GROUP2.Models
 {
@@ -11,6 +12,7 @@ namespace CV_ASPMVC_GROUP2.Models
         [Required(ErrorMessage = "Vänligen skriv en beskrivning av projektet.")]
         public string Description{ get; set; }
 
-        public IFormFile? Image {  get; set; } 
+        [NotMapped]
+        public IFormFile? ImageFile {  get; set; } 
     }
 }

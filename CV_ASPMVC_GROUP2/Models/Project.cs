@@ -1,4 +1,7 @@
-﻿namespace CV_ASPMVC_GROUP2.Models
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace CV_ASPMVC_GROUP2.Models
 {
     public class Project
     {
@@ -8,6 +11,9 @@
 
         public DateTime? CreatedDate { get; set; } = DateTime.Now;
         public string? Image { get; set; }
+
+        [NotMapped]
+        public IFormFile? ImageFile { get; set; }
         public virtual IEnumerable<UserProject> UserProjects { get; set; } = new List<UserProject>();
     }
 }

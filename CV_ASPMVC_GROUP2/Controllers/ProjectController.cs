@@ -1,6 +1,7 @@
 ﻿using CV_ASPMVC_GROUP2.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 namespace CV_ASPMVC_GROUP2.Controllers
 {
@@ -57,17 +58,27 @@ namespace CV_ASPMVC_GROUP2.Controllers
            
         }
 
+
+        
+
+
         private string UploadFile(ProjectViewModel pm)
         {
             string fileName = null;
-            if(pm.Image!= null)
+            if (pm.ImageFile != null)
             {
                 string uploadDir = Path.Combine(_webHostEnvironment.WebRootPath, "Images");
-                fileName = Guid.NewGuid().ToString() + "-" + pm.Image.FileName;
+
+                if (!Directory.Exists(uploadDir))
+                {
+                    Directory.CreateDirectory(uploadDir);
+                }
+
+                fileName = Guid.NewGuid().ToString() + "-" + pm.ImageFile.FileName;
                 string filePath = Path.Combine(uploadDir, fileName);
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
-                    pm.Image.CopyTo(fileStream);
+                    pm.ImageFile.CopyTo(fileStream);
                 }
             }
             return fileName;

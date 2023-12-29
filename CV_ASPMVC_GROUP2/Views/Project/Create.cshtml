@@ -8,7 +8,7 @@
     <h1>Skapa nytt Projekt</h1>
 
     <div asp-validation-summary="All" class="text-danger"></div>
-    <form method="post" asp-action="Create">
+    <form method="post" asp-action="Create" enctype="multipart/form-data">
         <div class="form-group row">
             <div class="col-sm-2">
                 <label asp-for="Title" ></label>
@@ -32,7 +32,7 @@
                 <label> Bild: </label>
             </div>
             <div class="col-sm-4">
-                <input type ="File" asp-for="Image" class="custom-file-input"/>
+                <input type ="File" asp-for="ImageFile" class="custom-file-input"/>
                 <label class="custom-file-label" for="customFile">Välj fil</label>
             </div>
         </div>
