@@ -4,14 +4,37 @@
 
 <form asp-action="SendMessage" asp-controller="Message" method="post">
     <div class="form-group">
-        <label for="ToUserId">Välj mottagare:</label>
-        @Html.DropDownListFor(model => model.ToUserId, ViewData["ToUserId"] as SelectList, "-- Välj en användare --", new { @class = "form-control" })
+        <label for="selectedUsername">Välj mottagare:</label>
+        <select name="selectedUsername" class="form-control">
+            @foreach (var user in ViewData["ToUserId"] as SelectList)
+            {
+                <option value="@user.Value">@user.Text</option>
+            }
+        </select>
     </div>
+
+    <input type="hidden" name="selectedUsername" id="selectedUsername" value="" />
+
+    <input type="hidden" name="fromUserId" value="@Model.FromUserId" />
+
+    <input type="hidden" name="toUserId" value="@Model.ToUserId" />
+
+    <input type="hidden" name="read" value="@Model.Read" />
+
+
 
     <div class="form-group">
         <label for="Content">Meddelande</label>
-        <textarea name="Content" class="form-control">@Model.Content</textarea>
+        <textarea asp-for="Content" class="form-control"></textarea>
     </div>
 
     <button type="submit" class="btn btn-primary">Skicka meddelande</button>
 </form>
+
+
+<script>
+    document.querySelector('select[name="selectedUsername"]').addEventListener('change', function () {
+        var selectedValue = this.value;
+        document.getElementById('selectedUsername').value = selectedValue;
+    });
+</script>
