@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using CV_ASPMVC_GROUP2.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CV_ASPMVC_GROUP2.Controllers
 {
@@ -30,17 +31,21 @@ namespace CV_ASPMVC_GROUP2.Controllers
         {
             if (ModelState.IsValid)
             {
-                User anvandare = new User();
-                anvandare.UserName = registerViewModel.UserName;
-                anvandare.FirstName = registerViewModel.FirstName;
-                anvandare.LastName = registerViewModel.LastName;
-                anvandare.PhoneNumber = registerViewModel.PhoneNumber;
-                anvandare.Email = registerViewModel.Email;
+                User user = new User();
+                user.UserName = registerViewModel.UserName;
+                user.FirstName = registerViewModel.FirstName;
+                user.LastName = registerViewModel.LastName;
+                user.PhoneNumber = registerViewModel.PhoneNumber;
+                user.Email = registerViewModel.Email;
                 var result =
-                await userManager.CreateAsync(anvandare, registerViewModel.Password);
+                await userManager.CreateAsync(user, registerViewModel.Password);
                 if (result.Succeeded)
                 {
-                    await signInManager.SignInAsync(anvandare, isPersistent: true);
+                    var address = new Address { User = user };
+                    testDbContext.Add(address);
+                    testDbContext.SaveChanges();
+
+                    await signInManager.SignInAsync(user, isPersistent: true);
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -84,6 +89,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();
@@ -147,6 +153,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
 
         [HttpGet]
+        [Authorize]
         public IActionResult EditUser()
         {
             var anv = testDbContext.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
@@ -165,6 +172,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> EditUser(EditUserViewModel editUserViewModel)
         {
             var user = await userManager.GetUserAsync(User);
