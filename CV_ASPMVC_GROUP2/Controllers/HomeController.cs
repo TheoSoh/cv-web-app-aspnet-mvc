@@ -17,12 +17,12 @@ namespace CV_ASPMVC_GROUP2.Controllers
         }
 
         public IActionResult Index()
-        { 
-            var selectedCVs = _context.Cvs.Include(cv => cv.User).Take(5).ToList();
-            var latestProject = _context.Projects.OrderByDescending(p => p.CreatedDate).FirstOrDefault();
+        {
+            //var selectedCVs = _context.Cvs.Include(cv => cv.User).Take(5).ToList();
+            //var latestProject = _context.Projects.OrderByDescending(p => p.CreatedDate).FirstOrDefault();
 
-            ViewBag.SelectedCVs = selectedCVs;
-            ViewBag.LatestProject = latestProject;
+            //ViewBag.SelectedCVs = selectedCVs;
+            //ViewBag.LatestProject = latestProject;
 
             return View();
         }
@@ -32,10 +32,10 @@ namespace CV_ASPMVC_GROUP2.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        //public IActionResult Error()
+        //{
+        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        //}
     }
 }
