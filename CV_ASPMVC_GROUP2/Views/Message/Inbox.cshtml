@@ -1,22 +1,67 @@
-﻿@model List<Message>
+﻿@model List<(Message message, string username)>
 
-<h2>Inkommande meddelanden</h2>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRPeZwLLXPT+fC6LZxyekk6E8x1MZQV5nDEbi3+fl" crossorigin="anonymous"></script>
 
-@if (Model != null && Model.Any())
-{
-    <ul>
-        @foreach (var message in Model)
+
+<h2>Mottagna meddelanden</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Från</th>
+            <th>Innehåll</th>
+            <th>Skickat</th>
+            <th>Läst</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var (message, username) in Model)
         {
-            <li>
-                <strong>Avsändare:</strong> @message.FromUserId <br />
-                <strong>Meddelande:</strong> @message.Content <br />
-                <strong>Tidpunkt:</strong> @message.SentTime
-            </li>
-            <hr />
+            <tr>
+                <td>@username</td>
+                <td>@message.Content</td>
+                <td>@message.SentTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td class="read-status">@message.Read</td>
+                <td>
+                    @if (message.Read == null || message.Read == false)
+                    {
+                        <button class="mark-as-read-btn" data-message-id="@message.Id">Markera som läst</button>
+                    }
+                    else
+                    {
+                        message.Read = true;
+                    }
+                </td>
+            </tr>
         }
-    </ul>
-}
-else
-{
-    <p>Du har inga inkommande meddelanden.</p>
-}
+       
+    </tbody>
+</table>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.mark-as-read-btn').on('click', function () {
+            var button = $(this);
+            var messageId = button.data('message-id');
+
+            $.ajax({
+                url: '/Message/MarkAsRead',
+                method: 'POST',
+                data: { messageId: messageId },
+                success: function (response) {
+                    if (response.isRead) {
+                        button.closest('tr').find('.read-status').text('True');
+                        button.remove();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
+
+</script>
+

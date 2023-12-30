@@ -10,6 +10,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<TestDbContext>(options =>
     options.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("TestDbContext")));
 builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<TestDbContext>().AddDefaultTokenProviders();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -28,8 +29,15 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapHub<MessageHub>("/messageHub");
+//    endpoints.MapControllers();
+//});
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
