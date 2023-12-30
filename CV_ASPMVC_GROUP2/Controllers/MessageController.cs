@@ -75,29 +75,45 @@ namespace CV_ASPMVC_GROUP2.Controllers
             return user?.Id;
         }
 
-
-
-
-        public IActionResult Inbox()
+        public async Task<string?> GetUsernameById(string userId)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var incomingUnreadMessages = _context.Messages
-                   .Where(m => m.ToUserId == userId && (m.Read == null || m.Read == false)).ToList();
-                   
-            return View("Inbox");
+            var user = await _userManager.FindByIdAsync(userId);
+            return user?.UserName;
         }
 
 
-        public IActionResult MarkAsRead(int id)
+        public async Task<IActionResult> Inbox()
         {
-            var message = _context.Messages.FirstOrDefault(m => m.Id == id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var incomingMessages = _context.Messages
+                .Where(m => m.ToUserId == userId)
+                .ToList();
+
+            var messagesWithUsername = new List<(Message message, string username)>();
+
+            foreach (var message in incomingMessages)
+            {
+                var senderUsername = await GetUsernameById(message.FromUserId);
+                messagesWithUsername.Add((message, senderUsername));
+            }
+
+            return View(messagesWithUsername);
+        }
+
+
+
+        [HttpPost]
+        public IActionResult MarkAsRead(int messageId)
+        {
+            var message = _context.Messages.FirstOrDefault(m => m.Id == messageId);
             if (message != null)
             {
                 message.Read = true;
                 _context.SaveChanges();
+                return Ok(); 
             }
-
-            return RedirectToAction("Inbox");
+            return NotFound(); 
         }
+
     }
 }
