@@ -43,6 +43,14 @@
     }
 </div>
 
+<div class="text-center">
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <a asp-action="Index" asp-controller="Profile">Hantera profil</a>
+    }
+</div>
+
 
 <div class="text-center>
     @if (ViewBag.LatestProject != null)
