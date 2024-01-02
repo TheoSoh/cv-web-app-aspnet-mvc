@@ -1,0 +1,40 @@
+﻿@model CV_ASPMVC_GROUP2.Models.ExperienceViewModel
+
+
+@{
+    ViewData["Title"] = "Add Experience-page";
+}
+
+
+
+<h1>Skapa ny Erfarenhet</h1>
+
+<div asp-validation-summary="All" class="text-danger"></div>
+<form method="post" asp-action="Create" enctype="multipart/form-data">
+    <div class="form-group row">
+        <div class="col-sm-2">
+            <label asp-for="Name"></label>
+        </div>
+        <div class="col-sm-4">
+            <input asp-for="Name" class="form-control" />
+        </div>
+    </div>
+    <br />
+    <div class="form-group row">
+        <div class="col-sm-2">
+            <label>Beskriving: </label>
+        </div>
+        <div class="col-sm-4">
+            <input asp-for="Description" class="form-control" />
+        </div>
+    </div>
+    <br />
+    <br />
+    <div class="form-group row">
+        <div class="offset-2 col-sm-4">
+            <button type="submit" class="btn btn-primary">Skapa ny erfarenhet</button>
+        </div>
+    </div>
+
+
+</form>
