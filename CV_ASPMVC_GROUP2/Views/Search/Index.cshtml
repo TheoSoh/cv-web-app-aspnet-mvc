@@ -1,0 +1,45 @@
+﻿@model IEnumerable<CV_ASPMVC_GROUP2.Models.User>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProfilePicture)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <img src="~/Images/@item.ProfilePicture" class="img-fluid" alt="Responsive image" asp-append-version="true" height="200px" width="200px" />
+                </td>
+                <td>
+                    <a asp-controller="Profile" asp-action="Index">
+
+                    @Html.DisplayFor(modelItem => item.UserName)
+                    </a>
+
+                </td>
+
+            </tr>
+
+        }
+
+
+
+
+
+    </tbody>
+
+
+
+</table>

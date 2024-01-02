@@ -135,6 +135,19 @@ namespace CV_ASPMVC_GROUP2.Controllers
             return fileName;
         }
 
+        //[HttpGet]
+
+        //public async Task<IActionResult> DeleteProject(int? id)
+        //{
+
+        //    if(id == null || _context.Projects == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    if
+        //}
+
         public IActionResult ProjectList()
         {
             return View();
