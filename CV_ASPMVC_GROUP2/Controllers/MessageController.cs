@@ -24,25 +24,27 @@ namespace CV_ASPMVC_GROUP2.Controllers
         [HttpGet]
         public async Task<IActionResult> SendMessage()
         {
-            var users = await _userManager.Users.ToListAsync();
-            var usersSelectList = new SelectList(users, "Id", "UserName");
-            ViewData["ToUserId"] = usersSelectList;
+              var users = await _userManager.Users.ToListAsync();
+                var usersSelectList = new SelectList(users, "Id", "UserName");
+                ViewData["ToUserId"] = usersSelectList;
 
-            var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var message = new Message
-            {
-                SentTime = DateTime.Now,
-                Read = false,
-                FromUserId = loggedInUserId
-            };
+                var message = new Message
+                {
+                    SentTime = DateTime.Now,
+                    Read = false,
+                    FromUserId = loggedInUserId
+                };
 
-            return View("SendMessage", message);
+                return View("SendMessage", message);
         }
 
         [HttpPost]
         public async Task<IActionResult> SendMessage(Message message, string selectedUsername)
         {
+
+
             if (ModelState.IsValid)
             {
                 var toUserId = selectedUsername;

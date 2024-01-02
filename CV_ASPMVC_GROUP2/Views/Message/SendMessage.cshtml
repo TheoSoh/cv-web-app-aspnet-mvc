@@ -21,7 +21,13 @@
 
     <input type="hidden" name="read" value="@Model.Read" />
 
-
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <div class="form-group">
+            <label for="senderName">Ange ditt namn:</label>
+            <input type="text" id="senderName" name="senderName" class="form-control" />
+        </div>
+    }
 
     <div class="form-group">
         <label for="Content">Meddelande</label>
