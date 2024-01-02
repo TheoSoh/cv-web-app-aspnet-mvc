@@ -1,4 +1,5 @@
 ﻿using CV_ASPMVC_GROUP2.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CV_ASPMVC_GROUP2.Controllers
@@ -15,9 +16,12 @@ namespace CV_ASPMVC_GROUP2.Controllers
         }
 
 
+        [Authorize]
 
         public IActionResult Index()
         {
+            string currentUserId = base.UserId;
+            ViewBag.UserInfo = _context.Users.Where(u => u.Id.Equals(currentUserId)).Single(); 
             return View();
         }
 
