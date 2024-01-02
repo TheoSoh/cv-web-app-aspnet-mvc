@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace CV_ASPMVC_GROUP2.Controllers
 {
@@ -57,12 +59,61 @@ namespace CV_ASPMVC_GROUP2.Controllers
             return View(pm);
            
         }
-      
 
-       
+        [HttpGet]
+        public IActionResult EditProject(int? id)
+        {
+            var pro = _context.Projects.FirstOrDefault(x => x.Id == id);
+
+            var model = new ProjectViewModel
+            {
+                Title = pro.Name,
+                Description = pro.Description,
+                ImageFile = pro.ImageFile
 
 
-        private string UploadFile(ProjectViewModel pm)
+            };
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+
+        public async Task<IActionResult> EditProject(ProjectViewModel pm, int id)
+        {
+            try
+            {
+
+                string stringFile = UploadFile(pm);
+                var pro = _context.Projects.FirstOrDefault(x => x.Id == id);
+
+                pro.Name = pm.Title;
+                pro.Description = pm.Description;
+                pro.Image = stringFile;
+
+
+
+                _context.Update(pro);
+                _context.SaveChanges();
+
+
+
+                return RedirectToAction("Index", "Project");
+            }
+            catch (Exception ex)
+            {
+
+                return View(pm);
+            }
+        }
+    
+
+
+
+
+
+    private string UploadFile(ProjectViewModel pm)
         {
             string fileName = null;
             if (pm.ImageFile != null)
