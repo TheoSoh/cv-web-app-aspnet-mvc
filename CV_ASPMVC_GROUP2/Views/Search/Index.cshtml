@@ -23,7 +23,7 @@
                     <img src="~/Images/@item.ProfilePicture" class="img-fluid" alt="Responsive image" asp-append-version="true" height="200px" width="200px" />
                 </td>
                 <td>
-                    <a asp-controller="Profile" asp-action="Index">
+                    <a asp-controller="Profile" asp-action="Index" asp-route-id="@item.Id">
 
                     @Html.DisplayFor(modelItem => item.UserName)
                     </a>
