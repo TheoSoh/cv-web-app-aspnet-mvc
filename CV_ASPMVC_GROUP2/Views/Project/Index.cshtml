@@ -44,10 +44,13 @@
                    <img src="~/Images/@item.Image" class="img-fluid" alt="Responsive image" asp-append-version = "true" height="200px" width="200px" />
                 </td>
                 <td>
-                    <a asp-controller = "Project" asp-action="Edit" asp-route-Id ="@item.Id"> Redigera </a>
+                    <a asp-controller = "Project" asp-action="EditProject" asp-route-Id ="@item.Id"> Redigera </a>
                 </td>
                 <td>
                     <a asp-controller="Project" asp-action="Delete" asp-route-Id="@item.Id"> Radera </a>
+                </td>
+                <td>
+                    <a asp-controller="Project" asp-action="Join" asp-route-Id ="@item.Id"> Gå med i projekt</a>
                 </td>
 
             </tr>
