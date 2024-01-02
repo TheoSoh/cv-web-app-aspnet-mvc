@@ -11,7 +11,6 @@
             <th>Från</th>
             <th>Innehåll</th>
             <th>Skickat</th>
-            <th>Läst</th>
         </tr>
     </thead>
     <tbody>
@@ -21,7 +20,6 @@
                 <td>@username</td>
                 <td>@message.Content</td>
                 <td>@message.SentTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
-                <td class="read-status">@message.Read</td>
                 <td>
                     @if (message.Read == null || message.Read == false)
                     {
@@ -51,10 +49,9 @@
                 method: 'POST',
                 data: { messageId: messageId },
                 success: function (response) {
-                    if (response.isRead) {
-                        button.closest('tr').find('.read-status').text('True');
-                        button.remove();
-                    }
+                    var row = button.closest('tr'); 
+                    row.addClass('read-message'); 
+                    button.remove();
                 },
                 error: function (xhr, status, error) {
                     console.error(error);
@@ -62,6 +59,26 @@
             });
         });
     });
-
 </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.0/signalr.min.js"></script>
+
+<script>
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/MessagesHub") 
+        .build();
+
+    connection.start().then(function () {
+        // Klienten är ansluten, gör något om det behövs
+    }).catch(function (err) {
+        console.error(err.toString());
+    });
+
+    connection.on("ReceiveUnreadMessageCount", function (unreadCount) {
+        // Uppdatera antalet olästa meddelanden i användargränssnittet
+        document.getElementById("unreadCount").innerText = unreadCount;
+    });
+</script>
+
+
 
