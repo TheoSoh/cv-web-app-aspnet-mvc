@@ -213,7 +213,6 @@ namespace CV_ASPMVC_GROUP2.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FromUserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<bool?>("Read")
@@ -576,8 +575,7 @@ namespace CV_ASPMVC_GROUP2.Migrations
                 {
                     b.HasOne("CV_ASPMVC_GROUP2.Models.User", "FromUser")
                         .WithMany("SentMessages")
-                        .HasForeignKey("FromUserId")
-                        .IsRequired();
+                        .HasForeignKey("FromUserId");
 
                     b.HasOne("CV_ASPMVC_GROUP2.Models.User", "ToUser")
                         .WithMany("RecievedMessages")

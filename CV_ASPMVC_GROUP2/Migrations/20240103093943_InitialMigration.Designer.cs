@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CV_ASPMVC_GROUP2.Migrations
 {
     [DbContext(typeof(TestDbContext))]
-    [Migration("20240102222306_InitialMigration")]
+    [Migration("20240103093943_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -216,7 +216,6 @@ namespace CV_ASPMVC_GROUP2.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FromUserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<bool?>("Read")
@@ -314,6 +313,9 @@ namespace CV_ASPMVC_GROUP2.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("PrivateStatus")
                         .HasColumnType("bit");
 
                     b.Property<string>("ProfilePicture")
@@ -576,8 +578,7 @@ namespace CV_ASPMVC_GROUP2.Migrations
                 {
                     b.HasOne("CV_ASPMVC_GROUP2.Models.User", "FromUser")
                         .WithMany("SentMessages")
-                        .HasForeignKey("FromUserId")
-                        .IsRequired();
+                        .HasForeignKey("FromUserId");
 
                     b.HasOne("CV_ASPMVC_GROUP2.Models.User", "ToUser")
                         .WithMany("RecievedMessages")
