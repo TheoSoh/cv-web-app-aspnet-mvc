@@ -41,11 +41,9 @@ namespace CV_ASPMVC_GROUP2.Controllers
                 project.Name = pm.Title;
                 project.Description = pm.Description;
                 project.Image = stringFile;
+                project.CreatedByUserId = base.UserId;
                 await _context.AddAsync(project);
                 await _context.SaveChangesAsync();
-
-                //var userProject = new UserProject();
-                //userProject.UserId = 
 
                 var userProject = new UserProject();
                 userProject.UserId = base.UserId;
