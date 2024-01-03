@@ -33,6 +33,7 @@ namespace CV_ASPMVC_GROUP2.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ProfilePicture = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PrivateStatus = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -253,7 +254,7 @@ namespace CV_ASPMVC_GROUP2.Migrations
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SentTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Read = table.Column<bool>(type: "bit", nullable: true),
-                    FromUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FromUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ToUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>

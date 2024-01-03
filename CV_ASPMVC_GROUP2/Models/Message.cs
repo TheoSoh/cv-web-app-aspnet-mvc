@@ -8,7 +8,7 @@ namespace CV_ASPMVC_GROUP2.Models
         public string? Content { get; set; }
         public DateTime SentTime { get; set; } = DateTime.Now;
         public bool? Read { get; set; }
-        public string FromUserId { get; set; }
+        public string? FromUserId { get; set; }
         public string? ToUserId { get; set; }
 
         [ForeignKey(nameof(FromUserId))]
