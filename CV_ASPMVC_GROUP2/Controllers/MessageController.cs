@@ -102,8 +102,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
             return View(messagesWithUsername);
         }
 
-
-
+     
         [HttpPost]
         public IActionResult MarkAsRead(int messageId)
         {

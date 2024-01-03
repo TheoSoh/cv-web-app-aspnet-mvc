@@ -18,10 +18,9 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
         public IActionResult Index()
         {
-            // Hämta de senaste projekten, t.ex. de 5 senaste
             var latestProjects = _context.Projects
-                .OrderByDescending(p => p.CreatedDate) // Antag att du har en kolumn "CreatedAt"
-                .Take(5) // Hämta de senaste 5 projekten, ändra antalet efter behov
+                .OrderByDescending(p => p.CreatedDate) 
+                .Take(5) 
                 .ToList();
 
             return View(latestProjects);
