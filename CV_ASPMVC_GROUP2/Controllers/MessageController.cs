@@ -43,8 +43,6 @@ namespace CV_ASPMVC_GROUP2.Controllers
         [HttpPost]
         public async Task<IActionResult> SendMessage(Message message, string selectedUsername)
         {
-
-
             if (ModelState.IsValid)
             {
                 var toUserId = selectedUsername;
