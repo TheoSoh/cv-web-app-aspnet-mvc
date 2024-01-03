@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CV_ASPMVC_GROUP2.Models
 {
@@ -10,6 +11,9 @@ namespace CV_ASPMVC_GROUP2.Models
         public bool? Read { get; set; }
         public string? FromUserId { get; set; }
         public string? ToUserId { get; set; }
+
+        [RegularExpression("^[a-zA-Z]*$", ErrorMessage = "Endast bokstäver tillåtna")]
+        public string? FromAnonymousName { get; set; }
 
         [ForeignKey(nameof(FromUserId))]
         public virtual User? FromUser { get; set; }

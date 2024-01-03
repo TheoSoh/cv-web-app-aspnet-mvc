@@ -17,7 +17,7 @@
         @foreach (var (message, username) in Model)
         {
             <tr>
-                <td>@username</td>
+                <td>@(message.FromUserId != null ? username : message.FromAnonymousName)</td>
                 <td>@message.Content</td>
                 <td>@message.SentTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
                 <td>

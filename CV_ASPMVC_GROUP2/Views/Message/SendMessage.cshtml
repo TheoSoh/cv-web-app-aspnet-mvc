@@ -24,8 +24,9 @@
     @if (!User.Identity.IsAuthenticated)
     {
         <div class="form-group">
-            <label for="senderName">Ange ditt namn:</label>
-            <input type="text" id="senderName" name="senderName" class="form-control" />
+            <label asp-for="FromAnonymousName">Ange ditt namn:</label>
+            <input asp-for="FromAnonymousName" class="form-control" />
+            <span asp-validation-for="FromAnonymousName" class="text-danger"></span>
         </div>
     }
 
