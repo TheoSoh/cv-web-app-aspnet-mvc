@@ -7,7 +7,6 @@ namespace CV_ASPMVC_GROUP2.Models
     {
         public int Id { get; set; }
         public  string? CvImage { get; set; }
-
         public string Description { get; set; }
 
         [NotMapped]

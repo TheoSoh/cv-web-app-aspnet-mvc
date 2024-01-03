@@ -160,7 +160,6 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
             var model = new EditUserViewModel
             {
-                UserName = anv.UserName,
                 FirstName = anv.FirstName,
                 LastName = anv.LastName,
                 Email = anv.Email,
@@ -177,7 +176,6 @@ namespace CV_ASPMVC_GROUP2.Controllers
         {
             var user = await userManager.GetUserAsync(User);
 
-            user.UserName = editUserViewModel.UserName;
             user.FirstName = editUserViewModel.FirstName;
             user.LastName = editUserViewModel.LastName;
             user.Email = editUserViewModel.Email;

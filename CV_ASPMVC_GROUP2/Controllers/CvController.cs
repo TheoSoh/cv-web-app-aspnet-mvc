@@ -18,20 +18,15 @@ namespace CV_ASPMVC_GROUP2.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-
-
         public IActionResult Index()
         {
             var items = context.Cvs.ToList();
             return View(items);
         }
 
-
         [HttpPost]
-
         public async Task<IActionResult> AddCV(CvViewModel cvViewModel)
         {
-
             if (ModelState.IsValid)
             {
                 var cv = new Cv { Id = cvViewModel.Id, Description = cvViewModel.Description };
@@ -58,18 +53,13 @@ namespace CV_ASPMVC_GROUP2.Controllers
                     cv.CvCompetences = competences.Select(c => new CvCompetence { CvId = cv.Id, CompetenceId = c.Id }).ToList();
                 }
 
-
                 context.Cvs.Add(cv);
                 await context.SaveChangesAsync();
 
                 return RedirectToAction("Index", "Home");
             }
-
-
             return View(cvViewModel);
         }
-
-
 
         [HttpGet]
         public IActionResult AddCV()
@@ -82,7 +72,6 @@ namespace CV_ASPMVC_GROUP2.Controllers
                 AvailableExperience = context.Experiences.Select(ex => new ExperienceViewModel { Id = ex.Id, Name = ex.Name, Description = ex.Description }).ToList(),
 
                 AvailableCompetence = context.Competences.Select(c => new CompetenceViewModel { Id = c.Id, Name = c.Name, Description = c.Description  }).ToList()
-
             };
             
 

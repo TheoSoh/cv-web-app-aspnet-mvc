@@ -8,48 +8,15 @@
     @if (User.Identity.IsAuthenticated)
     {
         <h2>Du är inloggad som @User.Identity.Name</h2>
-        <input type="submit" value="Logga ut" />
     }
 </form>
 
-<div class="text-center">
-
-    @if (!User.Identity.IsAuthenticated)
-    {
-        <a asp-action="Login" asp-controller="Account">Logga in</a>
-    }
-</div>
 
 <div class="text-center">
     
     @if (User.Identity.IsAuthenticated)
     {
         <a asp-action="Index" asp-controller="Project">Gå till projektsidan</a>
-    }
-</div>
-
-
-<div class="text-center">
-
-    @if (User.Identity.IsAuthenticated)
-    {
-        <a asp-action="EditUser" asp-controller="Account">Redigera uppgifter</a>
-    }
-</div>
-
-<div class="text-center">
-
-    @if (User.Identity.IsAuthenticated)
-    {
-        <a asp-action="EditAddress" asp-controller="Address">Redigera adress</a>
-    }
-</div>
-
-<div class="text-center">
-
-    @if (User.Identity.IsAuthenticated)
-    {
-        <a asp-controller="Profile" asp-action="Index">Hantera profil</a>
     }
 </div>
 
@@ -109,10 +76,3 @@
         </div>
     }
 </div>
-
-<footer class="fixed-bottom bg-light text-center">
-    <div class="container py-3">
-        <a asp-action="Inbox" asp-controller="Message" class="btn btn-primary">Inkommande meddelanden</a>
-        <a asp-action="SendMessage" asp-controller="Message" class="btn btn-primary">Skicka meddelande</a>
-    </div>
-</footer>
