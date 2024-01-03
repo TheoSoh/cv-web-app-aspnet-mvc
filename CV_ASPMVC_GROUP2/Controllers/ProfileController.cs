@@ -15,14 +15,21 @@ namespace CV_ASPMVC_GROUP2.Controllers
             _webHostEnvironment = webHostEnviroment;
         }
 
-
-        [Authorize]
-
-        public IActionResult Index()
+        [HttpGet]
+        public IActionResult Index(string userId)
         {
             string currentUserId = base.UserId;
-            ViewBag.UserInfo = _context.Users.Where(u => u.Id.Equals(currentUserId)).Single(); 
-            return View();
+            var profileViewModel = new ProfileViewModel { };
+
+            if(userId == null)
+            {
+                profileViewModel.user = _context.Users.Where(u => u.Id.Equals(currentUserId)).Single(); 
+            }
+            else
+            {
+                profileViewModel.user = _context.Users.Where(u => u.Id.Equals(userId)).Single();
+            }
+            return View(profileViewModel);
         }
 
 

@@ -41,6 +41,12 @@ namespace CV_ASPMVC_GROUP2.Models
                 .WithMany(u => u.RecievedMessages)
                 .HasForeignKey(m => m.ToUserId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
+
+            builder.Entity<Project>()
+                .HasOne(p => p.User)
+                .WithMany(u => u.ProjectsCreated)
+                .HasForeignKey(p => p.CreatedByUserId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
         }
     }
 }

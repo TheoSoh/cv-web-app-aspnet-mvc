@@ -242,6 +242,10 @@ namespace CV_ASPMVC_GROUP2.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("CreatedByUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -255,6 +259,8 @@ namespace CV_ASPMVC_GROUP2.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
 
                     b.ToTable("Projects");
                 });
@@ -579,6 +585,16 @@ namespace CV_ASPMVC_GROUP2.Migrations
                     b.Navigation("ToUser");
                 });
 
+            modelBuilder.Entity("CV_ASPMVC_GROUP2.Models.Project", b =>
+                {
+                    b.HasOne("CV_ASPMVC_GROUP2.Models.User", "User")
+                        .WithMany("ProjectsCreated")
+                        .HasForeignKey("CreatedByUserId")
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("CV_ASPMVC_GROUP2.Models.UserProject", b =>
                 {
                     b.HasOne("CV_ASPMVC_GROUP2.Models.Project", "Project")
@@ -683,6 +699,8 @@ namespace CV_ASPMVC_GROUP2.Migrations
                     b.Navigation("Address");
 
                     b.Navigation("Cv");
+
+                    b.Navigation("ProjectsCreated");
 
                     b.Navigation("RecievedMessages");
 

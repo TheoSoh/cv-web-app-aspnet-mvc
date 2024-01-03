@@ -15,22 +15,11 @@ namespace CV_ASPMVC_GROUP2.Controllers
         [HttpGet]
         public IActionResult Index(string search, string id)
         {
-
-
-            var model = _context.Users.Where(u => u.UserName.StartsWith(search) || u.FirstName.StartsWith(search)).ToList();
-
+            var model = _context.Users.Where(u => u.UserName.Contains(search) || u.FirstName.Contains(search)).ToList();
 
             return View(model);
         }
-
-
-
-      
-
-
     }
-
-
-    }
+}
 
 

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CV_ASPMVC_GROUP2.Migrations
 {
     [DbContext(typeof(TestDbContext))]
-    [Migration("20231221102246_InitialMigration")]
+    [Migration("20240102222306_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -36,16 +36,10 @@ namespace CV_ASPMVC_GROUP2.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("City")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Country")
+                    b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PostalCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Region")
+                    b.Property<int?>("PostalCode")
                         .HasColumnType("int");
 
                     b.Property<string>("Street")
@@ -71,6 +65,10 @@ namespace CV_ASPMVC_GROUP2.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -87,6 +85,13 @@ namespace CV_ASPMVC_GROUP2.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CvImage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("User_ID")
                         .IsRequired()
@@ -165,6 +170,10 @@ namespace CV_ASPMVC_GROUP2.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -236,17 +245,25 @@ namespace CV_ASPMVC_GROUP2.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("CreatedByUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("Image")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
 
                     b.ToTable("Projects");
                 });
@@ -298,6 +315,9 @@ namespace CV_ASPMVC_GROUP2.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("ProfilePicture")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -568,6 +588,16 @@ namespace CV_ASPMVC_GROUP2.Migrations
                     b.Navigation("ToUser");
                 });
 
+            modelBuilder.Entity("CV_ASPMVC_GROUP2.Models.Project", b =>
+                {
+                    b.HasOne("CV_ASPMVC_GROUP2.Models.User", "User")
+                        .WithMany("ProjectsCreated")
+                        .HasForeignKey("CreatedByUserId")
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("CV_ASPMVC_GROUP2.Models.UserProject", b =>
                 {
                     b.HasOne("CV_ASPMVC_GROUP2.Models.Project", "Project")
@@ -672,6 +702,8 @@ namespace CV_ASPMVC_GROUP2.Migrations
                     b.Navigation("Address");
 
                     b.Navigation("Cv");
+
+                    b.Navigation("ProjectsCreated");
 
                     b.Navigation("RecievedMessages");
 

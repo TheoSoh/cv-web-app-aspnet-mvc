@@ -13,6 +13,7 @@ namespace CV_ASPMVC_GROUP2.Models
 
         [NotMapped]
         public IFormFile? ImageFile { get; set; }
+        public virtual IEnumerable<Project> ProjectsCreated { get; set; } = new List<Project>();
         public virtual IEnumerable<Message> SentMessages { get; set; } = new List<Message>();
         public virtual IEnumerable<Message> RecievedMessages { get; set; } = new List<Message>();
         public virtual IEnumerable<UserProject> UserProjects { get; set; } = new List<UserProject>();
