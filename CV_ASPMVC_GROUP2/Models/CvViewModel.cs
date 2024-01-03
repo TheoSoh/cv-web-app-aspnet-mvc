@@ -18,15 +18,11 @@ namespace CV_ASPMVC_GROUP2.Models
         public List<EducationViewModel> AvailableEducations { get; set; }
 
         public List<int> SelectedEducations { get; set; }
-        //public Education Education { get; set; }    
-        
-        
+        //public Education Education { get; set; }   
         
         public List<ExperienceViewModel> AvailableExperience { get; set; }
         public List<int> SelectedExperience { get; set; }
         //public Experience Experience { get; set; }
-
-
 
         public List<CompetenceViewModel> AvailableCompetence { get; set; }
         public List<int> SelectedCompetence { get; set; }

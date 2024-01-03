@@ -5,9 +5,11 @@
 
 <h1>Välkommen till projektsidan </h1>
 <p> Här har vi samlat en lista av de projekt som användare av denna hemsida har skapat! </p>
-<p> 
-    <a asp-action = "Create"> Skapa nytt projekt</a>
-    </p>
+
+@if(User.Identity.IsAuthenticated)
+{
+    <a asp-controller="Project" asp-action = "Create"> Skapa nytt projekt</a>
+}
 <table class="table">
     <thead>
         <tr>

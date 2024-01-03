@@ -13,9 +13,9 @@ namespace CV_ASPMVC_GROUP2.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(string search, string id)
+        public IActionResult Index(string searchString)
         {
-            var model = _context.Users.Where(u => u.UserName.Contains(search) || u.FirstName.Contains(search)).ToList();
+            var model = _context.Users.Where(u => u.UserName.Contains(searchString) || u.FirstName.Contains(searchString)).ToList();
 
             return View(model);
         }
