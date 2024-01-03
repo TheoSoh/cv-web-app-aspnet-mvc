@@ -7,14 +7,14 @@
 <a asp-action="UploadFile">Ladda upp en profilbild</a>
 
 <div class="info">
-<h1>@User.Identity.Name</h1>
+    <h1>@Html.DisplayFor(p => p.user.UserName)</h1>
 
-    <img src="~/Images/@ViewBag.userInfo.ProfilePicture" class="img-fluid" alt="Responsive image" asp-append-version="true" height="200px" width="200px" />
+    <img src="~/Images/@Html.ValueFor(p => p.user.ProfilePicture)" class="img-fluid" alt="Responsive image" asp-append-version="true" height="200px" width="200px" />
   
-<p> @ViewBag.userInfo.FirstName</p>
-<p> @ViewBag.userInfo.LastName</p>
-<p> @ViewBag.userInfo.Email</p>
-<p> @ViewBag.userInfo.PhoneNumber</p>
+    <p>@Html.DisplayFor(p => p.user.FirstName)</p>
+    <p>@Html.DisplayFor(p => p.user.LastName)</p>
+    <p>@Html.DisplayFor(p => p.user.Email)</p>
+    <p>@Html.DisplayFor(p => p.user.PhoneNumber)</p>
 </div>
 
 

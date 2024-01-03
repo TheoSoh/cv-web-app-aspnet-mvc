@@ -8,9 +8,13 @@ namespace CV_ASPMVC_GROUP2.Models
         public int Id { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
-
         public DateTime? CreatedDate { get; set; } = DateTime.Now;
         public string? Image { get; set; }
+        public bool PrivateStatus { get; set; } = false;
+        public string CreatedByUserId { get; set; }
+
+        [ForeignKey(nameof(CreatedByUserId))]
+        public virtual User User { get; set; }
 
         [NotMapped]
         public IFormFile? ImageFile { get; set; }
