@@ -7,18 +7,10 @@
 <form method="post" asp-controller="Account" asp-action="Logout">
     @if (User.Identity.IsAuthenticated)
     {
+        <h1>Hej din toker! Vad kul att du kodar idag!</h1>
         <h2>Du är inloggad som @User.Identity.Name</h2>
     }
 </form>
-
-
-<div class="text-center">
-    
-    @if (User.Identity.IsAuthenticated)
-    {
-        <a asp-action="Index" asp-controller="Project">Gå till projektsidan</a>
-    }
-</div>
 
 <div id="carouselExampleCaptions" class="carousel slide">
     <div class="carousel-indicators">
