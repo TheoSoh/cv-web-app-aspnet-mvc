@@ -76,5 +76,26 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
 
         }
+
+
+       
+
+        [HttpPost]
+        public ActionResult UpdatePrivat(bool isChecked)
+        {
+            var anv = _context.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
+
+
+            
+            if (anv != null)
+            {
+                anv.PrivateStatus = isChecked;
+                _context.Update(anv);
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Index","Profile");
+
+        }
     }
 }

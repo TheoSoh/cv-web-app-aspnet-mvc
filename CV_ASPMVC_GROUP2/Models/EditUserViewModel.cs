@@ -4,6 +4,8 @@ namespace CV_ASPMVC_GROUP2.Models
 {
     public class EditUserViewModel
     {
+
+         
         public string FirstName {  get; set; }
         public string LastName { get; set; }
 
@@ -11,6 +13,8 @@ namespace CV_ASPMVC_GROUP2.Models
 
         [EmailAddress]
         public string Email { get; set; }
+
+        public bool Private { get; set; }
 
     }
 }

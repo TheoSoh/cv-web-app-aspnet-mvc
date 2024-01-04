@@ -209,7 +209,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
             if (result.Succeeded)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "home");
             }
 
             //Om uppdateringen misslyckas, returnera vyn för att fortsätta redigera användarinformationen

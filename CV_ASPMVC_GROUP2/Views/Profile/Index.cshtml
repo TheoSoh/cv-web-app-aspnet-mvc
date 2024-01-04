@@ -15,6 +15,23 @@
     <p>@Html.DisplayFor(p => p.user.LastName)</p>
     <p>@Html.DisplayFor(p => p.user.Email)</p>
     <p>@Html.DisplayFor(p => p.user.PhoneNumber)</p>
+
+    <div class="form-group row mb-2">
+        <p>Hantera kontointegritet</p>
+        <form asp-controller="Profile" asp-action="UpdatePrivat" method="post">
+            <input type="checkbox" name="isChecked" value="true" />
+            <input type="submit" value="Privat profil" />
+        </form>
+    </div>
+    <br />
+
+    <div class="form-group row mb-4">
+
+        <form asp-controller="Profile" asp-action="UpdatePrivat" method="post">
+            <input type="checkbox" name="isChecked" value="false" />
+            <input type="submit" value="Offentlig profil" />
+        </form>
+    </div>
 </div>
 
 
