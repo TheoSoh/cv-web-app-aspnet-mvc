@@ -18,6 +18,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
         public IActionResult Index()
         {
+            //Hämtar de 5 senaste projekten och sorterar genom datum de skapades (fallande) samt konverterar resultatet till lista
             var latestProjects = _context.Projects
                 .OrderByDescending(p => p.CreatedDate) 
                 .Take(5) 
