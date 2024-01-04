@@ -24,12 +24,13 @@ namespace CV_ASPMVC_GROUP2.Controllers
         [HttpGet]
         public async Task<IActionResult> SendMessage()
         {
-              var users = await _userManager.Users.ToListAsync();
+            //Hämtar alla användare från databasen och skapar en SelectList som kan användas i vyn
+            var users = await _userManager.Users.ToListAsync();
                 var usersSelectList = new SelectList(users, "Id", "UserName");
                 ViewData["ToUserId"] = usersSelectList;
 
+            //Hämtar den inloggade användarens ID från Claims och skapar ett nytt meddelandeobjekt
                 var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
                 var message = new Message
                 {
                     SentTime = DateTime.Now,
@@ -37,7 +38,8 @@ namespace CV_ASPMVC_GROUP2.Controllers
                     FromUserId = loggedInUserId
                 };
 
-                return View("SendMessage", message);
+            //Returnerar vyn för att skicka meddelanden med det nya meddelandeobjektet
+            return View("SendMessage", message);
         }
 
         [HttpPost]
@@ -45,15 +47,18 @@ namespace CV_ASPMVC_GROUP2.Controllers
         {
             if (ModelState.IsValid)
             {
+                //Hämtar mottagarens ID från det valda användarnamnet i vyn
                 var toUserId = selectedUsername;
 
                 if (toUserId != null)
                 {
+                    //Hämtar den inloggade användarens ID och tilldelar meddelandeobjektet rätt information
                     var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                     message.FromUserId = loggedInUserId;
                     message.ToUserId = toUserId;
                     message.Read = false;
 
+                    //Lägger till det nya meddelandeobjektet i databasen och sparar ändringarna
                     _context.Messages.Add(message);
                     await _context.SaveChangesAsync();
 
@@ -61,6 +66,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
                 }
             }
 
+            //Om ModelState inte är giltig, återgår till vyn för att skicka meddelanden
             var users = await _userManager.Users.ToListAsync();
             var usersSelectList = new SelectList(users, "UserName", "UserName");
             ViewData["ToUserId"] = usersSelectList;
@@ -68,6 +74,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
             return View("SendMessage", message);
         }
 
+        // Hämtar användar-ID med angivet användarna och returnerar ID om användaren finns, annars returneras null.
         public async Task<string?> GetUserIdByUsernameAsync(string username)
         {
             var user = await _userManager.FindByNameAsync(username);
@@ -75,6 +82,8 @@ namespace CV_ASPMVC_GROUP2.Controllers
             return user?.Id;
         }
 
+
+        //Hämtar användarnamn med angivet användar-Id och returnerar namnet om användaren finns, annars returneras null.
         public async Task<string?> GetUsernameById(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -85,18 +94,22 @@ namespace CV_ASPMVC_GROUP2.Controllers
         public async Task<IActionResult> Inbox()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            //Hämtar inkommande meddelanden för den inloggade användaren
             var incomingMessages = _context.Messages
                 .Where(m => m.ToUserId == userId)
                 .ToList();
 
             var messagesWithUsername = new List<(Message message, string username)>();
 
+            //Associerar varje meddelande med avsändarens användarnamn
             foreach (var message in incomingMessages)
             {
                 var senderUsername = await GetUsernameById(message.FromUserId);
                 messagesWithUsername.Add((message, senderUsername));
             }
 
+            //Returnerar en vy med listan av meddelanden tillsammans med avsändarens användarnamn.
             return View(messagesWithUsername);
         }
 

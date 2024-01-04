@@ -15,6 +15,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
         [HttpGet]
         public IActionResult Index(string searchString)
         {
+            //Söker efter användare vars användarnamn eller förnamn matchar den inkommande söksträngen
             var model = _context.Users.Where(u => u.UserName.Contains(searchString) || u.FirstName.Contains(searchString)).ToList();
 
             return View(model);
