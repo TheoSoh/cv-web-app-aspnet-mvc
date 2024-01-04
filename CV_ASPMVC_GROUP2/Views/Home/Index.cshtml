@@ -55,16 +55,24 @@
 <h1>De senaste projekten</h1>
 
 <div class="row">
-    @foreach (var project in Model)
-    {
-        <div class="col-md-6 mb-4">
-            <div class="card">
-                <div class="card-body">
-                    <img src="~/Images/@project.Image" class="img-fluid" alt="Responsive image" asp-append-version="true" height="200px" width="200px" />
-                    <h5 class="card-title">@project.Name</h5>
-                    <p class="card-text">@project.Description</p>
+    <div class="row">
+        @foreach (var project in Model)
+        {
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="~/Images/@project.Image" class="img-fluid" alt="Responsive image" asp-append-version="true" height="200px" width="200px" />
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">@project.Name</h5>
+                                <p class="card-text">@project.Description</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    }
+        }
+    </div>
 </div>
