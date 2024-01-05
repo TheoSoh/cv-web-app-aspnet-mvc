@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Net.Http.Headers;
+using Microsoft.CodeAnalysis;
 
 namespace CV_ASPMVC_GROUP2.Controllers
 {
@@ -37,7 +38,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
             if(ModelState.IsValid) {
 
                 string stringFile = UploadFile(pm);
-                var project = new Project();
+                var project = new Models.Project();
 
                 project.Name = pm.Title;
                 project.Description = pm.Description;
@@ -139,14 +140,15 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
         public IActionResult Delete(int id)
         {
-            Project project = _context.Projects.Find(id);
+            Models.Project project = _context.Projects.Find(id);
             return View(project);
         }
 
 
         [HttpPost]
 
-        public async Task<IActionResult> Delete(Project project) 
+
+        public async Task<IActionResult> Delete(Models.Project project) 
         { 
             _context.Projects.Remove(project);
             _context.SaveChanges();
@@ -156,51 +158,96 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
         public IActionResult Join(int id)
         {
-            Project project = _context.Projects.Find(id);
+            Models.Project project = _context.Projects.Find(id);
             return View(project);
         }
 
         [HttpPost]
+
+        //public async Task<IActionResult> Join(int? id)
+        //{
+
+        //    if (id == null || _context.Projects == null)
+        //    {
+        //        return NotFound();
+
+        //    }
+        //    var joina = await _context.Projects.FindAsync(id);
+        //    if (joina == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var anv = _context.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
+        //    var pro = _context.Projects.FirstOrDefault(x => x.Id == id);
+
+        //    UserProject userProject = new UserProject();
+        //    userProject.UserId = anv.Id;
+        //    userProject.ProjectId = pro.Id;
+        //    _context.Add(userProject);
+
+
+        //    await _context.SaveChangesAsync();
+
+        //    return RedirectToAction("Index", "Project");
+        //}
+
         public async Task<IActionResult> Join(int? id)
         {
-
             if (id == null || _context.Projects == null)
             {
                 return NotFound();
-
             }
-            var joina = await _context.Projects.FindAsync(id);
-            if (joina == null)
+
+            var project = await _context.Projects.FindAsync(id);
+            if (project == null)
             {
                 return NotFound();
             }
 
-            var anv = _context.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
-            var pro = _context.Projects.FirstOrDefault(x => x.Id == id);
-           
-                UserProject userProject = new UserProject();
-                userProject.UserId = anv.Id;
-                userProject.ProjectId = pro.Id;
+            var user = _context.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
+
+            // Kontrollera om användaren redan deltar i projektet
+            var existingUserProject = _context.Set<UserProject>()
+                .FirstOrDefault(up => up.UserId == user.Id && up.ProjectId == project.Id);
+
+            if (existingUserProject != null)
+            {
+                // Användaren deltar redan i projektet, visa ett meddelande
+                TempData["Message"] = "Du deltar redan i detta projekt.";
+                return RedirectToAction("Join", "Project");
+            }
+            else
+            {
+                // Användaren deltar inte i projektet, lägg till UserProject
+                UserProject userProject = new UserProject
+                {
+                    UserId = user.Id,
+                    ProjectId = project.Id
+                };
                 _context.Add(userProject);
-
-
-            await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
+                TempData["Message"] = "Du har gått med i projektet!";
+       
+            }
 
             return RedirectToAction("Index", "Project");
         }
 
 
     }
+
+
 }
 
 
-        //public IActionResult ProjectList()
-        //{
-        //    return View();
-        //}
+//public IActionResult ProjectList()
+//{
+//    return View();
+//}
 
-        //public IActionResult Delete(Project project)
-        //{
-        //    return RedirectToAction(nameof(ProjectList));
-        //}
- 
+//public IActionResult Delete(Project project)
+//{
+//    return RedirectToAction(nameof(ProjectList));
+//}
+
