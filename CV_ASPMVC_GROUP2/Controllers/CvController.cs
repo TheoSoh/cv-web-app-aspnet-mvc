@@ -120,14 +120,49 @@ namespace CV_ASPMVC_GROUP2.Controllers
         [HttpGet]
         public IActionResult EditCv(int id)
         {
-            return View();
+            var cv = context.Cvs.FirstOrDefault(x => x.Id == id);
+
+            var c = new Cv();
+
+
+            c.ImageFile = cv.ImageFile;
+            c.Description = cv.Description; 
+
+            
+
+            return View(c);
 
         }
 
         [HttpPost]
-        public IActionResult EditCv(ShowCvViewModel scvm, int id)
+        public IActionResult EditCv(Cv cv, int id)
         {
-            return RedirectToAction("ShowCv", "Cv");
+
+            try
+            {
+
+                string stringFile = UploadFile(cv);
+                var c = context.Cvs.FirstOrDefault(x => x.Id == id);
+
+
+                c.CvImage = stringFile;
+                c.Description = cv.Description;
+                
+
+
+
+                context.Update(c);
+                context.SaveChanges();
+
+
+
+                return RedirectToAction("ShowCv", "Cv");
+            }
+            catch (Exception ex)
+            {
+
+                return View(cv);
+            }
         }
 
     }
