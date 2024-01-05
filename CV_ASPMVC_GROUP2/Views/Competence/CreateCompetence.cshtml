@@ -1,16 +1,16 @@
-﻿@model CV_ASPMVC_GROUP2.Models.EducationViewModel
+﻿@model CV_ASPMVC_GROUP2.Models.Competence
 
 
 @{
-    ViewData["Title"] = "Add Education-page";
+    ViewData["Title"] = "Add Competence-page";
 }
 
 
 
-<h1>Skapa ny Utbildning</h1>
+<h1>Skapa ny Kompetens</h1>
 
 <div asp-validation-summary="All" class="text-danger"></div>
-<form method="post" asp-action="CreateEducation" enctype="multipart/form-data">
+<form method="post" asp-action="CreateCompetence" enctype="multipart/form-data">
     <div class="form-group row">
         <div class="col-sm-2">
             <label asp-for="Name"></label>
@@ -32,7 +32,7 @@
     <br />
     <div class="form-group row">
         <div class="offset-2 col-sm-4">
-            <button type="submit" class="btn btn-primary">Skapa ny Utbildning</button>
+            <button type="submit" class="btn btn-primary">Skapa ny Kompetens</button>
         </div>
     </div>
 

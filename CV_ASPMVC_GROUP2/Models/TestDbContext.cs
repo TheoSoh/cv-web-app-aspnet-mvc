@@ -16,6 +16,10 @@ namespace CV_ASPMVC_GROUP2.Models
         public DbSet<Experience> Experiences { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Project> Projects { get; set; }
+        public DbSet<CvCompetence> CvCompetences { get; set; }
+        public DbSet<CvEducation> CvEducations { get; set; }
+        public DbSet<CvExperience> CvExperiences { get; set; }
+        public DbSet<UserProject> UserProjects { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

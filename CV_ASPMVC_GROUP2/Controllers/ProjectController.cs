@@ -26,11 +26,11 @@ namespace CV_ASPMVC_GROUP2.Controllers
         }
 
         [HttpGet]
-        //public IActionResult Create()
-        //{
-        //    //var items = _context.Projects.ToList();
-        //    //return View(items);
-        //}
+        public IActionResult Create()
+        {
+            //var items = _context.Projects.ToList();
+            return View();
+        }
 
         [HttpPost]
         public async Task<IActionResult> Create(ProjectViewModel pm)

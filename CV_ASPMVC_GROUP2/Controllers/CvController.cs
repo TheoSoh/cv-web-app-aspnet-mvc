@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
-using CV_ASPMVC_GROUP2.Models;
+﻿using CV_ASPMVC_GROUP2.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
-
+using Microsoft.IdentityModel.Tokens;
 
 namespace CV_ASPMVC_GROUP2.Controllers
 {
@@ -11,108 +9,87 @@ namespace CV_ASPMVC_GROUP2.Controllers
     {
         private TestDbContext context;
         private readonly IWebHostEnvironment _webHostEnvironment;
-
-        public CvController(TestDbContext context, IWebHostEnvironment webHostEnvironment)
+        public CvController(TestDbContext context, IWebHostEnvironment _webHostEnvironment)
         {
             this.context = context;
-            _webHostEnvironment = webHostEnvironment;
+            this._webHostEnvironment = _webHostEnvironment;
+
         }
 
-        public IActionResult Index()
-        {
-            var items = context.Cvs.ToList();
-            return View(items);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> AddCV(CvViewModel cvViewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                var cv = new Cv { Id = cvViewModel.Id, Description = cvViewModel.Description };
-                context.Cvs.Add(cv);
-                context.SaveChangesAsync();
-
-                if (cvViewModel.SelectedEducations != null)
-                {
-                    var educations = context.Educations.Where(e => cvViewModel.SelectedEducations.Contains(e.Id)).ToList();
-                    cv.CvEducations = educations.Select(e => new CvEducation { CvId = cv.Id, EducationId = e.Id}).ToList();
-                }
-
-                // Här ska en erfarenhet läggas till för CV som man får välja från en flervalslista
-                if (cvViewModel.SelectedExperience != null)
-                {
-                    var experiences = context.Experiences.Where(ex => cvViewModel.SelectedExperience.Contains(ex.Id)).ToList();
-                    cv.CvExperiences = experiences.Select(ex => new CvExperience { CvId = cv.Id, ExperienceId = ex.Id }).ToList();
-                }
-
-                // samma som ovan fast för kompetens för cv
-                if (cvViewModel.SelectedCompetence != null)
-                {
-                    var competences = context.Competences.Where(c => cvViewModel.SelectedCompetence.Contains(c.Id)).ToList();
-                    cv.CvCompetences = competences.Select(c => new CvCompetence { CvId = cv.Id, CompetenceId = c.Id }).ToList();
-                }
-
-                context.Cvs.Add(cv);
-                await context.SaveChangesAsync();
-
-                return RedirectToAction("Index", "Home");
-            }
-            return View(cvViewModel);
-        }
-
+        //Här är en action metod som skapar vyn och skickar den lämpliga vyn "showcvview" till användaren. Här visas cv:et för den användare som man klickar in på via profilsidan.  
         [HttpGet]
-        public IActionResult AddCV()
+        public IActionResult ShowCv(string userId)
         {
+            ShowCvViewModel viewModel = new ShowCvViewModel { };
+            viewModel.User = context.Users.Where(u => u.Id == userId).Single();
+            viewModel.Cv = context.Cvs.Where(c => c.User_ID == userId).Single();
 
-            var model = new CvViewModel
+            IEnumerable<CvCompetence> cvCompetences = context.CvCompetences.Where(cc => cc.CvId == viewModel.Cv.Id).ToList();
+            List<Competence> competencesToView = new List<Competence>();
+            foreach(var cvCompetence in cvCompetences)
             {
-                AvailableEducations = context.Educations.Select(e => new EducationViewModel { Id = e.Id, Name = e.Name, Description = e.Description }).ToList(),
-
-                AvailableExperience = context.Experiences.Select(ex => new ExperienceViewModel { Id = ex.Id, Name = ex.Name, Description = ex.Description }).ToList(),
-
-                AvailableCompetence = context.Competences.Select(c => new CompetenceViewModel { Id = c.Id, Name = c.Name, Description = c.Description  }).ToList()
-            };
-            
-
-            // Här läggs exempeldata till valde bara några - så om listan är tom så läggs exempeldatan till
-            if (model.AvailableExperience.Count == 0)
-            {
-                model.AvailableExperience.Add(new ExperienceViewModel { Id = 1, Name = "Kundtjänstmedarbetare" });
-                
+                competencesToView.Add(context.Competences.Where(c => c.Id == cvCompetence.CompetenceId).Single());
             }
+            viewModel.Competences = competencesToView;
 
-            if (model.AvailableEducations.Count == 0)
+            IEnumerable<CvExperience> cvExperiences = context.CvExperiences.Where(cc => cc.CvId == viewModel.Cv.Id).ToList();
+            List<Experience> experiencesToView = new List<Experience>();
+            foreach(var experience in cvExperiences)
             {
-                model.AvailableEducations.Add(new EducationViewModel { Id = 1, Name = "Systemvetare" });
-                
+                experiencesToView.Add(context.Experiences.Where(ex => ex.Id == experience.ExperienceId).Single());
             }
+            viewModel.Experiences = experiencesToView;
 
-            if (model.AvailableCompetence.Count == 0)
+            IEnumerable<CvEducation> cvEducations = context.CvEducations.Where(cc => cc.CvId == viewModel.Cv.Id).ToList();
+            List<Education> educationsToView = new List<Education>();
+            foreach(var education in cvEducations)
             {
-                model.AvailableCompetence.Add(new CompetenceViewModel { Id = 1, Name = "JavaScript" });
-                
+                educationsToView.Add(context.Educations.Where(ed => ed.Id == education.EducationId).Single());
             }
-
-            return View(model);
-
+            viewModel.Educations = educationsToView;
+            return View(viewModel);
         }
 
-        
-        
 
-        public IActionResult CvList()
+
+        //Metoden här gör så att vyn kommer att göras synlig på hemsidan. den tar emot en request och skickar den lämpliga vyn till användaren  
+        [HttpGet]
+        public IActionResult CreateCv()
         {
             return View();
         }
 
-        //public IActionResult Delete(Cv cv)
-        //{
-        //    return RedirectToAction();
-        //}
+        //Metoden begär en resurs tex i detta fall så vill vi skapa ett objekt i databasen
+        [HttpPost]
+        public async Task<IActionResult> CreateCv(Cv cvm)
+        {
+            if (ModelState.IsValid)
+            {
+
+                string stringFile = UploadFile(cvm);
+                var cv = new Cv();
 
 
-        private string UploadFile(CvViewModel cvm)
+                cv.Description = cvm.Description;
+                cv.CvImage = stringFile;
+                cv.User_ID = base.UserId;
+                await context.AddAsync(cv);
+                await context.SaveChangesAsync();
+
+                return RedirectToAction("CreateCv", "Cv");
+
+            }
+            return View(cvm);
+
+        }
+
+        //Metod som utför en filuppladdningsfunktion för ett cv. _WebhostEnvironment.WebRootPath slapar en sökväg där filen/bilden kommer att sparas
+        //Den kollar sedan om sökvägen "Uploaddir" inte finns om inte så skapas den. 
+        //Sedan genereras ett unikt filnamn
+        //FileStream = skapar filen på den anvgivna filvägen 
+        //till sist returnerar det genererade filnamnet. 
+        //koden hanterar uppladdningen av en fil för en bild till ett cv och sedan sparar den på servern under katalogen för Images
+        private string UploadFile(Cv cvm)
         {
             string fileName = null;
             if (cvm.ImageFile != null)
@@ -134,134 +111,24 @@ namespace CV_ASPMVC_GROUP2.Controllers
             return fileName;
         }
 
-
-        public IActionResult Indexx()
+        public IActionResult CvList()
         {
-            var items = context.Experiences.ToList();
-            return View(items);
+            return View();
         }
 
+
         [HttpGet]
-        public IActionResult Create()
+        public IActionResult EditCv(int id)
         {
-            var model = new ExperienceViewModel();
-            return View(model);
+            return View();
+
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(ExperienceViewModel experienceviewmodel)
+        public IActionResult EditCv(ShowCvViewModel scvm, int id)
         {
-
-
-            if (ModelState.IsValid)
-            {
-
-                var experience = new Experience();
-
-                experience.Name = experienceviewmodel.Name;
-                experience.Description = experienceviewmodel.Description;
-                await context.AddAsync(experience);
-                await context.SaveChangesAsync();
-
-
-                var cvExperience = new CvExperience();
-                //cvExperience.UserId = base.UserId;
-                cvExperience.Experience = experience;
-                await context.AddAsync(cvExperience);
-                await context.SaveChangesAsync();
-
-                return RedirectToAction("Indexx", "Cv");
-
-            }
-            return View(experienceviewmodel);
-
+            return RedirectToAction("ShowCv", "Cv");
         }
-
-
-
-        public IActionResult Indexxx()
-        {
-            var items = context.Educations.ToList();
-            return View(items);
-        }
-
-        [HttpGet]
-        public IActionResult CreateEducation()
-        {
-            var model = new EducationViewModel();
-            return View(model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateEducation(EducationViewModel educationviewmodel)
-        {
-
-
-            if (ModelState.IsValid)
-            {
-
-                var education = new Education();
-
-                education.Name = educationviewmodel.Name;
-                education.Description = educationviewmodel.Description;
-                await context.AddAsync(education);
-                await context.SaveChangesAsync();
-
-
-                var cvEducation = new CvEducation();
-                cvEducation.Education = education;
-                await context.AddAsync(cvEducation);
-                await context.SaveChangesAsync();
-
-                return RedirectToAction("CreateEducation", "Cv");
-
-            }
-            return View(educationviewmodel);
-
-        }
-
-        public IActionResult Indexxxx()
-        {
-            var items = context.Competences.ToList();
-            return View(items);
-        }
-
-        [HttpGet]
-        public IActionResult CreateCompetence()
-        {
-            var model = new CompetenceViewModel();
-            return View(model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateCompetence(CompetenceViewModel competenceviewmodel)
-        {
-
-
-            if (ModelState.IsValid)
-            {
-
-                var competence = new Competence();
-
-                competence.Name = competenceviewmodel.Name;
-                competence.Description = competenceviewmodel.Description;
-                await context.AddAsync(competence);
-                await context.SaveChangesAsync();
-
-
-                var cvCompetence = new CvCompetence();
-                cvCompetence.Competence = competence;
-                await context.AddAsync(cvCompetence);
-                await context.SaveChangesAsync();
-
-                return RedirectToAction("CreateCompetence", "Cv");
-
-            }
-            return View(competenceviewmodel);
-
-        }
-
-
 
     }
 }

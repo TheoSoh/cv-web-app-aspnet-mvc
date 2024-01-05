@@ -4,6 +4,7 @@ using CV_ASPMVC_GROUP2.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CV_ASPMVC_GROUP2.Migrations
 {
     [DbContext(typeof(TestDbContext))]
-    partial class TestDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240105115538_MigrationThree")]
+    partial class MigrationThree
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,13 +95,13 @@ namespace CV_ASPMVC_GROUP2.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("User_ID")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("User_ID")
-                        .IsUnique()
-                        .HasFilter("[User_ID] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Cvs");
                 });
@@ -513,7 +516,9 @@ namespace CV_ASPMVC_GROUP2.Migrations
                 {
                     b.HasOne("CV_ASPMVC_GROUP2.Models.User", "User")
                         .WithOne("Cv")
-                        .HasForeignKey("CV_ASPMVC_GROUP2.Models.Cv", "User_ID");
+                        .HasForeignKey("CV_ASPMVC_GROUP2.Models.Cv", "User_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
