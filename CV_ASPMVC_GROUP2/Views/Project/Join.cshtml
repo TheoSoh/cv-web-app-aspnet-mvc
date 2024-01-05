@@ -46,4 +46,9 @@
         </tr>
 
     </table>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-info">@TempData["Message"]</div>
+    }
 </form>
