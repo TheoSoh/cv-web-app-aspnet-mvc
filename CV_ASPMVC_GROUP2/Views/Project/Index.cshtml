@@ -16,16 +16,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Titel
             </th>
               <th>
-                @Html.DisplayNameFor(model => model.Description)
+                Beskrivning
         </th>
         <th>
-                @Html.DisplayNameFor(model => model.UserProjects)
+                Deltagare
         </th>
         <th>
-                @Html.DisplayNameFor(model => model.Image)
+                Bild
         </th>
         <th></th>
         </tr>
@@ -41,8 +41,8 @@
                 @Html.DisplayFor(modelItem => item.Description)
                 </td>
 
-                 <td class="userProject">
-                    @Html.DisplayFor(modelItem => item.UserProjects)
+                <td class="userProject">
+                    @String.Join(" ", item.UserProjects.Select(user => user.user))
                 </td>
 
                 <td>
@@ -64,21 +64,5 @@
          
         }
 
-
-
-
-
     </tbody>
-
-
-
-
-
-
-
-
-
-
-
-
 </table>

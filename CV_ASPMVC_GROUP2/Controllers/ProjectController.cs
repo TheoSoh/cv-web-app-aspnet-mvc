@@ -163,6 +163,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
         [HttpPost]
         public async Task<IActionResult> Join(int? id)
         {
+
             if (id == null || _context.Projects == null)
             {
                 return NotFound();
@@ -174,21 +175,13 @@ namespace CV_ASPMVC_GROUP2.Controllers
                 return NotFound();
             }
 
-
             var anv = _context.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
             var pro = _context.Projects.FirstOrDefault(x => x.Id == id);
-
-            
-
            
                 UserProject userProject = new UserProject();
                 userProject.UserId = anv.Id;
                 userProject.ProjectId = pro.Id;
                 _context.Add(userProject);
-
-            
-           
-
 
 
             await _context.SaveChangesAsync();
