@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using System.Net.Http.Headers;
 
 namespace CV_ASPMVC_GROUP2.Controllers
 {
@@ -133,27 +134,37 @@ namespace CV_ASPMVC_GROUP2.Controllers
             return fileName;
         }
 
-        //[HttpGet]
+        [HttpGet]
+        
 
-        //public async Task<IActionResult> DeleteProject(int? id)
-        //{
-
-        //    if(id == null || _context.Projects == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if
-        //}
-
-        public IActionResult ProjectList()
+        public IActionResult Delete(int id)
         {
-            return View();
+            Project project = _context.Projects.Find(id);
+            return View(project);
         }
 
-        public IActionResult Delete(Project project)
-        {
-            return RedirectToAction(nameof(ProjectList));
+
+        [HttpPost]
+
+        public async Task<IActionResult> Delete(Project project) 
+        { 
+            _context.Projects.Remove(project);
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Project");
+        
         }
+
     }
 }
+
+
+        //public IActionResult ProjectList()
+        //{
+        //    return View();
+        //}
+
+        //public IActionResult Delete(Project project)
+        //{
+        //    return RedirectToAction(nameof(ProjectList));
+        //}
+ 

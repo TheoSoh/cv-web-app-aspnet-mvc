@@ -1,0 +1,49 @@
+﻿@model CV_ASPMVC_GROUP2.Models.Project
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+
+<h1>Vill du radera det här projektet?</h1>
+<div asp-validation-summary="All" class="text-danger"></div>
+<form asp-controller="Project"  asp-action="Delete" method="post">
+   <table class=" table table-light">
+        <div class="form-group">
+        <tr>
+        <td>
+
+        <label asp-for="Name"></label>:
+        <input asp-for="Name" type="text" readonly="readonly"/>
+        </td>
+        </tr>
+        </div>
+
+        <div class="form-group">
+        <tr>
+            <td>
+
+                <label asp-for="Description"></label>:
+                <textarea asp-for="Description" readonly="readonly" class="form-control" rows="3"></textarea>
+
+            </td>
+        </tr>
+        </div>
+
+        <div class="form-group">
+        <tr>
+            <td>
+
+                <label asp-for="CreatedDate"></label>:
+                <input asp-for="CreatedDate" type="text" readonly="readonly" />
+            </td>
+        </tr>
+        </div>
+        <tr>
+            <td>
+                <input type="submit" value ="Radera" class="btn btn-danger" />
+            </td>
+        </tr>
+
+   </table>
+   </form>
