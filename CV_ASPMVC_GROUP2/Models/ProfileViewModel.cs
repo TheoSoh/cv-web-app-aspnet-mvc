@@ -4,8 +4,8 @@ namespace CV_ASPMVC_GROUP2.Models
 {
     public class ProfileViewModel
     {
-        public User user { get; set; }
-        public Cv cv { get; set; }
+        public User User { get; set; }
+        public string AuthorizedUserId { get; set; }
 
 
         [NotMapped]
