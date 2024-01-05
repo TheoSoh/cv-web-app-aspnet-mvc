@@ -10,14 +10,14 @@
     <h1>@Html.DisplayFor(p => p.user.UserName)</h1>
 
     <img src="~/Images/@Html.ValueFor(p => p.user.ProfilePicture)" class="img-fluid" alt="Responsive image" asp-append-version="true" height="200px" width="200px" />
-  
-    <p>@Html.DisplayFor(p => p.user.FirstName)</p>
-    <p>@Html.DisplayFor(p => p.user.LastName)</p>
-    <p>@Html.DisplayFor(p => p.user.Email)</p>
-    <p>@Html.DisplayFor(p => p.user.PhoneNumber)</p>
+    <br />
+    <p class="textInfo">@Html.DisplayFor(p => p.user.FirstName)</p>
+    <p class="textInfo">@Html.DisplayFor(p => p.user.LastName)</p>
+    <p class="textInfo">@Html.DisplayFor(p => p.user.Email)</p>
+    <p class="textInfo">@Html.DisplayFor(p => p.user.PhoneNumber)</p>
 
     <div class="form-group row mb-2">
-        <p>Hantera kontointegritet</p>
+        <p class="privateStatusP">Hantera kontointegritet</p>
         <form asp-controller="Profile" asp-action="UpdatePrivat" method="post">
             <input type="checkbox" name="isChecked" value="true" />
             <input type="submit" value="Privat profil" />
@@ -32,6 +32,7 @@
             <input type="submit" value="Offentlig profil" />
         </form>
     </div>
+   
 </div>
 
 

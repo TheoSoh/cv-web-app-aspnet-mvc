@@ -154,6 +154,49 @@ namespace CV_ASPMVC_GROUP2.Controllers
         
         }
 
+        public IActionResult Join(int id)
+        {
+            Project project = _context.Projects.Find(id);
+            return View(project);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Join(int? id)
+        {
+            if (id == null || _context.Projects == null)
+            {
+                return NotFound();
+
+            }
+            var joina = await _context.Projects.FindAsync(id);
+            if (joina == null)
+            {
+                return NotFound();
+            }
+
+
+            var anv = _context.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
+            var pro = _context.Projects.FirstOrDefault(x => x.Id == id);
+
+            
+
+           
+                UserProject userProject = new UserProject();
+                userProject.UserId = anv.Id;
+                userProject.ProjectId = pro.Id;
+                _context.Add(userProject);
+
+            
+           
+
+
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Project");
+        }
+
+
     }
 }
 
