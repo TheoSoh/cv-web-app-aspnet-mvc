@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CV_ASPMVC_GROUP2.Models
@@ -16,6 +17,7 @@ namespace CV_ASPMVC_GROUP2.Models
         public virtual User User { get; set; }
 
         [NotMapped]
+        [Required]
         public IFormFile? ImageFile { get; set; }
         public virtual IEnumerable<UserProject> UserProjects { get; set; } = new List<UserProject>();
     }

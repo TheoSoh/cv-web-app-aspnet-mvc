@@ -1,5 +1,6 @@
 ﻿using CV_ASPMVC_GROUP2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CV_ASPMVC_GROUP2.Controllers
 {
@@ -15,11 +16,26 @@ namespace CV_ASPMVC_GROUP2.Controllers
         [HttpGet]
         public IActionResult Index(string searchString)
         {
-            //Söker efter användare vars användarnamn eller förnamn matchar den inkommande söksträngen
-            var model = _context.Users.Where(u => u.UserName.Contains(searchString) || u.FirstName.Contains(searchString)).ToList();
+            IQueryable<User> users = _context.Users;
 
-            return View(model);
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                users = users.Where(u => u.UserName.Contains(searchString) || u.FirstName.Contains(searchString));
+
+                if (User.Identity.IsAuthenticated)
+                {
+                    users = users.Include(u => u.Cv); 
+                }
+                else
+                {
+                    users = users.Where(u => u.PrivateStatus);
+                }
+            }
+
+            var searchResult = users.ToList();
+            return View(searchResult);
         }
+
     }
 }
 
