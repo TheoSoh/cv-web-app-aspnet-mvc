@@ -19,15 +19,18 @@ namespace CV_ASPMVC_GROUP2.Controllers
         public IActionResult Index(string userId)
         {
             string currentUserId = base.UserId;
-            var profileViewModel = new ProfileViewModel { };
+            var profileViewModel = new ProfileViewModel
+            {
+                AuthorizedUserId = currentUserId
+            };
 
             if(userId == null)
             {
-                profileViewModel.user = _context.Users.Where(u => u.Id.Equals(currentUserId)).Single(); 
+                profileViewModel.User = _context.Users.Where(u => u.Id.Equals(currentUserId)).Single(); 
             }
             else
             {
-                profileViewModel.user = _context.Users.Where(u => u.Id.Equals(userId)).Single();
+                profileViewModel.User = _context.Users.Where(u => u.Id.Equals(userId)).Single();
             }
             return View(profileViewModel);
         }
@@ -81,21 +84,25 @@ namespace CV_ASPMVC_GROUP2.Controllers
        
 
         [HttpPost]
-        public ActionResult UpdatePrivat(bool isChecked)
+        [Authorize]
+        public IActionResult UpdatePrivateStatus()
         {
             var anv = _context.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
-
-
-            
-            if (anv != null)
+            if (!anv.PrivateStatus)
             {
-                anv.PrivateStatus = isChecked;
+                anv.PrivateStatus = true;
                 _context.Update(anv);
                 _context.SaveChanges();
             }
+            else
+            {
+                anv.PrivateStatus = false;
+                _context.Update(anv);
+                _context.SaveChanges();
+            }
+            
 
-            return RedirectToAction("Index","Profile");
-
+            return RedirectToAction("Index", "Profile");
         }
     }
 }
