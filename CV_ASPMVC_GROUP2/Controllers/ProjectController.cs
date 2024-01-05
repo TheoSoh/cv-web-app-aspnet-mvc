@@ -22,6 +22,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
         public IActionResult Index()
         {
             var items = _context.Projects.ToList();
+            ViewBag.CurrentUserId = base.UserId;
             return View(items);
         }
 
