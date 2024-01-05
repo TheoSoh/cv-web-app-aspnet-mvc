@@ -113,7 +113,17 @@ namespace CV_ASPMVC_GROUP2.Controllers
             return View(messagesWithUsername);
         }
 
-     
+
+        [HttpGet]
+        public IActionResult GetUnreadMessages()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var unreadMessagesCount = _context.Messages.Count(m => m.ToUserId == userId && m.Read == false);
+
+            return Json(new { count = unreadMessagesCount });
+        }
+
+
         [HttpPost]
         public IActionResult MarkAsRead(int messageId)
         {
@@ -122,7 +132,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
             {
                 message.Read = true;
                 _context.SaveChanges();
-                return Ok(); 
+                return RedirectToAction("Inbox");
             }
             return NotFound(); 
         }

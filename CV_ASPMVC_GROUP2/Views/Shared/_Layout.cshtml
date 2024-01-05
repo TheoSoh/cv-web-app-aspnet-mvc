@@ -74,8 +74,27 @@
         <div class="container py-3">
             <a asp-action="Inbox" asp-controller="Message" class="btn btn-primary">Inkommande meddelanden</a>
             <a asp-action="SendMessage" asp-controller="Message" class="btn btn-primary">Skicka meddelande</a>
+            <p>Antal olästa meddelanden: <span id="unreadMessagesCount">-</span></p>
+
         </div>
     </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: 'GET',
+                url: '/Message/GetUnreadMessages',
+                success: function (response) {
+                    $('#unreadMessagesCount').text(response.count); 
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+    </script>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
