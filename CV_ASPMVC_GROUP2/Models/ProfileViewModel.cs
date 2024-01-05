@@ -6,6 +6,7 @@ namespace CV_ASPMVC_GROUP2.Models
     {
         public User User { get; set; }
         public Cv Cv { get; set; }
+        public string AuthorizedUserId { get; set; }
 
 
         [NotMapped]

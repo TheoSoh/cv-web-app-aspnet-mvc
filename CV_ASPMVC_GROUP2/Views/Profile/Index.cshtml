@@ -1,8 +1,5 @@
 ﻿@model ProfileViewModel
 
-
-
-
 <h1>Välkommen till profilsidan</h1>
 
 <a asp-action="UploadFile">Ladda upp en profilbild</a>
@@ -18,6 +15,15 @@
     <p> Epost: @Html.DisplayFor(p => p.User.Email)</p>
     <p>Telefonnummer: @Html.DisplayFor(p => p.User.PhoneNumber)</p>
 </div>
+
+@if (Model.User.Id.Equals(Model?.AuthorizedUserId))
+{
+    <form id="UpdatePrivateStatus" asp-controller="Profile" asp-action="UpdatePrivateStatus" method="post">
+        <label>Privat profil:</label>
+            @Html.CheckBoxFor(model => Model.User.PrivateStatus, new { onchange = "document.getElementById('UpdatePrivateStatus').submit()", @class = "toggle", id = "priv" })
+        <label for="priv"></label>
+    </form>
+}
 
 @if(Model.Cv == null)
 {
