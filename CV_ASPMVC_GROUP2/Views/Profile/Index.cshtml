@@ -1,7 +1,25 @@
 ﻿@model ProfileViewModel
 
 <h1>Välkommen till profilsidan</h1>
+@if (Model.User.Id.Equals(Model?.AuthorizedUserId))
+{
+    <form id="UpdatePrivateStatus" asp-controller="Profile" asp-action="UpdatePrivateStatus" method="post">
+        <label>Privat profil:</label>
+        @Html.CheckBoxFor(model => Model.User.PrivateStatus, new { onchange = "document.getElementById('UpdatePrivateStatus').submit()", @class = "toggle", id = "priv" })
+        <label for="priv"></label>
+    </form>
+}
 
+@if (Model.Cv == null)
+{
+    <a asp-controller="Cv" asp-action="CreateCv">Lägg till ett Cv</a>
+    <br />
+}
+else
+{
+    <a asp-controller="Cv" asp-action="ShowCv" asp-route-userId="@Model.User.Id">Visa Cv-sidan</a>
+    <br />
+}
 <a asp-action="UploadFile">Ladda upp en profilbild</a>
 
 <div class="info">
@@ -14,22 +32,7 @@
     <p>Efternamn: @Html.DisplayFor(p => p.User.LastName)</p>
     <p> Epost: @Html.DisplayFor(p => p.User.Email)</p>
     <p>Telefonnummer: @Html.DisplayFor(p => p.User.PhoneNumber)</p>
+
+
+    
 </div>
-
-@if (Model.User.Id.Equals(Model?.AuthorizedUserId))
-{
-    <form id="UpdatePrivateStatus" asp-controller="Profile" asp-action="UpdatePrivateStatus" method="post">
-        <label>Privat profil:</label>
-            @Html.CheckBoxFor(model => Model.User.PrivateStatus, new { onchange = "document.getElementById('UpdatePrivateStatus').submit()", @class = "toggle", id = "priv" })
-        <label for="priv"></label>
-    </form>
-}
-
-@if(Model.Cv == null)
-{
-    <a asp-controller="Cv" asp-action="CreateCv">Lägg till ett Cv</a>
-}
-else
-{
-    <a asp-controller="Cv" asp-action="ShowCv" asp-route-userId="@Model.User.Id">Visa Cv-sidan</a>
-}
