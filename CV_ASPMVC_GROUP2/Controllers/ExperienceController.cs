@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace CV_ASPMVC_GROUP2.Controllers
 {
@@ -22,35 +23,37 @@ namespace CV_ASPMVC_GROUP2.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            var model = new ExperienceViewModel();
-            return View(model);
+            
+            return View();
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> Create(ExperienceViewModel experienceviewmodel)
+        public async Task<IActionResult> Create(Experience ex)
         {
             if (ModelState.IsValid)
             {
 
                 var experience = new Experience();
 
-                experience.Name = experienceviewmodel.Name;
-                experience.Description = experienceviewmodel.Description;
+                experience.Name = ex.Name;
+                experience.Description = ex.Description;
                 await _context.AddAsync(experience);
                 await _context.SaveChangesAsync();
 
+                string currentUserId = base.UserId;
+                int currentCvId = _context.Cvs.Where(c => c.User_ID == currentUserId).Single().Id;
 
                 var cvExperience = new CvExperience();
-                //cvExperience.UserId = base.UserId;
+                cvExperience.CvId = currentCvId;
                 cvExperience.Experience = experience;
                 await _context.AddAsync(cvExperience);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("Create", "Cv");
+                return RedirectToAction("Create", "Experience");
 
             }
-            return View(experienceviewmodel);
+            return View(ex);
 
         }
 

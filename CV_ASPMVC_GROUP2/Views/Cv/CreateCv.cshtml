@@ -1,0 +1,56 @@
+﻿@model CV_ASPMVC_GROUP2.Models.Cv
+@{
+    ViewData["Title"] = "Add Project-page";
+}
+
+
+
+<h1>Skapa nytt Cv</h1>
+<h2>Fyll i Beskrivning och lägg till en bild</h2>
+
+<div asp-validation-summary="All" class="text-danger"></div>
+<form method="post" asp-action="CreateCv" enctype="multipart/form-data">
+   @*  <div class="form-group row">
+        <div class="col-sm-2">
+            <label asp-for="Description"></label>
+        </div>
+        <div class="col-sm-4">
+            <input asp-for="Desscription" class="form-control" />
+        </div>
+    </div>
+    <br /> *@
+    <div class="form-group row">
+        <div class="col-sm-2">
+            <label>Beskriving: </label>
+        </div>
+        <div class="col-sm-4">
+            <input asp-for="Description" class="form-control" />
+        </div>
+    </div>
+    <br />
+    <div class="form-group row">
+        <div class="col-sm-2">
+            <label> Bild: </label>
+        </div>
+        <div class="col-sm-4">
+            <input type="File" asp-for="ImageFile" class="custom-file-input" />
+            <label class="custom-file-label" for="customFile">Välj fil</label>
+        </div>
+    </div>
+    <br />
+    <div class="form-group row">
+        <div class="offset-2 col-sm-4">
+            <button type="submit" class="btn btn-primary">Skapa Cv</button>
+        </div>
+    </div>
+    <td>
+        <a asp-action="Create" asp-controller="Experience">Lägg till erfarenhet</a>
+    </td>
+    <td>
+        <a asp-action="CreateEducation" asp-controller="Education">Lägg till Utbildning</a>
+    </td>
+    <td>
+        <a asp-action="CreateCompetence" asp-controller="Competence">Lägg till Kompetens</a>
+    </td>
+
+</form>

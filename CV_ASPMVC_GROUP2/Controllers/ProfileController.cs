@@ -32,6 +32,11 @@ namespace CV_ASPMVC_GROUP2.Controllers
             {
                 profileViewModel.User = _context.Users.Where(u => u.Id.Equals(userId)).Single();
             }
+            try
+            {
+                profileViewModel.Cv = _context.Cvs.Where(c => c.User_ID == currentUserId).Single();
+            }
+            catch(Exception ex) { }
             return View(profileViewModel);
         }
 
