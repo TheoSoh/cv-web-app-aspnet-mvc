@@ -43,7 +43,15 @@
 
                
                 <td class="userProject">
-                    @String.Join(" ", item.UserProjects.Select(user => user.user))
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @String.Join(" ", item.UserProjects.Select(user => user.user))
+                    }
+                    else
+                    {
+                        var nonPrivateUsers = item.UserProjects.Where(user => !user.user.PrivateStatus == true).Select(user => user.user);
+                        @String.Join(" ", nonPrivateUsers)
+                    }
                 </td>
 
                 <td>
