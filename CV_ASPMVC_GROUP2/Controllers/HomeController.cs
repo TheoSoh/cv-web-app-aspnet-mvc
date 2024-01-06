@@ -23,10 +23,10 @@ namespace CV_ASPMVC_GROUP2.Controllers
             
             model.Users = _context.Users.Where(u => !u.PrivateStatus).Where(u => u.Cv != null).Take(3).ToList();
 
-            //Hämtar de 5 senaste projekten och sorterar genom datum de skapades (fallande) samt konverterar resultatet till lista
+            //Hämtar det senaste projektet och sorterar genom datum de skapades (fallande) samt konverterar resultatet till lista
             model.Projects = _context.Projects
                 .OrderByDescending(p => p.CreatedDate) 
-                .Take(5) 
+                .Take(1) 
                 .ToList();
 
             return View(model);
