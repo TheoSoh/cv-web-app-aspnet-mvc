@@ -4,7 +4,7 @@
 }
 
 <div class="card" style="width:300px" >
-    <img src="~/Images/@Html.ValueFor(model => model.User.ProfilePicture)" class="card-img-top" alt="Responsive image" asp-append-version="true" />
+    <img src="~/Images/@Html.ValueFor(model => model.User.ProfilePicture)" class="card-img-top" alt="Profilbild" asp-append-version="true" />
     <div class="card-body">
         <h2>Kontaktuppgifter</h2>
         <h5 class="card-title">Namn: @Html.DisplayFor(model => model.User.FirstName) @Html.DisplayFor(model => model.User.LastName)</h5>
@@ -12,16 +12,18 @@
         <p>Email: @Html.DisplayFor(model => model.User.Email)</p>
     </div>
 </div>
-<a asp-action="EditCv" asp-controller="Cv" asp-route-id ="@Model.Cv.Id">Redigera Cv</a>
-<a asp-action="CreateCompetence" asp-controller="Competence">Lägg till kompetens</a>
-<a asp-action="CreateExperience" asp-controller="Experience">Lägg till erfarenhet</a>
-<a asp-action="CreateEducation" asp-controller="Education">Lägg till utbildning</a>
 
-
+@if(Model.User.UserName.Equals(User?.Identity?.Name))
+{
+    <a class="btn btn-dark" asp-action="EditCv" asp-controller="Cv" asp-route-id="@Model.Cv.Id">Redigera Cv</a>
+    <a class="btn btn-dark" asp-action="CreateCompetence" asp-controller="Competence">Lägg till kompetens</a>
+    <a class="btn btn-dark" asp-action="CreateExperience" asp-controller="Experience">Lägg till erfarenhet</a>
+    <a class="btn btn-dark" asp-action="CreateEducation" asp-controller="Education">Lägg till utbildning</a>
+}
 
 <div class="container-fluid">
     <h5>@Html.DisplayNameFor(model => model.Cv.ImageFile)</h5>
-    <img src="~/Images/@Html.ValueFor(model => model.Cv.CvImage)" class="img-fluid" alt="Responsive image" asp-append-version="true" height="200px" width="200px" />
+    <img src="~/Images/@Html.ValueFor(model => model.Cv.CvImage)" class="img-fluid" alt="CV-bild" asp-append-version="true" height="200px" width="200px" />
     <br />
     <h5>@Html.DisplayNameFor(model => model.Cv.Description)</h5>
     <p>@Html.DisplayFor(model => model.Cv.Description)</p>
@@ -34,7 +36,10 @@
         <p>@Html.DisplayFor(model => item.Name)</p>
         <h5 class="card-title">@Html.DisplayNameFor(model => item.Description)</h5>
         <p>@Html.DisplayFor(model => item.Description)</p>
-        <a asp-action="Delete" asp-controller="Education" asp-route-id="@item.Id">Ta bort utbildning</a>
+        @if (Model.User.UserName.Equals(User?.Identity?.Name))
+        {
+            <a class="btn btn-dark" asp-action="Delete" asp-controller="Education" asp-route-id="@item.Id">Ta bort utbildning</a>
+        }
     </div>
     <br />
 }
@@ -46,7 +51,10 @@
         <p>@Html.DisplayFor(model => item.Name)</p>
         <h5 class="card-title">@Html.DisplayNameFor(model => item.Description)</h5>
         <p>@Html.DisplayFor(model => item.Description)</p>
-        <a asp-action="DeleteExperience" asp-controller="Experience" asp-route-id ="@item.Id">Ta bort erfarenhet</a>
+        @if (Model.User.UserName.Equals(User?.Identity?.Name))
+        {
+            <a class="btn btn-dark" asp-action="DeleteExperience" asp-controller="Experience" asp-route-id="@item.Id">Ta bort erfarenhet</a>
+        }
     </div>
     <br />
 }
@@ -58,109 +66,12 @@
         <p>@Html.DisplayFor(model => item.Name)</p>
         <h5 class="card-title">@Html.DisplayNameFor(model => item.Description)</h5>
         <p>@Html.DisplayFor(model => item.Description)</p>
-        <a asp-action="Delete" asp-controller="Competence" asp-route-id ="@item.Id">Ta bort kompetens</a>
+        @if (Model.User.UserName.Equals(User?.Identity?.Name))
+        {
+            <a class="btn btn-dark" asp-action="Delete" asp-controller="Competence" asp-route-id="@item.Id">Ta bort kompetens</a>
+        }
     </div>
     <br />
 }
- 
 
- 
-@*
-
-<table class= "table">
-<thead>
-    <tr>
-        <th>
-                @Html.DisplayNameFor(model => model.Cv.ImageFile)
-        </th>
-        <th>
-                @Html.DisplayNameFor(model => model.Cv.Description)
-        </th>
-        
-        @foreach(var item in Model.Educations)
-        {
-            <th>
-                @Html.DisplayNameFor(model => item.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => item.Description)
-            </th>
-        }
-
-        @foreach (var item in Model.Experiences)
-        {
-            <th>
-                @Html.DisplayNameFor(model => item.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => item.Description)
-            </th>
-        }
-            @foreach (var item in Model.Competences)
-            {
-                <th>
-                    @Html.DisplayNameFor(model => item.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => item.Description)
-                </th>
-            }
-        
-    </tr>
-</thead>
-<tbody>
-        
-        <tr>
-            <td>
-                    <img src="~/Images/@Html.ValueFor(model => model.Cv.CvImage)" class="img-fluid" alt="Responsive image" asp-append-version="true" height="200px" width="200px" />
-            </td>
-            <td>
-                    @Html.DisplayFor(model => model.Cv.Description)
-            </td>
-
-
-    @foreach(var item in Model.Educations)
-    {
-       
-            <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-            </td>
-
-        
-    }
-
-    @foreach(var item in Model.Experiences)
-    {
-            <td>
-                    @Html.DisplayFor(modelItem => item.Name)  
-            </td>
-            <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-            </td>
-    }
-
-    @foreach(var item in Model.Competences)
-    {
-            <td>
-                    @Html.DisplayFor(modeIteml => item.Name)
-            </td>
-            <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-            </td>
-    }
-
-        </tr>
-
-        
-
-    <div class="text-center">
-            <a asp-action="EditCv" asp-controller="Cv">Ändra CV</a>
-    </div>
-
-    <a asp-action="SendMessage" asp-controller="Message" class="btn btn-primary">Skicka meddelande</a>
-
-</tbody>
-*@
+<div style="height:50px" class="container-fluid"></div>
