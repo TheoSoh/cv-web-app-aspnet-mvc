@@ -26,7 +26,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
             IEnumerable<CvCompetence> cvCompetences = context.CvCompetences.Where(cc => cc.CvId == viewModel.Cv.Id).ToList();
             List<Competence> competencesToView = new List<Competence>();
-            foreach(var cvCompetence in cvCompetences)
+            foreach (var cvCompetence in cvCompetences)
             {
                 competencesToView.Add(context.Competences.Where(c => c.Id == cvCompetence.CompetenceId).Single());
             }
@@ -34,7 +34,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
             IEnumerable<CvExperience> cvExperiences = context.CvExperiences.Where(cc => cc.CvId == viewModel.Cv.Id).ToList();
             List<Experience> experiencesToView = new List<Experience>();
-            foreach(var experience in cvExperiences)
+            foreach (var experience in cvExperiences)
             {
                 experiencesToView.Add(context.Experiences.Where(ex => ex.Id == experience.ExperienceId).Single());
             }
@@ -42,7 +42,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
             IEnumerable<CvEducation> cvEducations = context.CvEducations.Where(cc => cc.CvId == viewModel.Cv.Id).ToList();
             List<Education> educationsToView = new List<Education>();
-            foreach(var education in cvEducations)
+            foreach (var education in cvEducations)
             {
                 educationsToView.Add(context.Educations.Where(ed => ed.Id == education.EducationId).Single());
             }
@@ -65,7 +65,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
         {
             if (ModelState.IsValid)
             {
-                
+
                 string stringFile = UploadFile(cvm);
                 var cv = new Cv();
 
@@ -117,28 +117,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
         }
 
 
-        //[HttpGet]
-        //public IActionResult EditCv(int? id)
-        //{
-        //    var cv = context.Cvs.FirstOrDefault(x => x.Id == id);
 
-
-        //    if (cv == null)
-        //    {
-
-        //        return View();
-        //    }
-        //    var ecvm = new EditCvViewModel
-        //    {
-
-        //       ImageFile = cv.ImageFile,
-        //       Description = cv.Description 
-
-        //    };
-
-        //    return View(ecvm);
-
-        //}
 
         [HttpGet]
         public IActionResult EditCv(int? id)
@@ -156,16 +135,19 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
         }
 
+        [HttpPost]
+
         public async Task<IActionResult> EditCv(EditCvViewModel pm, int id)
         {
             try
             {
 
                 string stringFile = UploadFile(pm);
-                var pro = context.Projects.FirstOrDefault(x => x.Id == id);
+                var pro = context.Cvs.FirstOrDefault(x => x.Id == id);
+
 
                 pro.Description = pm.Description;
-                pro.Image = stringFile;
+                pro.CvImage = stringFile;
 
 
 
@@ -185,49 +167,28 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
         private string UploadFile(EditCvViewModel pm)
         {
-            throw new NotImplementedException();
+            string fileName = null;
+            if (pm.ImageFile != null)
+            {
+                string uploadDir = Path.Combine(_webHostEnvironment.WebRootPath, "Images");
+
+                if (!Directory.Exists(uploadDir))
+                {
+                    Directory.CreateDirectory(uploadDir);
+                }
+
+                fileName = Guid.NewGuid().ToString() + "-" + pm.ImageFile.FileName;
+                string filePath = Path.Combine(uploadDir, fileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    pm.ImageFile.CopyTo(fileStream);
+                }
+            }
+            return fileName;
         }
 
-
-
-        //[HttpPost]
-        //public IActionResult EditCv(EditCvViewModel cvs, int id)
-        //{
-
-        //    try
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-
-        //            string stringFile = UploadFile(cvs);
-        //            var c = context.Cvs.FirstOrDefault(x => x.Id == id);
-
-        //            if (c == null)
-        //            {
-        //                return NotFound();
-        //            }
-
-        //            if (!string.IsNullOrEmpty(stringFile))
-        //            {
-        //                c.CvImage = stringFile;
-        //            }
-        //            c.Description = cvs.Description;
-
-        //            context.Update(c);
-        //            context.SaveChanges();
-
-
-
-        //            return RedirectToAction("ShowCv", "Cv");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-
-        //    }
-        //    return View(cvs);
-        //}
-
     }
+
 }
+
+       
