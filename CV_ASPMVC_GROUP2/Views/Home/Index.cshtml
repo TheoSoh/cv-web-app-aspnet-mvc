@@ -11,23 +11,22 @@
         <h2>Du är inloggad som @User.Identity.Name</h2>
     }
 </form>
-
-@foreach(var user in Model.Users)
-{
-    <form id="showcv" asp-controller="Cv" asp-action="ShowCv" asp-route-userId="@user.Id">
-        <div class="card bg-light">
+<div class="container-fluid d-inline-flex gap-5 align-content-center">
+    @foreach(var user in Model.Users)
+    {
+        <div class="card bg-light" style="width:200px">
             @if(user.ProfilePicture != null)
             {
-                <img src="~/Images/@user.ProfilePicture" class="card-img-top" alt="Responsive image" asp-append-version="true" />
+                <img src="~/Images/@user.ProfilePicture" class="card-img-top" alt="Profilbild" asp-append-version="true" />
             }
-            <div class="card-body">
-            <h5 class="card-title">@user.FirstName @user.LastName</h5>
+            <div class="card-body flex-fill">
+                <h5 class="card-title">@user.FirstName @user.LastName</h5>
                 <p>username: @user.UserName</p>
-                <input type="submit" class="btn-outline-light btn" for="showcv"/>
+                <a asp-controller="Cv" asp-action="ShowCv" asp-route-userId="@user.Id" class="btn btn-dark">Visa Cv-sidan</a>
             </div>
         </div>
-    </form>
-}
+    }
+</div>
 
 @* 
 <div id="carouselExampleCaptions" class="carousel slide">

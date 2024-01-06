@@ -65,10 +65,8 @@ namespace CV_ASPMVC_GROUP2.Controllers
         {
             if (ModelState.IsValid)
             {
-
                 string stringFile = UploadFile(cvm);
                 var cv = new Cv();
-
 
                 cv.Description = cvm.Description;
                 cv.CvImage = stringFile;
@@ -77,10 +75,8 @@ namespace CV_ASPMVC_GROUP2.Controllers
                 await context.SaveChangesAsync();
 
                 return RedirectToAction("CreateCv", "Cv");
-
             }
             return View(cvm);
-
         }
 
         //Metod som utför en filuppladdningsfunktion för ett cv. _WebhostEnvironment.WebRootPath slapar en sökväg där filen/bilden kommer att sparas

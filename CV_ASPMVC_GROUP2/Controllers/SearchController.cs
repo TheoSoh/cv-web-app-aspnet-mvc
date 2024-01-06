@@ -1,5 +1,6 @@
 ﻿using CV_ASPMVC_GROUP2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 
 namespace CV_ASPMVC_GROUP2.Controllers
@@ -35,6 +36,25 @@ namespace CV_ASPMVC_GROUP2.Controllers
             var searchResult = users.ToList();
             return View(searchResult);
         }
+
+//        IEnumerable<User> users = _context.Users.ToList();
+//        IEnumerable<User> searchResult = new List<User>();
+
+//            if (!string.IsNullOrEmpty(searchString))
+//            {
+//                if (User.Identity.IsAuthenticated)
+//                {
+//                    searchResult = users.Where(u => u.UserName.Contains(searchString) || u.FirstName.Contains(searchString)).ToList();
+//    }
+//                else
+//                {
+//                    searchResult = users.Where(u => u.UserName.Contains(searchString)).Where(u => !u.PrivateStatus).ToList();
+//}
+//            }
+
+//            return View(searchResult);
+
+
 
     }
 }
