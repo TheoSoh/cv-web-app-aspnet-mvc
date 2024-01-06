@@ -41,6 +41,7 @@
                 @Html.DisplayFor(modelItem => item.Description)
                 </td>
 
+               
                 <td class="userProject">
                     @String.Join(" ", item.UserProjects.Select(user => user.user))
                 </td>
@@ -58,10 +59,13 @@
                         <a asp-controller="Project" asp-action="Delete" asp-route-Id="@item.Id"> Radera </a>
                     </td>
                 }
+
+                @if (User.Identity.IsAuthenticated)
+                {
                     <td>
                         <a asp-controller="Project" asp-action="Join" asp-route-Id ="@item.Id"> Gå med i projekt</a>
                 </td>
-                
+                }
             </tr>
          
         }
