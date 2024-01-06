@@ -7,9 +7,6 @@ namespace CV_ASPMVC_GROUP2.Models
     {
 
 
-
-
-
         [NotMapped]
         [Required(ErrorMessage = "Du måste lägga in en bild till projektet.")]
         public IFormFile? ImageFile { get; set; }

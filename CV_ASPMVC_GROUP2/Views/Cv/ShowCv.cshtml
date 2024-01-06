@@ -3,7 +3,7 @@
     ViewData["Title"] = "Index";
 }
 
-<div class="card">
+<div class="card" style="width:300px" >
     <img src="~/Images/@Html.ValueFor(model => model.User.ProfilePicture)" class="card-img-top" alt="Responsive image" asp-append-version="true" />
     <div class="card-body">
         <h2>Kontaktuppgifter</h2>
@@ -12,7 +12,7 @@
         <p>Email: @Html.DisplayFor(model => model.User.Email)</p>
     </div>
 </div>
-<a asp-action="EditCv" asp-controller="Cv" asp-route-id ="@Model.Cv">Redigera Cv</a>
+<a asp-action="EditCv" asp-controller="Cv" asp-route-id ="@Model.Cv.Id">Redigera Cv</a>
 <a asp-action="CreateCompetence" asp-controller="Competence">Lägg till kompetens</a>
 
 

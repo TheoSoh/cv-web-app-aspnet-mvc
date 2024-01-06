@@ -152,7 +152,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
 
 
-                return RedirectToAction("ShowCv", "Cv");
+                return RedirectToAction("EditCv", "Cv");
             }
             catch (Exception ex)
             {
