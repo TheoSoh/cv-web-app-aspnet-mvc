@@ -1,6 +1,5 @@
 ﻿using CV_ASPMVC_GROUP2.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace CV_ASPMVC_GROUP2.Controllers
 {
@@ -35,45 +34,39 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
             if (ModelState.IsValid)
             {
-
+                //Skapar ett ny instans av competence och tilldelar attribut från vy-modellen till instansen
                 var competence = new Competence();
 
                 competence.Name = cvm.Name;
                 competence.Description = cvm.Description;
+
+                //Lägger till den nya kompetensen i databasen
                 await context.AddAsync(competence);
                 await context.SaveChangesAsync();
 
+                //Hämtar användarens nuvarande ID
                 string currentUserId = base.UserId;
+
+                //Hämtar användarens nuvarande CV ID baserat på användar-ID
                 int currentCvId = context.Cvs.Where(c => c.User_ID == currentUserId).Single().Id;
 
+                //Skapar en koppling mellan CV och den skapade kompetensen
                 var cvCompetence = new CvCompetence();
                 cvCompetence.Competence = competence;
                 cvCompetence.CvId = currentCvId;
+
+                //Lägger till kopplingen i databasen
                 await context.AddAsync(cvCompetence);
                 await context.SaveChangesAsync();
 
+                //Omdirigerar användaren till samma vy för att skapa ny kompetens
                 return RedirectToAction("CreateCompetence", "Competence");
 
             }
+            //Returnerar vy-modellen om validering misslyckades
             return View(cvm);
 
         }
 
-
-        [HttpGet]
-        public IActionResult Delete(int id)
-        {
-            Models.Competence competence= context.Competences.Find(id);
-            return View(competence);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Delete(Models.Competence competence)
-        {
-            context.Competences.Remove(competence);
-            context.SaveChanges();
-            return RedirectToAction("Delete", "Competence");
-
-        }
     }
 }

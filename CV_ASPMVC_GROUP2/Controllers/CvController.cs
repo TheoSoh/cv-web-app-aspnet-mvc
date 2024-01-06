@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System;
 
 namespace CV_ASPMVC_GROUP2.Controllers
 {
@@ -118,9 +119,10 @@ namespace CV_ASPMVC_GROUP2.Controllers
         [HttpGet]
         public IActionResult EditCv(int? id)
         {
+            //Hämtar CV:et från databasen med det specificerade ID:t
             var cro = context.Cvs.FirstOrDefault(x => x.Id == id);
 
-
+            //Skapar en ny instans av EditCvViewModel och tilldelar värden
             var model = new EditCvViewModel()
             {
                 Description = cro.Description,
@@ -132,35 +134,38 @@ namespace CV_ASPMVC_GROUP2.Controllers
         }
 
         [HttpPost]
-
         public async Task<IActionResult> EditCv(EditCvViewModel pm, int id)
         {
             try
             {
-
                 string stringFile = UploadFile(pm);
-                var pro = context.Cvs.FirstOrDefault(x => x.Id == id);
 
+                //Hämtar det CV från databasen som ska redigeras baserat på det specificerade ID:t
 
-                pro.Description = pm.Description;
-                pro.CvImage = stringFile;
+                var cv = context.Cvs.FirstOrDefault(x => x.Id == id);
 
+                //Uppdaterar beskrivningen och bildattributen med de nya värdena från view-modellen
+                cv.Description = pm.Description;
+                cv.CvImage = stringFile;
 
-
-                context.Update(pro);
+                //Uppdaterar CV:t i databasen med de nya ändringarna
+                context.Update(cv);
                 context.SaveChanges();
 
-
-
+                //Om allt går bra omdirigeras användaren till ShowCv-action
                 return RedirectToAction("ShowCv", "Cv");
             }
             catch (Exception ex)
             {
-
+                //Vid fel returneras vyn med samma data för att låta användaren försöka igen
                 return View(pm);
             }
         }
 
+
+        //privata metod som används för att ladda upp en fil till servern.
+        //Om en fil har valts för uppladdning skapas ett unikt filnamn och filen kopieras sedan till den angivna sökvägen på servern inom mappen för uppladdningar.
+        //Metoden returnerar det unika filnamnet för den uppladdade filen eller null om ingen fil har valts för uppladdning.
         private string UploadFile(EditCvViewModel pm)
         {
             string fileName = null;
