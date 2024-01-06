@@ -13,6 +13,8 @@
     </div>
 </div>
 <a asp-action="EditCv" asp-controller="Cv">Redigera Cv</a>
+<a asp-action="CreateCompetence" asp-controller="Competence">Lägg till kompetens</a>
+
 
 <div class="container-fluid">
     <h5>@Html.DisplayNameFor(model => model.Cv.ImageFile)</h5>
@@ -51,6 +53,7 @@
         <p>@Html.DisplayFor(model => item.Name)</p>
         <h5 class="card-title">@Html.DisplayNameFor(model => item.Description)</h5>
         <p>@Html.DisplayFor(model => item.Description)</p>
+        <a asp-action="Delete" asp-controller="Competence" asp-route-id ="@item.Id">Ta bort kompetens</a>
     </div>
     <br />
 }

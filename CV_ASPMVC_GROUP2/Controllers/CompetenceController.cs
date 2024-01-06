@@ -1,5 +1,6 @@
 ﻿using CV_ASPMVC_GROUP2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CV_ASPMVC_GROUP2.Controllers
 {
@@ -58,5 +59,21 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
         }
 
+
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            Models.Competence competence= context.Competences.Find(id);
+            return View(competence);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(Models.Competence competence)
+        {
+            context.Competences.Remove(competence);
+            context.SaveChanges();
+            return RedirectToAction("Delete", "Competence");
+
+        }
     }
 }

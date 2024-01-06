@@ -28,7 +28,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
                 }
                 else
                 {
-                    users = users.Where(u => u.PrivateStatus);
+                    users = users.Where(u => !u.PrivateStatus);
                 }
             }
 
