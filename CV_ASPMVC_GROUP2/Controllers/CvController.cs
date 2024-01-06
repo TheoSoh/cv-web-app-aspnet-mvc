@@ -65,7 +65,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
         {
             if (ModelState.IsValid)
             {
-
+                
                 string stringFile = UploadFile(cvm);
                 var cv = new Cv();
 
@@ -117,41 +117,59 @@ namespace CV_ASPMVC_GROUP2.Controllers
         }
 
 
+        //[HttpGet]
+        //public IActionResult EditCv(int? id)
+        //{
+        //    var cv = context.Cvs.FirstOrDefault(x => x.Id == id);
+
+
+        //    if (cv == null)
+        //    {
+
+        //        return View();
+        //    }
+        //    var ecvm = new EditCvViewModel
+        //    {
+
+        //       ImageFile = cv.ImageFile,
+        //       Description = cv.Description 
+
+        //    };
+
+        //    return View(ecvm);
+
+        //}
+
         [HttpGet]
-        public IActionResult EditCv(int id)
+        public IActionResult EditCv(int? id)
         {
-            var cv = context.Cvs.FirstOrDefault(x => x.Id == id);
-
-            var c = new Cv();
+            var cro = context.Cvs.FirstOrDefault(x => x.Id == id);
 
 
-            c.ImageFile = cv.ImageFile;
-            c.Description = cv.Description; 
+            var model = new EditCvViewModel()
+            {
+                Description = cro.Description,
+                ImageFile = cro.ImageFile
 
-            
-
-            return View(c);
+            };
+            return View(model);
 
         }
 
-        [HttpPost]
-        public IActionResult EditCv(Cv cv, int id)
+        public async Task<IActionResult> EditCv(EditCvViewModel pm, int id)
         {
-
             try
             {
 
-                string stringFile = UploadFile(cv);
-                var c = context.Cvs.FirstOrDefault(x => x.Id == id);
+                string stringFile = UploadFile(pm);
+                var pro = context.Projects.FirstOrDefault(x => x.Id == id);
 
-
-                c.CvImage = stringFile;
-                c.Description = cv.Description;
-                
+                pro.Description = pm.Description;
+                pro.Image = stringFile;
 
 
 
-                context.Update(c);
+                context.Update(pro);
                 context.SaveChanges();
 
 
@@ -161,9 +179,55 @@ namespace CV_ASPMVC_GROUP2.Controllers
             catch (Exception ex)
             {
 
-                return View(cv);
+                return View(pm);
             }
         }
+
+        private string UploadFile(EditCvViewModel pm)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+        //[HttpPost]
+        //public IActionResult EditCv(EditCvViewModel cvs, int id)
+        //{
+
+        //    try
+        //    {
+        //        if (ModelState.IsValid)
+        //        {
+
+        //            string stringFile = UploadFile(cvs);
+        //            var c = context.Cvs.FirstOrDefault(x => x.Id == id);
+
+        //            if (c == null)
+        //            {
+        //                return NotFound();
+        //            }
+
+        //            if (!string.IsNullOrEmpty(stringFile))
+        //            {
+        //                c.CvImage = stringFile;
+        //            }
+        //            c.Description = cvs.Description;
+
+        //            context.Update(c);
+        //            context.SaveChanges();
+
+
+
+        //            return RedirectToAction("ShowCv", "Cv");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+
+        //    }
+        //    return View(cvs);
+        //}
 
     }
 }
