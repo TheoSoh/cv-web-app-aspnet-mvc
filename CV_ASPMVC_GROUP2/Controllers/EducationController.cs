@@ -60,5 +60,21 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
         }
 
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            Models.Education education = context.Educations.Find(id);
+            return View(education);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(Models.Education education)
+        {
+            context.Educations.Remove(education);
+            context.SaveChanges();
+            return RedirectToAction("Delete", "Education");
+
+        }
+
     }
 }
