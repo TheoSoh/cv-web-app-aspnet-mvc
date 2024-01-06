@@ -21,6 +21,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
         {
             HomePageViewModel model = new HomePageViewModel { };
             
+            //Hämtar 3 CVn från databasen
             model.Users = _context.Users.Where(u => !u.PrivateStatus).Where(u => u.Cv != null).Take(3).ToList();
 
             //Hämtar det senaste projektet och sorterar genom datum de skapades (fallande) samt konverterar resultatet till lista
