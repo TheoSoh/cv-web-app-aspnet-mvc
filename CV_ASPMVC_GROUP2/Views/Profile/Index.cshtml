@@ -15,11 +15,13 @@
     <a asp-controller="Cv" asp-action="CreateCv">Lägg till ett Cv</a>
     <br />
 }
-else if (Model.Cv != null)
+
+@if (Model.Cv != null)
 {
     <a asp-controller="Cv" asp-action="ShowCv" asp-route-userId="@Model.User.Id">Visa Cv-sidan</a>
     <br />
 }
+
 @if (Model.User.Id.Equals(Model?.AuthorizedUserId))
 {
     <a asp-action="UploadFile">Ladda upp en profilbild</a>
