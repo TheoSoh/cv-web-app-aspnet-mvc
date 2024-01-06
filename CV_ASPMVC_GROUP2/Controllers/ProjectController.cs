@@ -195,45 +195,54 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
         public async Task<IActionResult> Join(int? id)
         {
-            if (id == null || _context.Projects == null)
+            try
             {
-                return NotFound();
-            }
+                if (id == null || _context.Projects == null)
+                {
+                    return NotFound();
+                }
 
-            var project = await _context.Projects.FindAsync(id);
-            if (project == null)
-            {
-                return NotFound();
-            }
+                var project = await _context.Projects.FindAsync(id);
+                if (project == null)
+                {
+                    return NotFound();
+                }
 
-            var user = _context.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
+                var user = _context.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
 
-            // Kontrollera om användaren redan deltar i projektet
-            var existingUserProject = _context.Set<UserProject>()
-                .FirstOrDefault(up => up.UserId == user.Id && up.ProjectId == project.Id);
+                // Kontrollera om användaren redan deltar i projektet
+                var existingUserProject = _context.Set<UserProject>()
+                    .FirstOrDefault(up => up.UserId == user.Id && up.ProjectId == project.Id);
 
-            if (existingUserProject != null)
-            {
-                // Användaren deltar redan i projektet, visa ett meddelande
-                TempData["Message"] = "Du deltar redan i detta projekt.";
+                if (existingUserProject != null)
+                {
+                    // Användaren deltar redan i projektet, visa ett meddelande
+                    TempData["Message"] = "Du deltar redan i detta projekt.";
+                    return RedirectToAction("Join", "Project");
+                }
+                else
+                {
+                    // Användaren deltar inte i projektet, lägg till UserProject
+                    UserProject userProject = new UserProject
+                    {
+                        UserId = user.Id,
+                        ProjectId = project.Id
+                    };
+                    _context.Add(userProject);
+                    await _context.SaveChangesAsync();
+                    TempData["Message"] = "Du har gått med i projektet!";
+                }
+
                 return RedirectToAction("Join", "Project");
             }
-            else
+            catch (Exception ex)
             {
-                // Användaren deltar inte i projektet, lägg till UserProject
-                UserProject userProject = new UserProject
-                {
-                    UserId = user.Id,
-                    ProjectId = project.Id
-                };
-                _context.Add(userProject);
-                await _context.SaveChangesAsync();
-                TempData["Message"] = "Du har gått med i projektet!";
-       
+                // Hantera undantaget här
+                TempData["ErrorMessage"] = "Ett fel inträffade vid försök att gå med i projektet.";
+                return RedirectToAction("Join", "Project");
             }
-
-            return RedirectToAction("Index", "Project");
         }
+
 
 
     }
