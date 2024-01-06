@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using CV_ASPMVC_GROUP2.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace CV_ASPMVC_GROUP2.Controllers
 {
@@ -18,13 +19,17 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
         public IActionResult Index()
         {
+            HomePageViewModel model = new HomePageViewModel { };
+            
+            model.Users = _context.Users.Where(u => !u.PrivateStatus).Where(u => u.Cv != null).Take(3).ToList();
+
             //Hämtar de 5 senaste projekten och sorterar genom datum de skapades (fallande) samt konverterar resultatet till lista
-            var latestProjects = _context.Projects
+            model.Projects = _context.Projects
                 .OrderByDescending(p => p.CreatedDate) 
                 .Take(5) 
                 .ToList();
 
-            return View(latestProjects);
+            return View(model);
         }
 
         public IActionResult Privacy()

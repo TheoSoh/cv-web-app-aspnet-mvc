@@ -1,4 +1,4 @@
-﻿@model List<Project>
+﻿@model CV_ASPMVC_GROUP2.Models.HomePageViewModel
 
 @{
     ViewData["Title"] = "Home Page";
@@ -11,6 +11,25 @@
         <h2>Du är inloggad som @User.Identity.Name</h2>
     }
 </form>
+
+@foreach(var user in Model.Users)
+{
+    <form id="showcv" asp-controller="Cv" asp-action="ShowCv" asp-route-userId="@user.Id">
+        <div class="card bg-light">
+            @if(user.ProfilePicture != null)
+            {
+                <img src="~/Images/@user.ProfilePicture" class="card-img-top" alt="Responsive image" asp-append-version="true" />
+            }
+            <div class="card-body">
+            <h5 class="card-title">@user.FirstName @user.LastName</h5>
+                <p>username: @user.UserName</p>
+                <input type="submit" class="btn-outline-light btn" for="showcv"/>
+            </div>
+        </div>
+    </form>
+}
+
+@* 
 <div id="carouselExampleCaptions" class="carousel slide">
     <div class="carousel-indicators">
         <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -48,14 +67,14 @@
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
     </button>
-</div>
+</div> *@
 
 
 <h1>De senaste projekten</h1>
 
 <div class="row">
     <div class="row">
-        @foreach (var project in Model)
+        @foreach (var project in Model.Projects)
         {
             <div class="col-md-6 mb-4">
                 <div class="card">
