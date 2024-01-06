@@ -1,17 +1,17 @@
-﻿@model CV_ASPMVC_GROUP2.Models.Competence
+﻿@model CV_ASPMVC_GROUP2.Models.Experience
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Alla dina inlagda kompetenser: </h1>
+<h1>Alla dina inlagda Erfarenheter: </h1>
 
 
 
-<h1>Vill du radera en kompetens?</h1>
+<h1>Vill du radera en Erfarenhet?</h1>
 <div asp-validation-summary="All" class="text-danger"></div>
-<form asp-controller="Competence" asp-action="Delete" method="post">
+<form asp-controller="Experience" asp-action="DeleteExperience" method="post">
 
-  
+
     <table class=" table table-light">
         <div class="form-group">
         <tr>
@@ -34,7 +34,7 @@
         </tr>
         </div>
 
-      
+
         <tr>
             <td>
                 <input type="submit" value="Radera" class="btn btn-danger" />
@@ -42,13 +42,13 @@
         </tr>
 
         <a asp-action="Index" asp-controller="Profile">Tillbaka</a>
-        
+
     </table>
-    
+
 </form>
 
 
-        
-            
-   
+
+
+
 

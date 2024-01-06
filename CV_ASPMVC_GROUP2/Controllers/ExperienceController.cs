@@ -57,7 +57,31 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
         }
 
-   
+        [HttpGet]
+        public IActionResult DeleteExperience(int id)
+        {
+            Models.Experience experience = _context.Experiences.Find(id);
+            //var cvId = experience.Id;
+            //ViewData["cvId"] = id;
+            return View(experience);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteExperience(Models.Experience experience)
+        {
+            _context.Experiences.Remove(experience);
+            _context.SaveChanges();
+            return RedirectToAction("DeleteExperience", "Experience");
+
+        }
+
+        [HttpGet]
+        public IActionResult Indexx()
+        {
+            return View();
+        }
+
+
         //public IActionResult ProjectList()
         //{
         //    return View();
