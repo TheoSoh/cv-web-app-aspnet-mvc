@@ -10,17 +10,20 @@
     </form>
 }
 
-@if (Model.Cv == null)
+@if (Model.Cv == null && Model.User.Id.Equals(Model?.AuthorizedUserId))
 {
     <a asp-controller="Cv" asp-action="CreateCv">Lägg till ett Cv</a>
     <br />
 }
-else
+else if (Model.Cv != null)
 {
     <a asp-controller="Cv" asp-action="ShowCv" asp-route-userId="@Model.User.Id">Visa Cv-sidan</a>
     <br />
 }
-<a asp-action="UploadFile">Ladda upp en profilbild</a>
+@if (Model.User.Id.Equals(Model?.AuthorizedUserId))
+{
+    <a asp-action="UploadFile">Ladda upp en profilbild</a>
+}
 
 <div class="info">
     <h1>Användarnamn: @Html.DisplayFor(p => p.User.UserName)</h1>
