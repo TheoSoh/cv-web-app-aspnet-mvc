@@ -114,6 +114,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
         }
 
 
+        //Get-metod som hämtar antalet olästa meddelanden, alltså meddelane där Read är false
         [HttpGet]
         public IActionResult GetUnreadMessages()
         {
@@ -124,6 +125,8 @@ namespace CV_ASPMVC_GROUP2.Controllers
         }
 
 
+        //Post-metod som markerar ett meddelande (det meddelande-id vi anger) som läst om meddelandet inte är null
+        //Sätter Read till true
         [HttpPost]
         public IActionResult MarkAsRead(int messageId)
         {
