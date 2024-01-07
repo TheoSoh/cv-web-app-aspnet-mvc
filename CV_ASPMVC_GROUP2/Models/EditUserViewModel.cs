@@ -4,10 +4,10 @@ namespace CV_ASPMVC_GROUP2.Models
 {
     public class EditUserViewModel
     {
-        [RegularExpression(@"^[a-zA-Z\s]*$", ErrorMessage = "Förnamnet får endast innehålla bokstäver.")]
+        [RegularExpression(@"^[\p{L}\s]*$", ErrorMessage = "Vänligen ange endast bokstäver.")]
         public string FirstName {  get; set; }
 
-        [RegularExpression(@"^[a-zA-Z\s]*$", ErrorMessage = "Efternamnet får endast innehålla bokstäver.")]
+        [RegularExpression(@"^[\p{L}\s]*$", ErrorMessage = "Vänligen ange endast bokstäver.")]
         public string LastName { get; set; }
 
         [RegularExpression("^[0-9]*$", ErrorMessage = "Telefonnumret får endast innehålla siffror.")]

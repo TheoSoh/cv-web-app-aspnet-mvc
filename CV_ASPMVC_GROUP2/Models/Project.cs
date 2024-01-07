@@ -9,12 +9,12 @@ namespace CV_ASPMVC_GROUP2.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Vänligen skriv en titel.")]
-        [RegularExpression(@"^[a-zA-Z0-9\s]*$", ErrorMessage = "Ange endast bokstäver och siffror")]
+        [RegularExpression(@"^[\p{L}\d]*$", ErrorMessage = "Vänligen ange endast bokstäver och siffror.")]
 
         public string? Name { get; set; }
 
         [Required(ErrorMessage = "Vänligen skriv en beskrivning av projektet.")]
-        [RegularExpression(@"^[a-zA-Z0-9\s]*$", ErrorMessage = "Ange endast bokstäver och siffror")]
+        [RegularExpression(@"^[\p{L}\d]*$", ErrorMessage = "Vänligen ange endast bokstäver och siffror.")]
 
         public string? Description { get; set; }
         public DateTime? CreatedDate { get; set; } = DateTime.Now;

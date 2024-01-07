@@ -7,10 +7,10 @@ namespace CV_ASPMVC_GROUP2.Models
     {
         public int Id { get; set; }
 
-        [RegularExpression(@"^[a-zA-Z0-9\s]*$", ErrorMessage = "Gatan kan endast innehålla bokstäver och siffror.")]
+        [RegularExpression(@"^[\p{L}\d]*$", ErrorMessage = "Vänligen ange endast bokstäver och siffror.")]
         public string? Street { get; set; }
 
-        [RegularExpression(@"^[a-zA-Z\s]*$", ErrorMessage = "Staden kan endast innehålla bokstäver.")]
+        [RegularExpression(@"^[\p{L}\s]*$", ErrorMessage = "Vänligen ange endast bokstäver.")]
         public string? City { get; set; }
 
         [RegularExpression("^[0-9]*$", ErrorMessage = "Postnumret kan endast innehålla siffror.")]
