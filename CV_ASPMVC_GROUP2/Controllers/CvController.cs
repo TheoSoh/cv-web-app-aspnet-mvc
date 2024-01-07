@@ -98,7 +98,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
                 await context.AddAsync(cv);
                 await context.SaveChangesAsync();
 
-                return RedirectToAction("CreateCv", "Cv");
+                return RedirectToAction("Index", "Profile");
             }
             return View(cvm);
         }
