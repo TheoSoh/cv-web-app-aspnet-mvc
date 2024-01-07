@@ -1,7 +1,9 @@
 ﻿@model ProfileViewModel
 
 <h1>Välkommen till profilsidan</h1>
-@if (Model.User.Id.Equals(Model?.AuthorizedUserId))
+
+@* Kontrollerar om den aktuella inloggade användaren är samma som nvändaren som representeras av AuthorizedUserId i vyn.
+ *@@if (Model.User.Id.Equals(Model?.AuthorizedUserId))
 {
     <form id="UpdatePrivateStatus" asp-controller="Profile" asp-action="UpdatePrivateStatus" method="post">
         <label>Privat profil:</label>
@@ -10,13 +12,15 @@
     </form>
 }
 
-@if (Model.Cv == null && Model.User.Id.Equals(Model?.AuthorizedUserId))
+@* Kontrollerar om användaren har ett cv och om inte kan man lägga till ett
+ *@@if (Model.Cv == null && Model.User.Id.Equals(Model?.AuthorizedUserId))
 {
     <a class="btn btn-dark" asp-controller="Cv" asp-action="CreateCv">Lägg till ett Cv</a>
     <br />
 }
 
-@if (Model.Cv != null)
+@* Om ett cv finns kan man visa det via knappen
+ *@@if (Model.Cv != null)
 {
     <a class="btn btn-dark" asp-controller="Cv" asp-action="ShowCv" asp-route-userId="@Model.User.Id">Visa Cv-sidan</a>
     <br />
@@ -27,7 +31,8 @@
     <a class="btn btn-dark" asp-action="UploadFile">Ladda upp en profilbild</a>
 }
 
-<div class="info" style="padding-bottom:60px">
+@* Skriver ut attribut för användaren
+ *@<div class="info" style="padding-bottom:60px">
     <h1>Användarnamn: @Html.DisplayFor(p => p.User.UserName)</h1>
 
     <h3>Profilbild:</h3>

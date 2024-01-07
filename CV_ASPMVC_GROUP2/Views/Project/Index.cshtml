@@ -8,7 +8,8 @@
 <h1>Välkommen till projektsidan </h1>
 <p> Här har vi samlat en lista av de projekt som användare av denna hemsida har skapat! </p>
 
-@if(User.Identity.IsAuthenticated)
+@* Kontrollerar om användaren är inloggad och tillåter den att skapa ett projekt
+ *@@if(User.Identity.IsAuthenticated)
 {
     <a asp-controller="Project" asp-action = "Create"> Skapa nytt projekt</a>
 }
@@ -31,7 +32,9 @@
         </tr>
     </thead>
     <tbody>
-        @foreach(var item in Model)
+
+@*         Foreach-loop som visar attribut om projekten i listan
+ *@        @foreach(var item in Model)
         {
             <tr>
                 <td>
@@ -49,6 +52,7 @@
                     }
                     else
                     {
+                        //Hämtar användare som inte är privata
                         var nonPrivateUsers = item.UserProjects.Where(user => !user.user.PrivateStatus == true).Select(user => user.user);
                         @String.Join(" ", nonPrivateUsers)
                     }
@@ -58,7 +62,8 @@
                    <img src="~/Images/@item.Image" class="img-fluid" alt="Responsive image" asp-append-version = "true" height="200px" width="200px" />
                 </td>
 
-                @if (item.CreatedByUserId == ViewBag.CurrentUserId)
+@*                 Kontrollerar om användaren som skapat projektet är samma användare som är inloggad
+ *@                @if (item.CreatedByUserId == ViewBag.CurrentUserId)
                 {
                     <td>
                         <a asp-controller = "Project" asp-action="EditProject" asp-route-Id ="@item.Id"> Redigera </a>
@@ -68,7 +73,8 @@
                     </td>
                 }
 
-                @if (User.Identity.IsAuthenticated)
+@*                 Kontrollerar om användaren är inloggad och låter den då gå med i ett projekt
+ *@                @if (User.Identity.IsAuthenticated)
                 {
                     <td>
                         <a asp-controller="Project" asp-action="Join" asp-route-Id ="@item.Id"> Gå med i projekt</a>

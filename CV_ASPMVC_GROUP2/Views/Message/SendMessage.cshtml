@@ -6,7 +6,8 @@
     <div class="form-group">
         <label for="selectedUsername">Välj mottagare:</label>
         <select name="selectedUsername" class="form-control">
-            @foreach (var user in ViewData["ToUserId"] as SelectList)
+@*             Lista med användare i databasen
+ *@            @foreach (var user in ViewData["ToUserId"] as SelectList)
             {
                 <option value="@user.Value">@user.Text</option>
             }
@@ -21,7 +22,8 @@
 
     <input type="hidden" name="read" value="@Model.Read" />
 
-    @if (!User.Identity.IsAuthenticated)
+@*     Om personen inte är inloggad får man skriva in sitt namn i en textruta som visas
+ *@    @if (!User.Identity.IsAuthenticated)
     {
         <div class="form-group">
             <label asp-for="FromAnonymousName">Ange ditt namn:</label>
@@ -48,8 +50,13 @@
 
 
 <script>
+    //Kollar på ändringar i select-dropdown med namnet "selectedUsername"
     document.querySelector('select[name="selectedUsername"]').addEventListener('change', function () {
+
+        //Hämtar det valda värdet från dropdownen
         var selectedValue = this.value;
+
+        //Uppdaterar värdet för ett element med id 'selectedUsername'
         document.getElementById('selectedUsername').value = selectedValue;
     });
 </script>

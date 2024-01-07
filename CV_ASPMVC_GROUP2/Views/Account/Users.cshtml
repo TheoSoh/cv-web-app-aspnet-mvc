@@ -24,7 +24,8 @@
             <tr>
                 <th>Profilbild</th>
                 <td>
-                    @if (!string.IsNullOrEmpty(Model.ProfilePicture))
+@*                     Kontrollerar om användaren har en profilbild
+ *@                    @if (!string.IsNullOrEmpty(Model.ProfilePicture))
                     {
                         <img src="@Model.ProfilePicture" alt="Profilbild" style="max-width: 200px; max-height: 200px;" />
                     }
