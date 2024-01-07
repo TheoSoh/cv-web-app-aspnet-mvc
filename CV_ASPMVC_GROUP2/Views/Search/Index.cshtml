@@ -5,10 +5,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ProfilePicture)
+                Profilbild
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UserName)
+                Användarnamn
+            </th>
+            <th>
+                Cv
             </th>
             
             
@@ -26,6 +29,22 @@
                     <a asp-controller="Profile" asp-action="Index" asp-route-userId="@item.Id">
                         @Html.DisplayFor(modelItem => item.UserName)
                     </a>
+                </td>
+                <td>
+                    @if (item.Cv != null && item.PrivateStatus == false)
+                    {
+                        <a asp-controller="Cv" asp-action="ShowCv" asp-route-id="@item.Cv.Id">
+                            @Html.DisplayFor(modelItem => item.Cv.Description)
+                        </a>
+                    }
+                    else if (item.Cv == null)
+                    {
+                        <span>No CV available</span>
+                    }
+                    else
+                    {
+                        <span>User's profile is private</span>
+                    }
                 </td>
             </tr>
         }

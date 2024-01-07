@@ -19,43 +19,27 @@ namespace CV_ASPMVC_GROUP2.Controllers
         {
             IQueryable<User> users = _context.Users;
 
+            //Kontrollerar om söksträngen är tom
             if (!string.IsNullOrEmpty(searchString))
             {
+                //Hämtar användare där antingen förnamn eller användarnamn innehåller söksträngen
                 users = users.Where(u => u.UserName.Contains(searchString) || u.FirstName.Contains(searchString));
 
+                //Kontrollerar om användaren är inloggad
                 if (User.Identity.IsAuthenticated)
                 {
                     users = users.Include(u => u.Cv); 
                 }
                 else
                 {
-                    users = users.Where(u => !u.PrivateStatus);
+                    users = users.Where(u => u.PrivateStatus == false).Include(u => u.Cv);
                 }
             }
 
+            //Lagrar användare i en lista och returnerar vyn för dem
             var searchResult = users.ToList();
             return View(searchResult);
         }
-
-//        IEnumerable<User> users = _context.Users.ToList();
-//        IEnumerable<User> searchResult = new List<User>();
-
-//            if (!string.IsNullOrEmpty(searchString))
-//            {
-//                if (User.Identity.IsAuthenticated)
-//                {
-//                    searchResult = users.Where(u => u.UserName.Contains(searchString) || u.FirstName.Contains(searchString)).ToList();
-//    }
-//                else
-//                {
-//                    searchResult = users.Where(u => u.UserName.Contains(searchString)).Where(u => !u.PrivateStatus).ToList();
-//}
-//            }
-
-//            return View(searchResult);
-
-
-
     }
 }
 
