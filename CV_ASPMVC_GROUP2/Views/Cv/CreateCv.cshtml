@@ -10,15 +10,6 @@
 
 <div asp-validation-summary="All" class="text-danger"></div>
 <form method="post" asp-action="CreateCv" enctype="multipart/form-data">
-   @*  <div class="form-group row">
-        <div class="col-sm-2">
-            <label asp-for="Description"></label>
-        </div>
-        <div class="col-sm-4">
-            <input asp-for="Desscription" class="form-control" />
-        </div>
-    </div>
-    <br /> *@
     <div class="form-group row">
         <div class="col-sm-2">
             <label>Beskriving: </label>
@@ -43,14 +34,5 @@
             <button type="submit" class="btn btn-primary">Skapa Cv</button>
         </div>
     </div>
-    <td>
-        <a asp-action="Create" asp-controller="Experience">Lägg till erfarenhet</a>
-    </td>
-    <td>
-        <a asp-action="CreateEducation" asp-controller="Education">Lägg till Utbildning</a>
-    </td>
-    <td>
-        <a asp-action="CreateCompetence" asp-controller="Competence">Lägg till Kompetens</a>
-    </td>
 
 </form>
