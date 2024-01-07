@@ -8,6 +8,8 @@ namespace CV_ASPMVC_GROUP2.Models
         public Cv Cv { get; set; }
         public string AuthorizedUserId { get; set; }
 
+        public Address Address { get; set; }
+
 
         [NotMapped]
         public IFormFile? ImageFile { get; set; }
