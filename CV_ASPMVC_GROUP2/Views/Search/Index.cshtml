@@ -10,6 +10,9 @@
             <th>
                 Användarnamn
             </th>
+            <th>
+                Cv
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -25,9 +28,14 @@
                     </a>
                 </td>
                 <td>
-                    <a asp-controller="Cv" asp-action="ShowCv" asp-route-userId="@item.Id">
-                        Visa CV
-                    </a>
+                    @if(item.Cv != null)
+                    {
+                        <a asp-controller="Cv" asp-action="ShowCv" asp-route-userId="@item.Id">Visa CV</a>
+                    }
+                    else
+                    {
+                        <p>Saknar CV</p>
+                    }
                 </td>
             </tr>
         }
