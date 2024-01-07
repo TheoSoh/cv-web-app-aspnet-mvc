@@ -71,8 +71,8 @@ namespace CV_ASPMVC_GROUP2.Controllers
         {
             //Hämtar projektet vi vill ändra/editera
             var pro = _context.Projects.FirstOrDefault(x => x.Id == id);
-
-            var model = new ProjectViewModel
+           
+            var model = new EditProjectViewModel
             {
                 Title = pro.Name,
                 Description = pro.Description,
@@ -84,7 +84,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditProject(ProjectViewModel pm, int id)
+        public async Task<IActionResult> EditProject(EditProjectViewModel pm, int id)
         {
             try
             {
@@ -96,8 +96,10 @@ namespace CV_ASPMVC_GROUP2.Controllers
                 //Tilldelar attribut
                 pro.Name = pm.Title;
                 pro.Description = pm.Description;
-                pro.Image = stringFile;
-
+                if (stringFile != null)
+                {
+                    pro.Image = stringFile;
+                }
 
                 //Uppdaterar projektet i databasen och sparar ändringarna
                 _context.Update(pro);
@@ -145,6 +147,37 @@ namespace CV_ASPMVC_GROUP2.Controllers
             return fileName;
         }
 
+
+
+        private string UploadFile(EditProjectViewModel pm)
+        {
+            string fileName = null;
+
+            //Kontrollerar om det finns en fil att ladda upp
+            if (pm.ImageFile != null)
+            {
+                //Skapar sökväg för uppladdning av filen till mappen "Images" i wwwroot
+                string uploadDir = Path.Combine(_webHostEnvironment.WebRootPath, "Images");
+
+                //Kontrollerar om mappen inte finns och skapar den 
+                if (!Directory.Exists(uploadDir))
+                {
+                    Directory.CreateDirectory(uploadDir);
+                }
+
+                fileName = Guid.NewGuid().ToString() + "-" + pm.ImageFile.FileName;
+
+                //Skapar ett unikt filnamn för den uppladdade filen
+                string filePath = Path.Combine(uploadDir, fileName);
+
+                //Sparar filen på servern
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    pm.ImageFile.CopyTo(fileStream);
+                }
+            }
+            return fileName;
+        }
         [HttpGet]
         public IActionResult Delete(int id)
         {
