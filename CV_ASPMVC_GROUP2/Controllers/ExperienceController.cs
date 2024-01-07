@@ -56,28 +56,21 @@ namespace CV_ASPMVC_GROUP2.Controllers
                 await _context.AddAsync(cvExperience);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("Create", "Experience");
+                return RedirectToAction("ShowCv", "Cv");
 
             }
             return View(ex);
 
         }
 
-        [HttpGet]
-        public IActionResult DeleteExperience(int id)
-        {
-            //Hämtar experience-objektet som matchar det angivna ID:t
-            Models.Experience experience = _context.Experiences.Find(id);
-            return View(experience);
-        }
-
         [HttpPost]
-        public async Task<IActionResult> DeleteExperience(Models.Experience experience)
+        public async Task<IActionResult> DeleteExperience(int id)
         {
+            Models.Experience experience = _context.Experiences.Find(id);
             //Tar bort erfarentets-sobjektet från databasen och sparar ändringarna i databasen
             _context.Experiences.Remove(experience);
             _context.SaveChanges();
-            return RedirectToAction("DeleteExperience", "Experience");
+            return RedirectToAction("ShowCv", "Cv");
 
         }
 

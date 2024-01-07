@@ -11,7 +11,7 @@ namespace CV_ASPMVC_GROUP2.Models
         public IEnumerable<Education> Educations { get; set; }
         public IEnumerable<Experience> Experiences { get; set; }
         public IEnumerable<Competence> Competences { get; set; }
-
+        public IEnumerable<Project> Projects { get; set; }
        
     }
 }

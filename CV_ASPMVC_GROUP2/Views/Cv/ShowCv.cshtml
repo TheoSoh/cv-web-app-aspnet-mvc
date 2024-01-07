@@ -32,14 +32,18 @@
 @foreach(var item in Model.Educations) 
 {
     <div class="card">
-        <h5 class="card-title">@Html.DisplayNameFor(model => item.Name)</h5>
-        <p>@Html.DisplayFor(model => item.Name)</p>
-        <h5 class="card-title">@Html.DisplayNameFor(model => item.Description)</h5>
-        <p>@Html.DisplayFor(model => item.Description)</p>
-        @if (Model.User.UserName.Equals(User?.Identity?.Name))
-        {
-            <a class="btn btn-dark" asp-action="Delete" asp-controller="Education" asp-route-id="@item.Id">Ta bort utbildning</a>
-        }
+        <div class="card-body">
+            <h5 class="card-title">@Html.DisplayNameFor(model => item.Name)</h5>
+            <p>@Html.DisplayFor(model => item.Name)</p>
+            <h5 class="card-title">@Html.DisplayNameFor(model => item.Description)</h5>
+            <p>@Html.DisplayFor(model => item.Description)</p>
+            @if (Model.User.UserName.Equals(User?.Identity?.Name))
+            {
+                <form method="post" asp-controller="Education" asp-action="Delete" asp-route-id="@item.Id">
+                    <input class="btn btn-dark" type="submit" value="Ta bort" />
+                </form>
+            }
+        </div>
     </div>
     <br />
 }
@@ -47,14 +51,18 @@
 @foreach(var item in Model.Experiences)
 {
     <div class="card">
-        <h5 class="card-title">@Html.DisplayNameFor(model => item.Name)</h5>
-        <p>@Html.DisplayFor(model => item.Name)</p>
-        <h5 class="card-title">@Html.DisplayNameFor(model => item.Description)</h5>
-        <p>@Html.DisplayFor(model => item.Description)</p>
-        @if (Model.User.UserName.Equals(User?.Identity?.Name))
-        {
-            <a class="btn btn-dark" asp-action="DeleteExperience" asp-controller="Experience" asp-route-id="@item.Id">Ta bort erfarenhet</a>
-        }
+        <div class="card-body">
+            <h5 class="card-title">@Html.DisplayNameFor(model => item.Name)</h5>
+            <p>@Html.DisplayFor(model => item.Name)</p>
+            <h5 class="card-title">@Html.DisplayNameFor(model => item.Description)</h5>
+            <p>@Html.DisplayFor(model => item.Description)</p>
+            @if (Model.User.UserName.Equals(User?.Identity?.Name))
+            {
+                <form method="post" asp-controller="Experience" asp-action="DeleteExperience" asp-route-id="@item.Id">
+                    <input class="btn btn-dark" type="submit" value="Ta bort" />
+                </form>
+            }
+        </div>
     </div>
     <br />
 }
@@ -62,16 +70,34 @@
 @foreach(var item in Model.Competences)
 {
     <div class="card">
-        <h5 class="card-title">@Html.DisplayNameFor(model => item.Name)</h5>
-        <p>@Html.DisplayFor(model => item.Name)</p>
-        <h5 class="card-title">@Html.DisplayNameFor(model => item.Description)</h5>
-        <p>@Html.DisplayFor(model => item.Description)</p>
-        @if (Model.User.UserName.Equals(User?.Identity?.Name))
-        {
-            <a class="btn btn-dark" asp-action="Delete" asp-controller="Competence" asp-route-id="@item.Id">Ta bort kompetens</a>
-        }
+        <div class="card-body">
+            <h5 class="card-title">@Html.DisplayNameFor(model => item.Name)</h5>
+            <p>@Html.DisplayFor(model => item.Name)</p>
+            <h5 class="card-title">@Html.DisplayNameFor(model => item.Description)</h5>
+            <p>@Html.DisplayFor(model => item.Description)</p>
+            @if (Model.User.UserName.Equals(User?.Identity?.Name))
+            {
+                <form method="post" asp-controller="Competence" asp-action="Delete" asp-route-id="@item.Id">
+                    <input class="btn btn-dark" type="submit" value="Ta bort" />
+                </form>
+            }
+        </div>
     </div>
     <br />
+}
+
+<h2>Projekt Som @Model.User.FirstName deltar i</h2>
+@foreach(var item in Model.Projects)
+{
+    <div class="card bg-light">
+        <div class="card-body">
+            <img src="~/Images/@item.Image" class="img-fluid" alt="Projekt-bild" asp-append-version="true" height="200px" width="200px" />
+            <h4 class="card-title">@item.Name</h4>
+            <p>@item.Description</p>
+            <br />
+            <p>Skapat: @item.CreatedDate</p>
+        </div>
+    </div>
 }
 
 <div style="height:50px" class="container-fluid"></div>
