@@ -34,7 +34,6 @@
     <div class="row">
         @foreach (var project in Model.Projects)
         {
-            <div class="col-md-6 mb-4">
                 <div class="card">
                     <div class="row g-0">
                         <div class="col-md-4">
@@ -45,11 +44,14 @@
                                 <h5 class="card-title">@project.Name</h5>
                                 <p class="card-text">@project.Description</p>
                                 <p class="card-text">@project.CreatedDate</p>
+                                @if(User.Identity.IsAuthenticated)
+                                {
+                                    <a class="btn btn-light" asp-controller="Project" asp-action="Join" asp-route-id="@project.Id">Gå med</a>
+                                }
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
         }
     </div>
 </div>
