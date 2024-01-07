@@ -12,7 +12,7 @@ namespace CV_ASPMVC_GROUP2.Models
         public string? FromUserId { get; set; }
         public string? ToUserId { get; set; }
 
-        [RegularExpression("^[a-zA-Z]*$", ErrorMessage = "Endast bokstäver tillåtna")]
+        [RegularExpression(@"^[\p{L}\s]*$", ErrorMessage = "Vänligen ange endast bokstäver.")]
         public string? FromAnonymousName { get; set; }
 
         [ForeignKey(nameof(FromUserId))]

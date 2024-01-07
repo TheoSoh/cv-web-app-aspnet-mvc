@@ -10,12 +10,12 @@ namespace CV_ASPMVC_GROUP2.Models
         [Required(ErrorMessage = "Vänligen fyll i ett Namn.")]
         [StringLength(255)]
         [DisplayName("Titel på erfarenhet")]
-        [RegularExpression(@"^[a-zA-Z\s]*$", ErrorMessage = "Vänligen ange endast bokstäver.")]
+        [RegularExpression(@"^[\p{L}\s]*$", ErrorMessage = "Vänligen ange endast bokstäver.")]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Vänligen skriv en beskrivning.")]
         [DisplayName("Erfarenhetsbeskrivning")]
-        [RegularExpression(@"^[a-zA-Z\s]*$", ErrorMessage = "Vänligen ange endast bokstäver.")]
+        [RegularExpression(@"^[\p{L}\s]*$", ErrorMessage = "Vänligen ange endast bokstäver.")]
         public string Description { get; set; }
         public virtual IEnumerable<CvExperience> Experiences { get; set; } = new List<CvExperience>();
     }

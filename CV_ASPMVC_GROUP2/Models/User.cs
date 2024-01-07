@@ -7,11 +7,11 @@ namespace CV_ASPMVC_GROUP2.Models
     public class User : IdentityUser
     {
         [Required(ErrorMessage = "Förnamn är obligatoriskt.")]
-        [RegularExpression(@"^[a-zA-Z\s]*$", ErrorMessage = "Vänligen ange endast bokstäver.")]
+        [RegularExpression(@"^[\p{L}\s]*$", ErrorMessage = "Vänligen ange endast bokstäver.")]
         public string? FirstName { get; set; }
 
         [Required(ErrorMessage = "Efternamn är obligatoriskt.")]
-        [RegularExpression(@"^[a-zA-Z\s]*$", ErrorMessage = "Vänligen ange endast bokstäver.")]
+        [RegularExpression(@"^[\p{L}\s]*$", ErrorMessage = "Vänligen ange endast bokstäver.")]
         public string? LastName { get; set; }
         public string? ProfilePicture {  get; set; }
         public bool PrivateStatus { get; set; } = false;
