@@ -5,7 +5,9 @@
 }
 
 <form method="post" asp-controller="Account" asp-action="Logout">
-    @if (User.Identity.IsAuthenticated)
+
+@*     Kontrollerar om användaren är inloggad och skriver vem man är inloggad som
+ *@    @if (User.Identity.IsAuthenticated)
     {
      
         <h2>Du är inloggad som @User.Identity.Name</h2>
@@ -15,7 +17,9 @@
     @foreach(var user in Model.Users)
     {
         <div class="card bg-light" style="width:200px">
-            @if(user.ProfilePicture != null)
+
+@*             Om profilbilden inte är null vill vi visa den i vyn
+ *@            @if(user.ProfilePicture != null)
             {
                 <img src="~/Images/@user.ProfilePicture" class="card-img-top" alt="Profilbild" asp-append-version="true" />
             }
@@ -32,7 +36,8 @@
 
 <div class="row">
     <div class="row">
-        @foreach (var project in Model.Projects)
+@*         Foreach-loop med objekt i project-modellen som visar dess attribut
+ *@        @foreach (var project in Model.Projects)
         {
             <div class="card" style="margin-bottom:90px">
                 <div class="row g-0">

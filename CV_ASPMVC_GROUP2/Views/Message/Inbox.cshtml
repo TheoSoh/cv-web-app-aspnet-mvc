@@ -14,14 +14,16 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var (message, username) in Model)
+@*         Forach-loop som visar varje meddelande i listan
+ *@        @foreach (var (message, username) in Model)
         {
             <tr>
                 <td>@(message.FromUserId != null ? username : message.FromAnonymousName)</td>
                 <td>@message.Content</td>
                 <td>@message.SentTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
                 <td>
-                    @if (message.Read == null || message.Read == false)
+@*                     Kontrollerar om meddelande inte är true (alltså false eller null) och lägger till en knapp för att markera det som läst
+ *@                    @if (message.Read == null || message.Read == false)
                     {
                         <button class="mark-as-read-btn" data-message-id="@message.Id">Markera som läst</button>
                     }
@@ -40,20 +42,21 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
-        $('.mark-as-read-btn').on('click', function () {
-            var button = $(this);
-            var messageId = button.data('message-id');
+        $('.mark-as-read-btn').on('click', function () { //När man klickar på knappen med namnet "mask-as-read körs koden nedan".
+            var button = $(this); //Hämtar den aktuella knappen som triggade händelsen.
+            var messageId = button.data('message-id'); //Hämtar meddelande-ID från knappens data-attribut.
 
             $.ajax({
                 url: '/Message/MarkAsRead',
-                method: 'POST',
-                data: { messageId: messageId },
+                method: 'POST', //Använder HTTP-metoden POST för att skicka data till servern.
+                data: { messageId: messageId }, //Skickar med meddelande-ID:t som data i förfrågan.
                 success: function (response) {
-                    var row = button.closest('tr'); 
-                    row.addClass('read-message'); 
-                    button.remove();
+                    var row = button.closest('tr'); //Hämtar närmaste tabellraden (tr) där knappen finns.
+                    row.addClass('read-message'); //Lägger till klassen 'read-message' på raden för att markera den som läst
+                    button.remove(); //Tar bort knappen efter meddelanet markerats som läst
                 },
                 error: function (xhr, status, error) {
+                    //Felmeddelande om förfrågan misslyckas
                     console.error(error);
                 }
             });
@@ -61,24 +64,7 @@
     });
 </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.0/signalr.min.js"></script>
 
-<script>
-    const connection = new signalR.HubConnectionBuilder()
-        .withUrl("/MessagesHub") 
-        .build();
-
-    connection.start().then(function () {
-        // Klienten är ansluten, gör något om det behövs
-    }).catch(function (err) {
-        console.error(err.toString());
-    });
-
-    connection.on("ReceiveUnreadMessageCount", function (unreadCount) {
-        // Uppdatera antalet olästa meddelanden i användargränssnittet
-        document.getElementById("unreadCount").innerText = unreadCount;
-    });
-</script>
 
 
 

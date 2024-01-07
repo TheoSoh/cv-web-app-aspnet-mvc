@@ -19,7 +19,9 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        @if(User.Identity.IsAuthenticated)
+
+@*                         Konteollerar om användaren är inloggad
+ *@                        @if(User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
                                 <div class="dropdown">
@@ -47,7 +49,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Project" asp-action="Index">Alla projekt</a>
                         </li>
-                        @if (!User.Identity.IsAuthenticated)
+
+@*                         Kontrollerar om användaren inte är inloggad och visar då funktion för att logag in
+ *@                        @if (!User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-action="Login" asp-controller="Account">Logga in</a>
@@ -73,13 +77,16 @@
     </div>
     <footer class="fixed-bottom bg-light text-center">
         <div class="container py-3">
-            @if(User.Identity.IsAuthenticated)
+
+@*             Kontrollerar om användare är inloggad och visar då inkommande meddelanden
+ *@            @if(User.Identity.IsAuthenticated)
             {
                 <a asp-action="Inbox" asp-controller="Message" class="btn btn-primary">Inkommande meddelanden</a>
             }
             <a asp-action="SendMessage" asp-controller="Message" class="btn btn-primary">Skicka meddelande</a>
 
-            @if(User.Identity.IsAuthenticated){
+@*             Om användaren är inloggad vill vi visa hur många olästa meddelanden den har
+ *@            @if(User.Identity.IsAuthenticated){
             <p>Antal olästa meddelanden: <span id="unreadMessagesCount">-</span></p>
             }
         </div>
@@ -89,12 +96,13 @@
     <script>
         $(document).ready(function () {
             $.ajax({
-                type: 'GET',
-                url: '/Message/GetUnreadMessages',
+                type: 'GET', //Använder HTTP GET-metoden för att hämta data
+                url: '/Message/GetUnreadMessages', //Anger URL:en för att hämta antalet olästa meddelanden
                 success: function (response) {
-                    $('#unreadMessagesCount').text(response.count); 
+                    $('#unreadMessagesCount').text(response.count); //Uppdaterar texten med antalet olästa meddelanden från svaret
                 },
                 error: function (xhr, status, error) {
+                    //Felmeddelande om förfrågan misslyckas
                     console.error(error);
                 }
             });

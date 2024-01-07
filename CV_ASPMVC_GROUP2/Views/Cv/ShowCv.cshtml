@@ -13,7 +13,8 @@
     </div>
 </div>
 
-@if(Model.User.UserName.Equals(User?.Identity?.Name))
+@* If-sats som kontrollerar den inloggade användarens användarnamn med användarnamnet från modellen
+ *@@if(Model.User.UserName.Equals(User?.Identity?.Name))
 {
     <a class="btn btn-dark" asp-action="EditCv" asp-controller="Cv" asp-route-id="@Model.Cv.Id">Redigera Cv</a>
     <a class="btn btn-dark" asp-action="CreateCompetence" asp-controller="Competence">Lägg till kompetens</a>
@@ -29,7 +30,8 @@
     <p>@Html.DisplayFor(model => model.Cv.Description)</p>
 </div>
 
-@foreach(var item in Model.Educations) 
+@* En foreach-loop där vi skrivet ut attribut för varje objekt i listan
+ *@@foreach(var item in Model.Educations) 
 {
     <div class="card">
         <div class="card-body">
@@ -37,7 +39,9 @@
             <p>@Html.DisplayFor(model => item.Name)</p>
             <h5 class="card-title">@Html.DisplayNameFor(model => item.Description)</h5>
             <p>@Html.DisplayFor(model => item.Description)</p>
-            @if (Model.User.UserName.Equals(User?.Identity?.Name))
+
+@*             If-sats som kontrollerar den inloggade användarens användarnamn med användarnamnet från modellen
+ *@            @if (Model.User.UserName.Equals(User?.Identity?.Name))
             {
                 <form method="post" asp-controller="Education" asp-action="Delete" asp-route-id="@item.Id">
                     <input class="btn btn-dark" type="submit" value="Ta bort" />
@@ -47,7 +51,8 @@
     </div>
     <br />
 }
-
+@* En foreach-loop där vi skrivet ut attribut för varje objekt i listan
+*@
 @foreach(var item in Model.Experiences)
 {
     <div class="card">
@@ -56,6 +61,7 @@
             <p>@Html.DisplayFor(model => item.Name)</p>
             <h5 class="card-title">@Html.DisplayNameFor(model => item.Description)</h5>
             <p>@Html.DisplayFor(model => item.Description)</p>
+
             @if (Model.User.UserName.Equals(User?.Identity?.Name))
             {
                 <form method="post" asp-controller="Experience" asp-action="DeleteExperience" asp-route-id="@item.Id">
@@ -87,7 +93,9 @@
 }
 
 <h2>Projekt Som @Model.User.FirstName deltar i</h2>
-@foreach(var item in Model.Projects)
+
+@* Skrivet ut alla objekt som användaren deltar i 
+ *@@foreach(var item in Model.Projects)
 {
     <div class="card bg-light">
         <div class="card-body">
