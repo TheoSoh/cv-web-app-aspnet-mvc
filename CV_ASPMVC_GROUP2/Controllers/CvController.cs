@@ -22,8 +22,31 @@ namespace CV_ASPMVC_GROUP2.Controllers
         public IActionResult ShowCv(string userId)
         {
             ShowCvViewModel viewModel = new ShowCvViewModel { };
-            viewModel.User = context.Users.Where(u => u.Id == userId).Single();
-            viewModel.Cv = context.Cvs.Where(c => c.User_ID == userId).Single();
+            if(userId == null)
+            {
+                string currentUserId = base.UserId;
+                viewModel.User = context.Users.Where(u => u.Id.Equals(currentUserId)).Single();
+                viewModel.Cv = context.Cvs.Where(c => c.User_ID.Equals(currentUserId)).Single();
+                List<UserProject> userProjects = context.UserProjects.Where(up => up.UserId.Equals(currentUserId)).ToList();
+                List<Project> projects = new List<Project>();
+                foreach(var up in userProjects)
+                {
+                    projects.Add(context.Projects.Where(p => p.Id == up.ProjectId).Single());
+                }
+                viewModel.Projects = projects;
+            }
+            else
+            {
+                viewModel.User = context.Users.Where(u => u.Id == userId).Single();
+                viewModel.Cv = context.Cvs.Where(c => c.User_ID == userId).Single();
+                List<UserProject> userProjects = context.UserProjects.Where(up => up.UserId.Equals(userId)).ToList();
+                List<Project> projects = new List<Project>();
+                foreach (var up in userProjects)
+                {
+                    projects.Add(context.Projects.Where(p => p.Id == up.ProjectId).Single());
+                }
+                viewModel.Projects = projects;
+            }
 
             IEnumerable<CvCompetence> cvCompetences = context.CvCompetences.Where(cc => cc.CvId == viewModel.Cv.Id).ToList();
             List<Competence> competencesToView = new List<Competence>();

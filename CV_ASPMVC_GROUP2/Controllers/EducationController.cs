@@ -23,7 +23,6 @@ namespace CV_ASPMVC_GROUP2.Controllers
         }
 
 
-        [HttpGet]
         public IActionResult CreateEducation()
         {
             return View();
@@ -58,31 +57,23 @@ namespace CV_ASPMVC_GROUP2.Controllers
                 await context.AddAsync(cvEducation);
                 await context.SaveChangesAsync();
 
-                //Omdirigerar användaren till samma vy för att skapa ny erfarenhet
-                return RedirectToAction("CreateEducation", "Education");
+                //Dirigerar användaren tillbaka till Cv-sidan.
+                return RedirectToAction("ShowCv", "Cv");
 
             }
             return View(evm);
-
-        }
-
-        [HttpGet]
-        public IActionResult Delete(int id)
-        {
-            //Hämtar education-objektet som matchar det angivna ID:t
-            Models.Education education = context.Educations.Find(id);
-            //Returnerar vyn för att bekräfta radering av utbildningen
-            return View(education);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(Models.Education education)
+        public async Task<IActionResult> Delete(int id)
         {
+            //Hämtar education-objektet som matchar det angivna ID:t
+            Models.Education education = context.Educations.Find(id);
             //Tar bort utbildningsobjektet från databasen och sparar ändringarna i databasen
             context.Educations.Remove(education);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
 
-            return RedirectToAction("Delete", "Education");
+            return RedirectToAction("ShowCv", "Cv");
 
         }
 

@@ -42,19 +42,14 @@ namespace CV_ASPMVC_GROUP2.Controllers
                 //Försöker hämta CV-informationen för den inloggade användaren
                 profileViewModel.Cv = _context.Cvs.Where(c => c.User_ID == currentUserId).Single();
             }
-            catch(Exception ex) { }
+            catch(Exception ex) { profileViewModel.Cv = null; }
             return View(profileViewModel);
         }
 
-
-
         [HttpGet]
-
         public IActionResult UploadFile()
         { 
-        
             return View();
-        
         }
 
         [HttpPost]
@@ -91,10 +86,8 @@ namespace CV_ASPMVC_GROUP2.Controllers
                 _context.Update(anv);
                 _context.SaveChanges();
             }
-
             //Omdirigerar till profilsidan efter uppladdningen
             return RedirectToAction("Index", "Profile");
-
         }
 
 
@@ -102,7 +95,6 @@ namespace CV_ASPMVC_GROUP2.Controllers
         [Authorize]
         public IActionResult UpdatePrivateStatus()
         {
-
             //Hämtar användaren baserat på inloggad användares användarnamn
             var anv = _context.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
 
@@ -123,7 +115,6 @@ namespace CV_ASPMVC_GROUP2.Controllers
                 _context.Update(anv);
                 _context.SaveChanges();
             }
-            
 
             return RedirectToAction("Index", "Profile");
         }

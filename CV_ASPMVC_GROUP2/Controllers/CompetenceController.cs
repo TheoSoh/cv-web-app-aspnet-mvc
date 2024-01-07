@@ -59,12 +59,22 @@ namespace CV_ASPMVC_GROUP2.Controllers
                 await context.AddAsync(cvCompetence);
                 await context.SaveChangesAsync();
 
-                //Omdirigerar användaren till samma vy för att skapa ny kompetens
-                return RedirectToAction("CreateCompetence", "Competence");
+                //Dirigerar användaren tillbaka till Cv-sidan.
+                return RedirectToAction("ShowCv", "Cv");
 
             }
             //Returnerar vy-modellen om validering misslyckades
             return View(cvm);
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            Models.Competence competence = context.Competences.Find(id);
+            context.Competences.Remove(competence);
+            context.SaveChanges();
+            return RedirectToAction("ShowCv", "Cv");
 
         }
 
