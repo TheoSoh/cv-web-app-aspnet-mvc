@@ -23,8 +23,32 @@ namespace CV_ASPMVC_GROUP2.Controllers
         {
             //Hämtar alla projekt från databasen och lagrar dem i en lista och visar dem i vyn
             var items = _context.Projects.ToList();
+            List<ShowProjectsViewModel> list = new List<ShowProjectsViewModel>();
+            try
+            {
+                foreach (var item in items)
+                {
+                    List<UserProject> userProjects = _context.UserProjects.Where(up => up.ProjectId == item.Id).ToList();
+                    List<User> users = new List<User> { };
+                    foreach (var up in userProjects)
+                    {
+                        if(User.Identity.IsAuthenticated)
+                        {
+                            users.Add(_context.Users.Where(u => u.Id.Equals(up.UserId)).Where(u => !u.IsDeactivated).Single());
+                        }
+                        else
+                        {
+                            users.Add(_context.Users.Where(u => u.Id.Equals(up.UserId)).Where(u => !u.IsDeactivated).Where(u => !u.PrivateStatus).Single());
+                        }
+                    }
+                    
+                    list.Add(new ShowProjectsViewModel { Project = item, Users = users});
+                }
+            }
+            catch(Exception ex) { }
+
             ViewBag.CurrentUserId = base.UserId;
-            return View(items);
+            return View(list);
         }
 
         [HttpGet]
@@ -205,35 +229,6 @@ namespace CV_ASPMVC_GROUP2.Controllers
         }
 
         [HttpPost]
-
-        //public async Task<IActionResult> Join(int? id)
-        //{
-
-        //    if (id == null || _context.Projects == null)
-        //    {
-        //        return NotFound();
-
-        //    }
-        //    var joina = await _context.Projects.FindAsync(id);
-        //    if (joina == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var anv = _context.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
-        //    var pro = _context.Projects.FirstOrDefault(x => x.Id == id);
-
-        //    UserProject userProject = new UserProject();
-        //    userProject.UserId = anv.Id;
-        //    userProject.ProjectId = pro.Id;
-        //    _context.Add(userProject);
-
-
-        //    await _context.SaveChangesAsync();
-
-        //    return RedirectToAction("Index", "Project");
-        //}
-
         public async Task<IActionResult> Join(int? id)
         {
             try
