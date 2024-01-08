@@ -77,6 +77,8 @@
 </script>
 
 
+<script>
+
     connection.on("ReceiveUnreadMessageCount", function (unreadCount) {
         // Uppdatera antalet olästa meddelanden i användargränssnittet
         document.getElementById("unreadCount").innerText = unreadCount;
