@@ -22,7 +22,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
             HomePageViewModel model = new HomePageViewModel { };
             
             //Hämtar 3 CVn från databasen
-            model.Users = _context.Users.Where(u => !u.PrivateStatus).Where(u => u.Cv != null).Take(3).ToList();
+            model.Users = _context.Users.Where(u => !u.PrivateStatus).Where(u => u.Cv != null).Where(u => !u.IsDeactivated).Take(3).ToList();
 
             //Hämtar det senaste projektet och sorterar genom datum de skapades (fallande) samt konverterar resultatet till lista
             model.Projects = _context.Projects
@@ -32,16 +32,5 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
             return View(model);
         }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        //public IActionResult Error()
-        //{
-        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        //}
     }
 }

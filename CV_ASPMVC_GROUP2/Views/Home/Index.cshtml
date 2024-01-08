@@ -26,7 +26,9 @@
             <div class="card-body flex-fill">
                 <h5 class="card-title">@user.FirstName @user.LastName</h5>
                 <p>username: @user.UserName</p>
-                <a asp-controller="Cv" asp-action="ShowCv" asp-route-userId="@user.Id" class="btn btn-dark">Visa Cv-sidan</a>
+                <form method ="post" asp-controller="Cv" asp-action="ShowCv" asp-route-userId="@user.Id">
+                    <input type="submit" class="btn btn-dark btn-sm" value="Visa CV-sidan"/>
+                </form>
             </div>
         </div>
     }

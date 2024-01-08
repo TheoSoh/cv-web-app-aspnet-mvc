@@ -1,6 +1,4 @@
-﻿
-
-@model IEnumerable<CV_ASPMVC_GROUP2.Models.Project>
+﻿@model IEnumerable<CV_ASPMVC_GROUP2.Models.Project>
 @{
     ViewData["Title"] = "Index";
 }
@@ -48,12 +46,11 @@
                 <td class="userProject">
                     @if (User.Identity.IsAuthenticated)
                     {
-                        @String.Join(" ", item.UserProjects.Select(user => user.user))
+                        @String.Join(" ", item.UserProjects.Where(up => !up.user.IsDeactivated).Select(up => up.user))
                     }
                     else
                     {
-                        //Hämtar användare som inte är privata
-                        var nonPrivateUsers = item.UserProjects.Where(user => !user.user.PrivateStatus == true).Select(user => user.user);
+                        var nonPrivateUsers = item.UserProjects.Where(up => !up.user.PrivateStatus).Where(up => !up.user.IsDeactivated).Select(user => user.user);
                         @String.Join(" ", nonPrivateUsers)
                     }
                 </td>

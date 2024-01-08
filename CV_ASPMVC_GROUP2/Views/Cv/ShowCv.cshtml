@@ -17,10 +17,20 @@
  *@@if(Model.User.UserName.Equals(User?.Identity?.Name))
 {
     <a class="btn btn-dark" asp-action="EditCv" asp-controller="Cv" asp-route-id="@Model.Cv.Id">Redigera Cv</a>
+    <br />
     <a class="btn btn-dark" asp-action="CreateCompetence" asp-controller="Competence">Lägg till kompetens</a>
+    <br />
     <a class="btn btn-dark" asp-action="Create" asp-controller="Experience">Lägg till erfarenhet</a>
+    <br />
     <a class="btn btn-dark" asp-action="CreateEducation" asp-controller="Education">Lägg till utbildning</a>
+    <br />
+    <p>Totalt antal besökare: @Model.Cv.TotalVisitors</p>
+    <br />
 }
+
+<form asp-controller="Cv" asp-action="FindMatchingUser" asp-route-userIdToMatch="@Model.User.Id" method="post">
+    <input type="submit" class="link-secondary btn btn-light" value="Hitta liknande CV"/>
+</form>
 
 <div class="container-fluid">
     <h5>@Html.DisplayNameFor(model => model.Cv.ImageFile)</h5>

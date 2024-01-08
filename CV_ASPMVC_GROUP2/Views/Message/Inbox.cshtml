@@ -1,4 +1,4 @@
-﻿@model List<(Message message, string username)>
+﻿@model IEnumerable<ShowMessagesViewModel>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRPeZwLLXPT+fC6LZxyekk6E8x1MZQV5nDEbi3+fl" crossorigin="anonymous"></script>
 
@@ -11,30 +11,42 @@
             <th>Från</th>
             <th>Innehåll</th>
             <th>Skickat</th>
+            <th></th>
+            <th>Ta bort?</th>
         </tr>
     </thead>
     <tbody>
-@*         Forach-loop som visar varje meddelande i listan
- *@        @foreach (var (message, username) in Model)
+        @foreach (var vm in Model)
         {
             <tr>
-                <td>@(message.FromUserId != null ? username : message.FromAnonymousName)</td>
-                <td>@message.Content</td>
-                <td>@message.SentTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                @if(vm.FromAnonymousName == null)
+                {
+                    <td>@vm.FromUserName</td>
+                }
+                else
+                {
+                    <td>@vm.FromAnonymousName</td>
+                }
+                <td>@vm.Message.Content</td>
+                <td>@vm.Message.SentTime</td>
                 <td>
-@*                     Kontrollerar om meddelande inte är true (alltså false eller null) och lägger till en knapp för att markera det som läst
- *@                    @if (message.Read == null || message.Read == false)
+                    @if (vm.Message.Read == null || vm.Message.Read == false)
                     {
-                        <button class="mark-as-read-btn" data-message-id="@message.Id">Markera som läst</button>
+                        <button class="mark-as-read-btn" data-message-id="@vm.Message.Id">Markera som läst</button>
                     }
                     else
                     {
-                        message.Read = true;
+                        vm.Message.Read = true;
                     }
+                </td>
+                <td class="flex-row">
+                    <button type="submit" onclick="toggleVisibleButton()" class="link-secondary btn btn-light" value="">Radera</button>
+                    <form asp-controller="Message" asp-action="Delete" asp-route-messageId="@vm.Message.Id" method="post">
+                        <button id="button-two" style="display:none;" type="submit" class="link-secondary btn btn-danger delete-message text-white" value="">Bekräfta</button>
+                    </form>
                 </td>
             </tr>
         }
-       
     </tbody>
 </table>
 
@@ -65,6 +77,25 @@
 </script>
 
 
+    connection.on("ReceiveUnreadMessageCount", function (unreadCount) {
+        // Uppdatera antalet olästa meddelanden i användargränssnittet
+        document.getElementById("unreadCount").innerText = unreadCount;
+    });
+
+    var buttonVisible = false;
+
+    function toggleVisibleButton() {
+        var buttonTwo = document.getElementById("button-two");
+
+        if (buttonVisible) {
+            buttonTwo.style.display = "none";
+        } else {
+            buttonTwo.style.display = "block";
+        }
+
+        buttonVisible = !buttonVisible;
+    }
+</script>
 
 
 

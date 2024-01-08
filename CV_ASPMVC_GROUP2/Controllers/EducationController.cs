@@ -1,4 +1,5 @@
 ﻿using CV_ASPMVC_GROUP2.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -14,20 +15,14 @@ namespace CV_ASPMVC_GROUP2.Controllers
                 this.context = context;
                 
         }
-       
 
-        public IActionResult Index()
-        {
-            var items = context.Educations.ToList();
-            return View(items);
-        }
-
-
+        [Authorize]
         public IActionResult CreateEducation()
         {
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateEducation(Education evm)
         {
@@ -64,6 +59,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
             return View(evm);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {

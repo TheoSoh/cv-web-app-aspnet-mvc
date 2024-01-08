@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml.Serialization;
 
 namespace CV_ASPMVC_GROUP2.Models
 {
+    [Serializable]
     public class Project
     {
         public int Id { get; set; }
@@ -22,11 +24,15 @@ namespace CV_ASPMVC_GROUP2.Models
         public string CreatedByUserId { get; set; }
 
         [ForeignKey(nameof(CreatedByUserId))]
+        [XmlIgnore]
         public virtual User User { get; set; }
 
         [NotMapped]
         [Required]
+        [XmlIgnore]
         public IFormFile? ImageFile { get; set; }
+        [XmlIgnore]
         public virtual IEnumerable<UserProject> UserProjects { get; set; } = new List<UserProject>();
+        
     }
 }

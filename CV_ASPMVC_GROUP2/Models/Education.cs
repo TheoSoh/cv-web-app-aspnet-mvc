@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Xml.Serialization;
 
 namespace CV_ASPMVC_GROUP2.Models
 {
+    [Serializable]
     public class Education
     {
         public int Id { get; set; }
@@ -17,6 +19,8 @@ namespace CV_ASPMVC_GROUP2.Models
         [DisplayName("utbildningsbeskrivning")]
         [RegularExpression(@"^[\p{L}\s]*$", ErrorMessage = "Vänligen ange endast bokstäver.")]
         public string Description { get; set; }
+        [XmlIgnore]
         public virtual IEnumerable<CvEducation> CvEducations { get; set; } = new List<CvEducation>();
+        
     }
 }

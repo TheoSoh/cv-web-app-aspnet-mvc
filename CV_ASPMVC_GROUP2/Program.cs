@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<TestDbContext>(options =>
-    options.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("TestDbContext")));
+    options.UseLazyLoadingProxies(false).UseSqlServer(builder.Configuration.GetConnectionString("TestDbContext")));
 builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<TestDbContext>().AddDefaultTokenProviders();
 builder.Services.AddSignalR();
 

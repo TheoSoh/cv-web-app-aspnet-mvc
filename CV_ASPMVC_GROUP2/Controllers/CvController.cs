@@ -1,4 +1,5 @@
 ﻿using CV_ASPMVC_GROUP2.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -18,18 +19,27 @@ namespace CV_ASPMVC_GROUP2.Controllers
         }
 
         //Här är en action metod som skapar vyn och skickar den lämpliga vyn "showcvview" till användaren. Här visas cv:et för den användare som man klickar in på via profilsidan.  
-        [HttpGet]
-        public IActionResult ShowCv(string userId)
+
+        public async Task<IActionResult> ShowCv(string userId)
+        {
+            return await ShowCvPost(userId);
+        }
+
+        [HttpPost]
+        [ActionName("ShowCv")]
+        public async Task<IActionResult> ShowCvPost(string userId)
         {
             ShowCvViewModel viewModel = new ShowCvViewModel { };
-            if(userId == null)
+            string? currentUserId = base.UserId;
+            if (userId == null || userId.Equals(currentUserId))
             {
-                string currentUserId = base.UserId;
+                
                 viewModel.User = context.Users.Where(u => u.Id.Equals(currentUserId)).Single();
                 viewModel.Cv = context.Cvs.Where(c => c.User_ID.Equals(currentUserId)).Single();
+
                 List<UserProject> userProjects = context.UserProjects.Where(up => up.UserId.Equals(currentUserId)).ToList();
                 List<Project> projects = new List<Project>();
-                foreach(var up in userProjects)
+                foreach (var up in userProjects)
                 {
                     projects.Add(context.Projects.Where(p => p.Id == up.ProjectId).Single());
                 }
@@ -39,6 +49,12 @@ namespace CV_ASPMVC_GROUP2.Controllers
             {
                 viewModel.User = context.Users.Where(u => u.Id == userId).Single();
                 viewModel.Cv = context.Cvs.Where(c => c.User_ID == userId).Single();
+
+                var totalVisitors = context.Cvs.Where(c => c.Id == viewModel.Cv.Id).Single().TotalVisitors;
+                Cv cv = viewModel.Cv;
+                cv.TotalVisitors = totalVisitors + 1;
+                context.Update(cv);
+                await context.SaveChangesAsync();
                 List<UserProject> userProjects = context.UserProjects.Where(up => up.UserId.Equals(userId)).ToList();
                 List<Project> projects = new List<Project>();
                 foreach (var up in userProjects)
@@ -71,6 +87,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
                 educationsToView.Add(context.Educations.Where(ed => ed.Id == education.EducationId).Single());
             }
             viewModel.Educations = educationsToView;
+
             return View(viewModel);
         }
 
@@ -78,12 +95,14 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
         //Metoden här gör så att vyn kommer att göras synlig på hemsidan. den tar emot en request och skickar den lämpliga vyn till användaren  
         [HttpGet]
+        [Authorize]
         public IActionResult CreateCv()
         {
             return View();
         }
 
         //Metoden begär en resurs tex i detta fall så vill vi skapa ett objekt i databasen
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateCv(Cv cvm)
         {
@@ -109,6 +128,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
         //FileStream = skapar filen på den anvgivna filvägen 
         //till sist returnerar det genererade filnamnet. 
         //koden hanterar uppladdningen av en fil för en bild till ett cv och sedan sparar den på servern under katalogen för Images
+        [Authorize]
         private string UploadFile(Cv cvm)
         {
             string fileName = null;
@@ -131,14 +151,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
             return fileName;
         }
 
-        public IActionResult CvList()
-        {
-            return View();
-        }
-
-
-
-
+        [Authorize]
         [HttpGet]
         public IActionResult EditCv(int? id)
         {
@@ -150,12 +163,12 @@ namespace CV_ASPMVC_GROUP2.Controllers
             {
                 Description = cro.Description,
                 ImageFile = cro.ImageFile
-
             };
             return View(model);
 
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> EditCv(EditCvViewModel pm, int id)
         {
@@ -186,9 +199,10 @@ namespace CV_ASPMVC_GROUP2.Controllers
         }
 
 
-        //privata metod som används för att ladda upp en fil till servern.
+        //privat metod som används för att ladda upp en fil till servern.
         //Om en fil har valts för uppladdning skapas ett unikt filnamn och filen kopieras sedan till den angivna sökvägen på servern inom mappen för uppladdningar.
         //Metoden returnerar det unika filnamnet för den uppladdade filen eller null om ingen fil har valts för uppladdning.
+        [Authorize]
         private string UploadFile(EditCvViewModel pm)
         {
             string fileName = null;
@@ -211,8 +225,28 @@ namespace CV_ASPMVC_GROUP2.Controllers
             return fileName;
         }
 
+        [HttpPost]
+        public IActionResult FindMatchingUser(string userIdToMatch)
+        {
+            var allUsers = context.Users.Where(u => !u.PrivateStatus).Where(u => !u.IsDeactivated).Where(u => u.Cv != null).ToList();
+            var userToMatch = context.Users.Find(userIdToMatch);
+            allUsers.Remove(userToMatch);
+            FindMatchingUserViewModel model = new FindMatchingUserViewModel
+            {
+                UserToMatch = userToMatch,
+            };
+            if (allUsers != null)
+            {
+                var arrayOfFirstName = userToMatch.FirstName.ToCharArray();
+                try
+                {
+                    model.MatchResult = allUsers.Where(u => u.FirstName.StartsWith(arrayOfFirstName[0])).Take(1).Single();
+                }
+                catch (Exception ex) { model.MatchResult = null; }
+            }
+            return View(model);
+        }
     }
-
 }
 
        

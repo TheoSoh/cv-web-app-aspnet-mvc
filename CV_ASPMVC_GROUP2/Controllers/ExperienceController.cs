@@ -1,4 +1,5 @@
 ﻿using CV_ASPMVC_GROUP2.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,12 +15,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
-        {
-            var items = _context.Experiences.ToList();
-            return View(items);
-        }
-
+        [Authorize]
         [HttpGet]
         public IActionResult Create()
         {
@@ -27,7 +23,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
             return View();
         }
 
-
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(Experience ex)
         {
@@ -63,26 +59,16 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> DeleteExperience(int id)
         {
             Models.Experience experience = _context.Experiences.Find(id);
             //Tar bort erfarentets-sobjektet från databasen och sparar ändringarna i databasen
             _context.Experiences.Remove(experience);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return RedirectToAction("ShowCv", "Cv");
 
-        }
-
-        [HttpGet]
-        public IActionResult Indexx()
-        {
-            return View();
-        }
-
-        public IActionResult ExperienceList()
-        {
-            return View();
         }
     }
 }
