@@ -13,6 +13,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
         {
             _context = testDbContext;
         }
+        [Authorize]
         public IActionResult EditAddress()
         {
             //Hämtar användarens ID från basklassen
@@ -30,6 +31,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
             };
             return View(model);
         }
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> EditAddress(EditAddressViewModel editAddressViewModel)
         {

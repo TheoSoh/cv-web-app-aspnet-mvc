@@ -1,0 +1,28 @@
+﻿@model CV_ASPMVC_GROUP2.Models.FindMatchingUserViewModel
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-body">
+            @if(Model.MatchResult != null)
+            {
+                <h5 class="card-title">@Model.UserToMatch.FirstName @Model.UserToMatch.LastName matchade med @Model.MatchResult.FirstName @Model.MatchResult.LastName</h5>
+                <p>(Eftersom deras förnamn börjar på samma bokstav!)</p>
+                <div class="flex-row">
+                    <form method="post" asp-controller="Cv" asp-action="ShowCv" asp-route-userId="@Model.UserToMatch.Id">
+                        <input type="submit" class="link-secondary btn btn-light" value="Tillbaka" />
+                    </form>
+                    <form method="post" asp-controller="Cv" asp-action="ShowCv" asp-route-userId="@Model.MatchResult.Id">
+                        <input type="submit" class="link-secondary btn btn-light" value="Visa CV som matchade" />
+                    </form>
+                </div>
+            }
+            else
+            {
+                <h5 class="card-title">Tyvärr fanns det ingen matchning för @Model.UserToMatch.FirstName @Model.UserToMatch.LastName!</h5>
+                <form method="post" asp-controller="Cv" asp-action="ShowCv" asp-route-userId="@Model.UserToMatch.Id">
+                    <input type="submit" class="link-secondary btn btn-light" value="Tillbaka" />
+                </form>
+            }
+        </div>
+    </div>
+</div>

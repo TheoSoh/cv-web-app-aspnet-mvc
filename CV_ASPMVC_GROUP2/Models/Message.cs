@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml.Serialization;
 
 namespace CV_ASPMVC_GROUP2.Models
 {
+    [Serializable]
     public class Message
     {
         public int Id { get; set; }
@@ -16,9 +18,12 @@ namespace CV_ASPMVC_GROUP2.Models
         public string? FromAnonymousName { get; set; }
 
         [ForeignKey(nameof(FromUserId))]
+        [XmlIgnore]
         public virtual User? FromUser { get; set; }
 
         [ForeignKey(nameof(ToUserId))]
+        [XmlIgnore]
         public virtual User? ToUser { get; set; }
+        
     }
 }

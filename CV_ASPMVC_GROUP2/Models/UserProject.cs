@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml.Serialization;
 
 namespace CV_ASPMVC_GROUP2.Models
 {
@@ -9,9 +10,12 @@ namespace CV_ASPMVC_GROUP2.Models
         public string? UserRole { get; set; }
 
         [ForeignKey(nameof(UserId))]
+        [XmlIgnore]
         public virtual User? user { get; set; }
 
         [ForeignKey(nameof(ProjectId))]
+        [XmlIgnore]
         public virtual Project? Project { get; set; }
+        
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Xml.Serialization;
 
 namespace CV_ASPMVC_GROUP2.Models
 {
+    [Serializable]
     public class Competence
     {
         public int Id { get; set; }
@@ -17,6 +19,8 @@ namespace CV_ASPMVC_GROUP2.Models
         [DisplayName("Kompetensbeskrivning")]
         [RegularExpression(@"^[\p{L}\s]*$", ErrorMessage = "Vänligen ange endast bokstäver.")]
         public string Description { get; set; }
+        [XmlIgnore]
         public virtual IEnumerable<CvCompetence> CvCompetences { get; set; } = new List<CvCompetence>();
+        
     }
 }

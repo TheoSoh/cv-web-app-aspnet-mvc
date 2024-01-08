@@ -1,46 +1,90 @@
-﻿@model IEnumerable<CV_ASPMVC_GROUP2.Models.User>
+﻿@model CV_ASPMVC_GROUP2.Models.SearchViewModel
 
+<div class="table-responsive">
 
-<table class="table">
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th>
+                    Profilbild
+                </th>
+                <th>
+                    Användarnamn
+                </th>
+                <th>
+                    Profil
+                </th>
+                <th>
+                    CV
+                </th>
+                <th>
+                    Kompetenser
+                </th>
+            </tr>  
+        </thead>
+        <tbody>
+            @if(Model.UserModels != null)
+            {
+                @foreach (var m in Model.UserModels)
+                {
+                    <tr>
+                        <td>
+                            <img src="~/Images/@m.AUser.ProfilePicture" class="img-fluid" alt="Responsive image" asp-append-version="true" height="200px" width="200px" />
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => m.AUser.UserName)
+                        </td>
+                        <td>
+                            <a method="get" class="link-secondary btn btn-light" asp-controller="Profile" asp-action="Index" asp-route-userId="@m.AUser.Id">Visa profil</a>
+                        </td>
+                        <td>
+                            @if(m.Cv != null)
+                            {
+                                <form method="post" asp-controller="Cv" asp-action="ShowCv" asp-route-userId="@m.AUser.Id">
+                                    <input type="submit" class="link-secondary btn btn-light" value="Visa CV" />
+                                </form>
+                            }
+                            else
+                            {
+                                <p>Saknar CV</p>
+                            }
+                        </td>
+                        <td class="flex-column">
+                            @if(m.Competences != null)
+                            {
+                                @foreach(var competence in m.Competences)
+                                {
+                                    @competence.Name
+                                } 
+                            }
+                            
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<table class="table table-responsive">
     <thead>
         <tr>
             <th>
-                Profilbild
-            </th>
-            <th>
-                Användarnamn
-            </th>
-            <th>
-                Cv
+                Kompetenser från sökresultat
             </th>
         </tr>
     </thead>
     <tbody>
-
-@*         Listar profilbild, länk till profilsida samt användarens cv för varje objekt i listan
- *@        @foreach (var item in Model)
+        @if(Model.AllFilteredCompetences != null)
         {
-            <tr>
-                <td>
-                    <img src="~/Images/@item.ProfilePicture" class="img-fluid" alt="Responsive image" asp-append-version="true" height="200px" width="200px" />
-                </td>
-                <td>
-                    <a asp-controller="Profile" asp-action="Index" asp-route-userId="@item.Id">
-                        @Html.DisplayFor(modelItem => item.UserName)
-                    </a>
-                </td>
-                <td>
-@*                     Kontrollerar om användaren har ett cv
- *@                    @if(item.Cv != null)
-                    {
-                        <a asp-controller="Cv" asp-action="ShowCv" asp-route-userId="@item.Id">Visa CV</a>
-                    }
-                    else
-                    {
-                        <p>Saknar CV</p>
-                    }
-                </td>
-            </tr>
+            @foreach (var competence in Model.AllFilteredCompetences)
+            {
+                <tr>
+                    <td>
+                        @competence.Name
+                    </td>
+                </tr>
+            }
         }
     </tbody>
 </table>

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CV_ASPMVC_GROUP2.Controllers
 {
@@ -26,17 +27,17 @@ namespace CV_ASPMVC_GROUP2.Controllers
         {
             //Hämtar alla användare från databasen och skapar en SelectList som kan användas i vyn
             var users = await _userManager.Users.ToListAsync();
-                var usersSelectList = new SelectList(users, "Id", "UserName");
-                ViewData["ToUserId"] = usersSelectList;
+            var usersSelectList = new SelectList(users, "Id", "UserName");
+            ViewData["ToUserId"] = usersSelectList;
 
             //Hämtar den inloggade användarens ID från Claims och skapar ett nytt meddelandeobjekt
-                var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var message = new Message
-                {
-                    SentTime = DateTime.Now,
-                    Read = false,
-                    FromUserId = loggedInUserId
-                };
+            var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var message = new Message
+            {
+                SentTime = DateTime.Now,
+                Read = false,
+                FromUserId = loggedInUserId
+            };
 
             //Returnerar vyn för att skicka meddelanden med det nya meddelandeobjektet
             return View("SendMessage", message);
@@ -90,27 +91,32 @@ namespace CV_ASPMVC_GROUP2.Controllers
             return user?.UserName;
         }
 
-
+        [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Inbox()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
+            var userId = base.UserId;
+            List<ShowMessagesViewModel> model = new List<ShowMessagesViewModel>();
             //Hämtar inkommande meddelanden för den inloggade användaren
-            var incomingMessages = _context.Messages
+            var allMessages = _context.Messages
                 .Where(m => m.ToUserId == userId)
                 .ToList();
 
-            var messagesWithUsername = new List<(Message message, string username)>();
-
-            //Associerar varje meddelande med avsändarens användarnamn
-            foreach (var message in incomingMessages)
+            foreach(var message in allMessages)
             {
-                var senderUsername = await GetUsernameById(message.FromUserId);
-                messagesWithUsername.Add((message, senderUsername));
+                model.Add(new ShowMessagesViewModel
+                {
+                    Message = message,
+                    FromAnonymousName = message.FromAnonymousName,
+                    FromUserName = await GetUsernameById(message?.FromUserId)
+                });
             }
 
+            IEnumerable<ShowMessagesViewModel> modelToView = model;
+            //Associerar varje meddelande med avsändarens användarnamn
+
             //Returnerar en vy med listan av meddelanden tillsammans med avsändarens användarnamn.
-            return View(messagesWithUsername);
+            return View(model);
         }
 
 
@@ -128,6 +134,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
         //Post-metod som markerar ett meddelande (det meddelande-id vi anger) som läst om meddelandet inte är null
         //Sätter Read till true
         [HttpPost]
+        [Authorize]
         public IActionResult MarkAsRead(int messageId)
         {
             var message = _context.Messages.FirstOrDefault(m => m.Id == messageId);
@@ -137,8 +144,20 @@ namespace CV_ASPMVC_GROUP2.Controllers
                 _context.SaveChanges();
                 return RedirectToAction("Inbox");
             }
-            return NotFound(); 
+            return NotFound();
         }
 
+        [HttpPost]
+        [Authorize]
+        public IActionResult Delete(int messageId) 
+        {
+            Message messageToDelete = _context.Messages.Find(messageId);
+            if (messageToDelete != null)
+            {
+                _context.Messages.Remove(messageToDelete);
+                _context.SaveChanges();
+            }
+            return RedirectToAction("Inbox");
+        }
     }
 }

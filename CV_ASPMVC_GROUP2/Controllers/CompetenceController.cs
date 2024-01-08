@@ -1,4 +1,5 @@
 ﻿using CV_ASPMVC_GROUP2.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CV_ASPMVC_GROUP2.Controllers
@@ -12,14 +13,8 @@ namespace CV_ASPMVC_GROUP2.Controllers
             this.context = context;
             
         }
-        
 
-        public IActionResult Index()
-        {
-            var items = context.Competences.ToList();
-            return View(items);
-        }
-
+        [Authorize]
         [HttpGet]
         public IActionResult CreateCompetence()
         {
@@ -27,10 +22,10 @@ namespace CV_ASPMVC_GROUP2.Controllers
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateCompetence(Competence cvm)
         {
-
 
             if (ModelState.IsValid)
             {
@@ -68,6 +63,7 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {

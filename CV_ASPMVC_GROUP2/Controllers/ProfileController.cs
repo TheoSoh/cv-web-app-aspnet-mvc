@@ -1,6 +1,11 @@
-﻿using CV_ASPMVC_GROUP2.Models;
+﻿using Microsoft.AspNetCore;
+using CV_ASPMVC_GROUP2.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.IO;
+using System.Xml.Serialization;
+using System.Collections;
 
 namespace CV_ASPMVC_GROUP2.Controllers
 {
@@ -21,38 +26,48 @@ namespace CV_ASPMVC_GROUP2.Controllers
             //Hämtar den aktuella inloggade användarens ID
             string currentUserId = base.UserId;
 
-            //Skapar ett nytt ProfileViewModel-objekt
-            var profileViewModel = new ProfileViewModel
-            {
-                AuthorizedUserId = currentUserId
-            };
 
+            User user = null;
             //Om användar-ID inte är specificerat används den inloggade användarens ID för att hämta dess information
             if (userId == null)
             {
-                profileViewModel.User = _context.Users.Where(u => u.Id.Equals(currentUserId)).Single(); 
+                user = _context.Users.Where(u => u.Id.Equals(userId)).Single(); 
             }
             else
             {
                 //Annars hämtas användarinformation baserat på det angivna användar-ID:t
-                profileViewModel.User = _context.Users.Where(u => u.Id.Equals(userId)).Single();
+                user = _context.Users.Where(u => u.Id.Equals(userId)).Single();
             }
+            Address address = _context.Addresses.Where(a => a.UserId == userId).Single();
+            Cv cv = null;
             try
             {
                 //Försöker hämta CV-informationen för den inloggade användaren
-                profileViewModel.Cv = _context.Cvs.Where(c => c.User_ID == currentUserId).Single();
+                cv = _context.Cvs.Where(c => c.User_ID == userId).Single();
             }
-            catch(Exception ex) { profileViewModel.Cv = null; }
+            catch(Exception ex) { cv = null; }
+
+            //Skapar ett nytt ProfileViewModel-objekt
+            var profileViewModel = new ProfileViewModel
+            {
+                User = user,
+                Cv = cv,
+                AuthorizedUserId = currentUserId,
+                Address = address
+
+            };
             return View(profileViewModel);
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult UploadFile()
         { 
             return View();
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult UploadFile(ProfileViewModel profile)
         {
             //Kontrollerar om det finns en fil att ladda upp
@@ -96,27 +111,135 @@ namespace CV_ASPMVC_GROUP2.Controllers
         public IActionResult UpdatePrivateStatus()
         {
             //Hämtar användaren baserat på inloggad användares användarnamn
-            var anv = _context.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
+            var user = _context.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
 
             //Kontrollerar och uppdaterar användarens privatstatus beroende på dess nuvarande status
-            if (!anv.PrivateStatus)
+            if (!user.PrivateStatus)
             {
-                anv.PrivateStatus = true;
+                user.PrivateStatus = true;
 
                 //Uppdaterar användarens status i databasen
-                _context.Update(anv);
+                _context.Update(user);
                 _context.SaveChanges();
             }
             else
             {
-                anv.PrivateStatus = false;
+                user.PrivateStatus = false;
 
                 //Uppdaterar användarens status i databasen
-                _context.Update(anv);
+                _context.Update(user);
                 _context.SaveChanges();
             }
 
             return RedirectToAction("Index", "Profile");
         }
+
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult UpdateIsDeactivated()
+        {
+            //Hämtar användaren baserat på inloggad användares användarnamn
+            var user = _context.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
+
+            //Kontrollerar och uppdaterar användarens privatstatus beroende på dess nuvarande status
+            if (!user.IsDeactivated)
+            {
+                user.IsDeactivated = true;
+
+                //Uppdaterar användarens status i databasen
+                _context.Update(user);
+                _context.SaveChanges();
+            }
+            else
+            {
+                user.IsDeactivated = false;
+
+                //Uppdaterar användarens status i databasen
+                _context.Update(user);
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Index", "Profile");
+        }
+
+        [HttpPost]
+        public IActionResult ExportProfileToXml(string userId)
+        {
+            if(userId == null)
+            {
+                return NotFound();
+            }
+            
+
+            var user = _context.Users.FirstOrDefault(x => x.Id.Equals(userId));
+            user.PasswordHash = null;
+
+            string path = user.UserName + ".xml";
+
+            //Kontrollerar om mappen inte finns och skapar den 
+            //if (!Directory.Exists(path))
+            //{
+            //    Directory.CreateDirectory(path);
+            //}
+
+            Address address = _context.Addresses.Where(a => a.UserId == userId).FirstOrDefault();
+            Cv? cv = _context.Cvs.Where(c => c.User_ID == user.Id).FirstOrDefault();
+            List<CvCompetence> cvCompetences = new List<CvCompetence>();
+            List<Competence> competences = new List<Competence>();
+            List<CvEducation> cvEducations = new List<CvEducation>();
+            List<Education> educations = new List<Education>();
+            List<CvExperience> cvExperiences = new List<CvExperience>();
+            List<Experience> experiences = new List<Experience>();
+            List<Project> projects = new List<Project>();
+            if(cv != null)
+            {
+                cvCompetences = _context.CvCompetences.Where(cc => cc.CvId == cv.Id).ToList();
+                foreach(var cvCompetence in cvCompetences)
+                {
+                    competences.Add(_context.Competences.Where(c => c.Id == cvCompetence.CompetenceId).Single());
+                }
+                cvEducations = _context.CvEducations.Where(ce => ce.CvId == cv.Id).ToList();
+                foreach (var cvEducation in cvEducations)
+                {
+                    educations.Add(_context.Educations.Where(c => c.Id == cvEducation.EducationId).Single());
+                }
+                cvExperiences = _context.CvExperiences.Where(cc => cc.CvId == cv.Id).ToList();
+                foreach (var cvExperience in cvExperiences)
+                {
+                    experiences.Add(_context.Experiences.Where(c => c.Id == cvExperience.ExperienceId).Single());
+                }
+            }
+
+            try
+            {
+                projects = _context.Projects.Where(p => p.CreatedByUserId.Equals(userId)).ToList();
+            }
+            catch (Exception ex) { }
+
+            ExportProfileViewModel exportProfileViewModel = new ExportProfileViewModel { user = user,
+                address = address, cv = cv, cvCompetences = cvCompetences, competences = competences, 
+                cvEducations = cvEducations, educations = educations, cvExperiences = cvExperiences, 
+                experiences = experiences, projects = projects };
+            var data = exportProfileViewModel;
+
+            XmlSerializer xmlSerializer = new XmlSerializer(data.GetType());
+            var memoryStream = new System.IO.MemoryStream();
+            
+            xmlSerializer.Serialize(memoryStream, data);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            return File(memoryStream, "CV_ASPMVC_GROUP2/xml", path);
+        }
+
+        //var newStream = new System.IO.MemoryStream();
+        //var writer = new System.IO.StreamWriter(newStream);
+        //writer.Write(xml);
+        //writer.Flush();
+        //newStream.Position = 0;
+
+        //return File(newStream, "application/xml", "prova.xml");
+
+
+
     }
 }
