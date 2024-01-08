@@ -28,7 +28,15 @@ namespace CV_ASPMVC_GROUP2.Controllers
             {
                 foreach (var item in items)
                 {
-                    List<UserProject> userProjects = _context.UserProjects.Where(up => up.ProjectId == item.Id).ToList();
+                    List<UserProject>? userProjects = new List<UserProject>();
+                    try
+                    {
+                        userProjects = _context.UserProjects.Where(up => up.ProjectId == item.Id).ToList();
+                    }
+                    catch(Exception ex)
+                    {
+
+                    }
                     List<User> users = new List<User> { };
                     foreach (var up in userProjects)
                     {
@@ -38,7 +46,12 @@ namespace CV_ASPMVC_GROUP2.Controllers
                         }
                         else
                         {
-                            users.Add(_context.Users.Where(u => u.Id.Equals(up.UserId)).Where(u => !u.IsDeactivated).Where(u => !u.PrivateStatus).Single());
+                            try
+                            {
+                                users.Add(_context.Users.Where(u => u.Id.Equals(up.UserId)).Where(u => !u.IsDeactivated).Where(u => !u.PrivateStatus).Single());
+                            }
+                            catch(Exception ex)
+                            { }
                         }
                     }
                     
