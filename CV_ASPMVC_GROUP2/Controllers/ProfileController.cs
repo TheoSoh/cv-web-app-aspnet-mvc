@@ -28,24 +28,33 @@ namespace CV_ASPMVC_GROUP2.Controllers
 
 
             User user = null;
+            Address address = null;
+            Cv cv = null;
             //Om användar-ID inte är specificerat används den inloggade användarens ID för att hämta dess information
             if (userId == null)
             {
-                user = _context.Users.Where(u => u.Id.Equals(userId)).Single(); 
+                user = _context.Users.Where(u => u.Id.Equals(currentUserId)).Single();
+                address = _context.Addresses.Where(a => a.UserId == currentUserId).Single();
+                try
+                {
+                    //Försöker hämta CV-informationen för den inloggade användaren
+                    cv = _context.Cvs.Where(c => c.User_ID == currentUserId).Single();
+                }
+                catch (Exception ex) { cv = null; }
             }
             else
             {
                 //Annars hämtas användarinformation baserat på det angivna användar-ID:t
                 user = _context.Users.Where(u => u.Id.Equals(userId)).Single();
+                address = _context.Addresses.Where(a => a.UserId == userId).Single();
+                try
+                {
+                    //Försöker hämta CV-informationen för den inloggade användaren
+                    cv = _context.Cvs.Where(c => c.User_ID == userId).Single();
+                }
+                catch(Exception ex) { cv = null; }
             }
-            Address address = _context.Addresses.Where(a => a.UserId == userId).Single();
-            Cv cv = null;
-            try
-            {
-                //Försöker hämta CV-informationen för den inloggade användaren
-                cv = _context.Cvs.Where(c => c.User_ID == userId).Single();
-            }
-            catch(Exception ex) { cv = null; }
+            
 
             //Skapar ett nytt ProfileViewModel-objekt
             var profileViewModel = new ProfileViewModel
