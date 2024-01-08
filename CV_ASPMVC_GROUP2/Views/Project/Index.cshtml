@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CV_ASPMVC_GROUP2.Models.Project>
+﻿@model IEnumerable<CV_ASPMVC_GROUP2.Models.ShowProjectsViewModel>
 @{
     ViewData["Title"] = "Index";
 }
@@ -36,37 +36,31 @@
         {
             <tr>
                 <td>
-                 @Html.DisplayFor(modelItem => item.Name)
+                 @Html.DisplayFor(modelItem => item.Project.Name)
                 </td>
                 <td>
-                @Html.DisplayFor(modelItem => item.Description)
+                @Html.DisplayFor(modelItem => item.Project.Description)
                 </td>
 
-               
                 <td class="userProject">
-                    @if (User.Identity.IsAuthenticated)
+                    @foreach(var user in item.Users)
                     {
-                        @String.Join(" ", item.UserProjects.Where(up => !up.user.IsDeactivated).Select(up => up.user))
-                    }
-                    else
-                    {
-                        var nonPrivateUsers = item.UserProjects.Where(up => !up.user.PrivateStatus).Where(up => !up.user.IsDeactivated).Select(user => user.user);
-                        @String.Join(" ", nonPrivateUsers)
+                        @Html.DisplayFor(modelItem => user.UserName) 
                     }
                 </td>
 
                 <td>
-                   <img src="~/Images/@item.Image" class="img-fluid" alt="Responsive image" asp-append-version = "true" height="200px" width="200px" />
+                   <img src="~/Images/@item.Project.Image" class="img-fluid" alt="Responsive image" asp-append-version = "true" height="200px" width="200px" />
                 </td>
 
 @*                 Kontrollerar om användaren som skapat projektet är samma användare som är inloggad
- *@                @if (item.CreatedByUserId == ViewBag.CurrentUserId)
+ *@                @if (item.Project.CreatedByUserId == ViewBag.CurrentUserId)
                 {
                     <td>
-                        <a asp-controller = "Project" asp-action="EditProject" asp-route-Id ="@item.Id"> Redigera </a>
+                        <a asp-controller = "Project" asp-action="EditProject" asp-route-Id ="@item.Project.Id"> Redigera </a>
                     </td>
                     <td>
-                        <a asp-controller="Project" asp-action="Delete" asp-route-Id="@item.Id"> Radera </a>
+                        <a asp-controller="Project" asp-action="Delete" asp-route-Id="@item.Project.Id"> Radera </a>
                     </td>
                 }
 
@@ -74,7 +68,7 @@
  *@                @if (User.Identity.IsAuthenticated)
                 {
                     <td>
-                        <a asp-controller="Project" asp-action="Join" asp-route-Id ="@item.Id"> Gå med i projekt</a>
+                        <a asp-controller="Project" asp-action="Join" asp-route-Id ="@item.Project.Id"> Gå med i projekt</a>
                 </td>
                 }
             </tr>

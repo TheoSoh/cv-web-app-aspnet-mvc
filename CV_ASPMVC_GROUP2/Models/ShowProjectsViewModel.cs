@@ -2,5 +2,7 @@
 {
     public class ShowProjectsViewModel
     {
+        public Project Project { get; set; }
+        public IEnumerable<User> Users { get; set; }
     }
 }
